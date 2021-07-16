@@ -166,11 +166,11 @@ namespace Gestion_Web.Formularios.Articulos
                 int idEmpresa = (int)Session["Login_SucUser"];
                 Empresa empresa = controladorEmpresa.obtenerEmpresaByIdSucursal(idEmpresa);
 
-                ///Chequeo si la empresa es parte de Deport Show, para habilitar la descarga del archivo .txt de los articulos para Magento
-                if (string.Equals(empresa.RazonSocial, "RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
-                    lbtnExportarArticulosMagento.Visible = true;
-                else
-                    lbtnExportarArticulosMagento.Visible = false;
+                /////Chequeo si la empresa es parte de Deport Show, para habilitar la descarga del archivo .txt de los articulos para Magento
+                //if (string.Equals(empresa.RazonSocial, "RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
+                //    lbtnExportarArticulosMagento.Visible = true;
+                //else
+                //    lbtnExportarArticulosMagento.Visible = false;
 
                 ///Chequeo si la empresa es ID GROUP, para habilitar la importacion de articulos desde la base externa.
                 if (string.Equals(empresa.RazonSocial, "ID Group"))
@@ -2220,7 +2220,7 @@ namespace Gestion_Web.Formularios.Articulos
                 {
                     TableRow tr = c as TableRow;
                     string id = tr.ID.Split('_')[1];
-                    int i = this.controlador.modificarMargenArticulo(Convert.ToInt32(id),margen);
+                    int i = this.controlador.modificarMargenArticulo(Convert.ToInt32(id), margen);
                     if (i <= 0)
                     {
                         //no se atualizo
@@ -2476,30 +2476,31 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                controladorReportes controladorReportes = new controladorReportes();
+                SolicitarReporteArticuloMagento();
+                //controladorReportes controladorReportes = new controladorReportes();
 
-                string rutaCSV = Server.MapPath("../ArchivosExportacion/Salida/");
+                //string rutaCSV = Server.MapPath("../ArchivosExportacion/Salida/");
 
-                if (!Directory.Exists(rutaCSV))
-                {
-                    Directory.CreateDirectory(rutaCSV);
-                }
+                //if (!Directory.Exists(rutaCSV))
+                //{
+                //    Directory.CreateDirectory(rutaCSV);
+                //}
 
-                string archivoCSV = controladorReportes.generarArchivoArticulosMagento(rutaCSV);
+                //string archivoCSV = controladorReportes.generarArchivoArticulosMagento(rutaCSV);
 
-                System.IO.FileStream fs = null;
-                fs = System.IO.File.Open(archivoCSV, System.IO.FileMode.Open);
+                //System.IO.FileStream fs = null;
+                //fs = System.IO.File.Open(archivoCSV, System.IO.FileMode.Open);
 
-                byte[] btFile = new byte[fs.Length];
-                fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
-                fs.Close();
+                //byte[] btFile = new byte[fs.Length];
+                //fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
+                //fs.Close();
 
-                this.Response.Clear();
-                this.Response.Buffer = true;
-                this.Response.ContentType = "application/octet-stream";
-                this.Response.AddHeader("Content-disposition", "attachment; filename= Articulos_Magento.csv");
-                this.Response.BinaryWrite(btFile);
-                this.Response.End();
+                //this.Response.Clear();
+                //this.Response.Buffer = true;
+                //this.Response.ContentType = "application/octet-stream";
+                //this.Response.AddHeader("Content-disposition", "attachment; filename= Articulos_Magento.csv");
+                //this.Response.BinaryWrite(btFile);
+                //this.Response.End();
 
             }
             catch (Exception ex)
@@ -2510,6 +2511,44 @@ namespace Gestion_Web.Formularios.Articulos
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
                 }
             }
+        }
+        private void SolicitarReporteArticuloMagento()
+        {
+            try
+            {
+                ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                Informes_Pedidos ip = new Informes_Pedidos();
+                InformeXML infXML = new InformeXML();
+
+
+
+                ///Cargo el objeto Informes_Pedidos
+                cargarDatosInformePedido(ip, 2);
+
+                ///Cargo el objeto InformeXML
+
+                ///Concatenamos el ID de la insercion al reporte a guardar
+                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+
+                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                else
+                {
+                    int idError = Log.ObtenerUltimoIDLog();
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas. Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+            }
+
         }
 
         /// <summary>
@@ -2591,6 +2630,13 @@ namespace Gestion_Web.Formularios.Articulos
                         ip.Informe = 9;
                         ip.NombreInforme = "ECOMMERCE-ARTICULOS_";
                         ip.Usuario = (int)Session["Login_IdUser"];
+
+                        break;
+                    case 2:
+                        ip.Informe = 12;
+                        ip.NombreInforme = "ARTICULOS-MAGENTO_";
+                        ip.Usuario = (int)Session["Login_IdUser"];
+
                         break;
                     ///Informe para Ventas Filtradas
 
@@ -2640,7 +2686,7 @@ namespace Gestion_Web.Formularios.Articulos
                 int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
-          
+
         }
 
         protected void lbtnExportarArticulos_Click1(object sender, EventArgs e)
@@ -2650,7 +2696,7 @@ namespace Gestion_Web.Formularios.Articulos
                 SolicitarReporteArticulosTxt();
             }
             catch (Exception ex)
-            {           
+            {
             }
         }
     }

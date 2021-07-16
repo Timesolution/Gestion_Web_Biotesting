@@ -10,6 +10,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -375,6 +376,11 @@ namespace Gestion_Web.Formularios.Cobros
                         ip.Informe = 11;
                         ip.Usuario = (int)Session["Login_IdUser"];
                         ip.NombreInforme = "REPORTE-COBROS-REALIZADOS_";
+                        break;
+                    case 2:
+                        ip.Informe = 13;
+                        ip.Usuario = (int)Session["Login_IdUser"];
+                        ip.NombreInforme = "REPORTE-COBROS-REALIZADOS-VENDEDORES_";
                         break;
                     default:
                         break;
@@ -824,7 +830,9 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Response.Redirect("ImpresionCobro.aspx?valor=7&ex=1&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);
+                
+                    Response.Redirect("ImpresionCobro.aspx?valor=7&ex=1&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);
+                
             }
             catch
             {
@@ -832,12 +840,64 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
+        private void SolicitarReporteCobranzaVendedores()
+        {
+            try
+            {
+                ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
+                Informes_Pedidos ip = new Informes_Pedidos();
+                InformeXML infXML = new InformeXML();
+
+                infXML.FechaDesde = this.fechaD;
+                infXML.FechaHasta = this.fechaH;
+                infXML.Cliente = idCliente;
+                infXML.Vendedor = this.vendedor;
+                infXML.PuntoVenta = this.puntoVenta;
+                infXML.Tipo = this.idTipo;
+                infXML.Sucursal = this.idSucursal;
+
+                ///Cargo el objeto Informes_Pedidos
+                cargarDatosInformePedido(ip, 2);
+
+                ///Cargo el objeto InformeXML
+
+                ///Concatenamos el ID de la insercion al reporte a guardar
+                ip.NombreInforme += (controladorInformesEntity.ObtenerUltimoIdInformePedido() + 1).ToString();
+
+                ///Agrego el informe para ejecutar la funcion de reporte de filtro de ventas. Si todo es correcto retorna 1.
+                int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
+
+                if (i > 0)
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Se ha generado la solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                else
+                {
+                    int idError = Log.ObtenerUltimoIDLog();
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "ERROR", "ELSE: No pudo generar un pedido para el reporte de ventas. Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango.");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "Ubicacion: Articulos.aspx. Metodo: cargarFacturasRango. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError(idError.ToString()));
+            }
+
+        }
+
         protected void lbtnReporteCobranzaPDF_Click(object sender, EventArgs e)
         {
             try
             {
-
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "','_blank');", true);
+                string reporteVendedores = WebConfigurationManager.AppSettings["ReporteVendedores"];
+                if (reporteVendedores == "1")
+                {
+                    SolicitarReporteCobranzaVendedores();
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "','_blank');", true);
+                }
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
             catch

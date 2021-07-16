@@ -194,14 +194,23 @@ namespace Gestion_Web.Formularios.Reportes
                             hpDetalles.NavigateUrl += ".xls";
                         if (ip.Informe1.Id == 3 || ip.Informe1.Id == 4)
                             hpDetalles.NavigateUrl += ".xlsx";
-                        if (ip.Informe1.Id == 6)
+                        if (ip.Informe1.Id == 6 || ip.Informe1.Id == 13)
+                        {
                             hpDetalles.NavigateUrl += ".pdf";
+                            hpDetalles.Attributes.Add("download", "");
+                        }
                         if (ip.Informe1.Id == 9 || ip.Informe1.Id == 10)
                         {
                             hpDetalles.Attributes.Add("download", "");
                             hpDetalles.NavigateUrl += ".txt";
                         }
-                            
+
+                        if (ip.Informe1.Id == 12)
+                        {
+                            hpDetalles.Attributes.Add("download", "");
+                            hpDetalles.NavigateUrl += ".csv";
+                        }
+
                     }
                     celEstado.Controls.Add(hpDetalles);
                     tr.Controls.Add(celEstado);
