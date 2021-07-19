@@ -3453,7 +3453,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
                 //c.iva = this.ListIvaFact.Items.FindByValue(idIva.ToString()).Text;
                 c.iva = idIva.ToString();
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                int cMod = this.contCliente.modificarClienteParaRefacturar(c, this.txtCUITfact.Text, c.codigo);
                 return cMod;
             }
             catch
@@ -3559,50 +3559,44 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //cargo todos los datos del cliente
                 Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.lblIdCliente.Text));
-                c.cuit = this.txtCUITfact.Text;
                 c.alerta = this.contCliente.obtenerAlertaClienteByID(Convert.ToInt32(this.lblIdCliente.Text));
                 c.alerta.idCliente = c.id;
                 c.iva = this.ListIvaFact.SelectedValue.ToString();
 
-                bool vCuit = contCliente.verificarCuitClienteParaRefacturarPRP(c.cuit);
-
-                if (vCuit == true)
+                int cMod = this.contCliente.modificarClienteParaRefacturar(c, this.txtCUITfact.Text, c.codigo);
+                if (cMod > 0)
                 {
-                    int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
-                    if (cMod > 0)
+                    controladorDireccion contDir = new controladorDireccion();
+                    if (c.direcciones != null)
                     {
-                        controladorDireccion contDir = new controladorDireccion();
-                        if (c.direcciones != null)
+                        if (c.direcciones.Count == 0)
                         {
-                            if (c.direcciones.Count == 0)
-                            {
-                                direccion dir = new direccion();
-                                dir.nombre = "Legal";
-                                dir.direc = this.txtDirFact.Text;
-                                dir.localidad = this.ListLocalidadFact.SelectedValue;
-                                dir.provincia = this.ListProvinciaFact.SelectedValue;
-                                dir.pais = "Argentina";
-                                dir.codPostal = "0000";
+                            direccion dir = new direccion();
+                            dir.nombre = "Legal";
+                            dir.direc = this.txtDirFact.Text;
+                            dir.localidad = this.ListLocalidadFact.SelectedValue;
+                            dir.provincia = this.ListProvinciaFact.SelectedValue;
+                            dir.pais = "Argentina";
+                            dir.codPostal = "0000";
 
-                                int i = this.contCliente.agregarDireccionReduc(c, dir);
+                            int i = this.contCliente.agregarDireccionReduc(c, dir);
 
-                                return i;
-                            }
-                            else
-                            {
-                                direccion d = contDir.obtenerContactoId(Convert.ToInt32(this.lblIdDirFact.Text));
-                                d.direc = this.txtDirFact.Text;
-                                d.localidad = this.ListLocalidadFact.SelectedValue;
-                                d.provincia = this.ListProvinciaFact.SelectedValue;
-                                int j = this.contCliente.ModificarDireccionMod(d, c.id);
-                                return j;
-                            }
+                            return i;
+                        }
+                        else
+                        {
+                            direccion d = contDir.obtenerContactoId(Convert.ToInt32(this.lblIdDirFact.Text));
+                            d.direc = this.txtDirFact.Text;
+                            d.localidad = this.ListLocalidadFact.SelectedValue;
+                            d.provincia = this.ListProvinciaFact.SelectedValue;
+                            int j = this.contCliente.ModificarDireccionMod(d, c.id);
+                            return j;
                         }
                     }
-                    else
-                    {
-                        return -1;
-                    }
+                }
+                else
+                {
+                    return -1;
                 }
 
                 return -1;
@@ -5342,11 +5336,11 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Response.Redirect("ABMFacturas.aspx?accion=13&facturas=" + idtildado +"&numero="+numero);
+                    Response.Redirect("ABMFacturas.aspx?accion=13&facturas=" + idtildado + "&numero=" + numero);
                 }
                 else
                 {
-                    
+
                 }
             }
             catch (Exception ex)
