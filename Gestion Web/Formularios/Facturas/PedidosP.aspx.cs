@@ -2402,7 +2402,15 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //int i = contPedEntity.
                     string mensaje = contPedEntity.ImportarPedidosTXT(archivo).ToString();
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(mensaje, ""));
+                    //string mensaje ="funciono";
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", m.mensajeBoxInfo("funciono 1", ""), true);
+                    ScriptManager.RegisterStartupScript(this, this.UpdatePanel1.GetType(), "alert", m.mensajeBoxInfo(mensaje, ""), true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.UpdatePanel1.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //RegisterClientScriptBlock("alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+
                     //if (i > 0)
                     //{
                     //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + i + " pedidos ", "../Clientes/ClientesF.aspx"));
