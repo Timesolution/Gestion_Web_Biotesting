@@ -31,15 +31,15 @@
                                                     </li>
                                                     <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cobranzas vendedores</a>
                                                         <ul class="dropdown-menu">
-                                                            <li>
+                                                            <li ID="BtnExcelVendedores" runat="server">
                                                                 <asp:LinkButton ID="lbtnReporteCobranza" runat="server" OnClick="lbtnReporteCobranza_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
                                                                 </asp:LinkButton>
                                                             </li>
-                                                            <li>
+                                                            <li ID="BtnPDFVendedores" runat="server">
                                                                 <asp:LinkButton ID="lbtnReporteCobranzaPDF" runat="server" OnClick="lbtnReporteCobranzaPDF_Click">
-                                                                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                                                    <i  class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
                                                                 </asp:LinkButton>
                                                             </li>
