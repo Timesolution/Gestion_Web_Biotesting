@@ -167,10 +167,10 @@ namespace Gestion_Web.Formularios.Articulos
                 Empresa empresa = controladorEmpresa.obtenerEmpresaByIdSucursal(idEmpresa);
 
                 /////Chequeo si la empresa es parte de Deport Show, para habilitar la descarga del archivo .txt de los articulos para Magento
-                //if (string.Equals(empresa.RazonSocial, "RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
-                //    lbtnExportarArticulosMagento.Visible = true;
-                //else
-                //    lbtnExportarArticulosMagento.Visible = false;
+                if (string.Equals(empresa.RazonSocial, "RIO SKY S A") || string.Equals(empresa.RazonSocial, "Nieve Sol SA"))
+                    lbtnExportarArticulosMagento.Visible = true;
+                else
+                    lbtnExportarArticulosMagento.Visible = false;
 
                 ///Chequeo si la empresa es ID GROUP, para habilitar la importacion de articulos desde la base externa.
                 if (string.Equals(empresa.RazonSocial, "ID Group"))
@@ -216,6 +216,8 @@ namespace Gestion_Web.Formularios.Articulos
                     this.txtFechaHastaNoVendido.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtDesdeIEArticulos.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.txtHastaIEArticulos.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    this.txtFechaDesdeMagento.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    this.txtFechaHastaMagento.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     CargarProveedor();
                     //Obtengo todas las promociones
                     this.listPromociones = this.contArtEnt.obtenerPromociones();
@@ -792,6 +794,12 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListMarca.DataTextField = "marca";
 
                 this.ListMarca.DataBind();
+
+                this.ListMarcaMagento.DataSource = dt;
+                this.ListMarcaMagento.DataValueField = "id";
+                this.ListMarcaMagento.DataTextField = "marca";
+
+                this.ListMarcaMagento.DataBind();
 
             }
             catch (Exception ex)
@@ -2622,6 +2630,7 @@ namespace Gestion_Web.Formularios.Articulos
                 ip.Fecha = DateTime.Now;
                 ip.Usuario = (int)Session["Login_IdUser"];
                 ip.Estado = 0;
+                
 
                 switch (accion)
                 {
@@ -2659,9 +2668,20 @@ namespace Gestion_Web.Formularios.Articulos
                 ControladorInformesEntity controladorInformesEntity = new ControladorInformesEntity();
                 Informes_Pedidos ip = new Informes_Pedidos();
                 InformeXML infXML = new InformeXML();
-
+                if (!cbxFechasMagento.Checked)
+                {
+                    infXML.FechaDesde = txtFechaDesdeMagento.Text;
+                    infXML.FechaHasta = txtFechaHastaMagento.Text;
+                }
+                else
+                {
+                    infXML.FechaDesde = "";
+                    infXML.FechaHasta = "";
+                }
+                infXML.Marca = Convert.ToInt32(ListMarcaMagento.SelectedValue);
                 ///Cargo el objeto Informes_Pedidos
-                cargarDatosInformePedido(ip, 1);
+                cargarDatosInformePedido(ip, 2);
+                
 
                 ///Cargo el objeto InformeXML
 
