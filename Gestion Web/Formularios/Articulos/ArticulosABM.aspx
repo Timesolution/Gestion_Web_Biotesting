@@ -851,8 +851,8 @@
                                                             <label for="validateSelect" class="col-md-4">Porcentaje IVA</label>
                                                             <div class="col-md-4">
                                                                 <asp:DropDownList ID="DropListIva" runat="server" class="form-control">
-                                                                    <asp:ListItem Value="-1">Seleccione..</asp:ListItem>
-                                                                    <%--<asp:ListItem Value="0.00">0%</asp:ListItem>
+                                                                    <%--<asp:ListItem Value="-1">Seleccione..</asp:ListItem>
+                                                                    <asp:ListItem Value="0.00">0%</asp:ListItem>
                                                                     <asp:ListItem Value="10.50">10,5%</asp:ListItem>
                                                                     <asp:ListItem Value="21.00">21%</asp:ListItem>--%>
                                                                 </asp:DropDownList>

@@ -95,6 +95,7 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarDropListSucursales();
                     this.cargarSucursalesAlListBoxDeArticulo();
                     this.cargarIVA();
+                    this.cargarIVAProveedores();
 
                     //cargo fecha de carga
                     //this.txtFechaAlta.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -4494,6 +4495,29 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+        public void cargarIVAProveedores()
+        {
+            try
+            {
+                DataTable dt = controlador.obtenerPorcentajesIVA(esUruguay);
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["iva"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListIva.DataSource = dt;
+                this.DropListIva.DataValueField = "id";
+                this.DropListIva.DataTextField = "iva";
+                this.DropListIva.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando IVA. " + ex.Message));
+            }
+        }
+ 
         public void cargarIVA()
         {
             try
@@ -4513,7 +4537,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando IVA. " + ex.Message));
             }
         }
 
