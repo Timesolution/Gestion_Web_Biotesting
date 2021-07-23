@@ -1,4 +1,4 @@
-﻿  using Disipar.Models;
+﻿using Disipar.Models;
 using Gestion_Api.Auxiliares;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
@@ -32,6 +32,8 @@ namespace Gestion_Web.Formularios.Facturas
 {
     public partial class ABMFacturasLargo : System.Web.UI.Page
     {
+        //Pregunto si el sistema es del Rey del Entretenmiento
+        string EsRoller = WebConfigurationManager.AppSettings["EsRoller"];
         Mensajes m = new Mensajes();
         controladorFacturacion controlador = new controladorFacturacion();
         controladorUsuario contUser = new controladorUsuario();
@@ -99,7 +101,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ConfigurarModoCredito();
 
                 idClientePadre = Convert.ToInt32(Request.QueryString["cp"]);
-                
+
                 _verificarEnvioMercaderiaSiNoHayStockOrNegativo = WebConfigurationManager.AppSettings.Get("VerificarEnvioMercaderiaSiNoHayStockOrNegativo");
 
                 btnAgregar.Attributes.Add("onclick", " this.disabled = true;  " + btnAgregarRemitir.ClientID + ".disabled=true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnAgregar, null) + ";");
@@ -463,7 +465,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
 
-                if(idPaciente > 0)
+                if (idPaciente > 0)
                 {
                     // cargo para que sea un presupuesto.
                     this.obtenerNroPresupuesto();
@@ -2054,9 +2056,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //SI ES CONSUMIDOR FINAL no permito venta en CTA CTE
                     this.cargarFormaPAgo();
-                    
+
                     if (accion != 9)
-                    this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
+                        this.DropListFormaPago.SelectedValue = this.cliente.formaPago.id.ToString();
                     //CARGO LAS LISTAS DE PRECIO QUE TIENE LA FORMA DE PAGO QUE TIENE EL CLIENTE
                     this.cargarListaPrecio();
                     try
@@ -2496,7 +2498,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnFacturaE.Visible = false;
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
-               
+
                 if (accion != 6 && accion != 7 && accion != 13)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
@@ -3329,11 +3331,11 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        public void CambiarEstadoAgendaFacturado() 
+        public void CambiarEstadoAgendaFacturado()
         {
             try
             {
-                if (idAgenda != 0) 
+                if (idAgenda != 0)
                 {
                     Estetica_Api.Controladores.ControladorAgenda controladorAgenda = new Estetica_Api.Controladores.ControladorAgenda();
                     controladorAgenda.ModificarEstadoFacturado(idAgenda);
@@ -3344,7 +3346,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL(1, "Error", "Error al modificar estado de la agenda: " + ex.Message);
             }
         }
-        
+
 
         void AgregarComentariosIvaYNetoDiscriminados(Factura factura = null)
         {
@@ -4174,18 +4176,24 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         //despues de refacturar establezco el iva de nuevo en NO informa
                         this.restablecerIvaCliente();
-                        //mando imprimir factura
-                        string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
-                        if (imprimir == "1")
+
+                        //Pregunto si el sistema es del rey del entretenmiento para solo imprimir FC Electronica
+                        if (EsRoller == "1" && fact.ptoV.formaFacturar == "Electronica")
                         {
-                            //imprimo factura
                             this.ImprimirFactura(fact.id, fact.tipo.id, 0);
                         }
-                        else
-                        {
-                            Session["Factura"] = null;
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
-                        }
+                            //mando imprimir factura
+                            string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
+                            if (imprimir == "1")
+                            {
+                                //imprimo factura
+                                this.ImprimirFactura(fact.id, fact.tipo.id, 0);
+                            }
+                            else
+                            {
+                                Session["Factura"] = null;
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
+                            }
                     }
                     else
                     {
@@ -4811,6 +4819,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                         //Elimina los datos del objeto Factura
                         Session.Remove("Factura");
+
+                        //Pregunto si el sistema es del rey del entretenmiento para solo imprimir FC Electronica
+                        if (EsRoller == "1" && fact.ptoV.formaFacturar == "Electronica")
+                        {
+                            this.ImprimirFactura(fact.id, fact.tipo.id, 0);
+                        }
+
                         string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
                         if (imprimir == "1")
                         {
@@ -4820,7 +4835,6 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
                         }
-
                         this.btnNueva.Visible = true;
                         this.btnAgregar.Visible = false;
                         this.btnAgregarRemitir.Visible = false;
@@ -4927,6 +4941,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //factura exitosa
                     Session.Remove("Factura");
+
+                    //Pregunto si el sistema es del rey del entretenmiento para solo imprimir FC Electronica
+                    if (EsRoller == "1" && fact.ptoV.formaFacturar == "Electronica")
+                    {
+                        this.ImprimirFactura(fact.id, fact.tipo.id, 0);
+                    }
+
                     string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
                     if (imprimir == "1")
                     {
