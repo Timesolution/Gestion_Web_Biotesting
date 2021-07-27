@@ -492,6 +492,12 @@
                                                                                             <asp:Label runat="server" ID="lblDivisaFacturar"></asp:Label>
                                                                                         </div>
                                                                                     </div>
+                                                                                    <div class="form-group" style="display: normal">
+                                                                                        <label class="col-md-3">Referidos:</label>
+                                                                                        <div class="col-md-8">
+                                                                                            <asp:DropDownList ID="ListReferido" runat="server" class="form-control"></asp:DropDownList>
+                                                                                        </div>
+                                                                                    </div>
                                                                                     <div class="form-group">
                                                                                         <div class="col-md-12">
                                                                                             <asp:TextBox placeholder="AGREGUE AQUI OBSERVACIONES" ID="txtComentarios" runat="server" class="form-control" TextMode="MultiLine" Rows="5"></asp:TextBox>
@@ -2227,7 +2233,7 @@
                 document.getElementById("<%= txtRestanPuntosTotales.ClientID %>").value = restan;
             }
 
-            
+
 
         }
 

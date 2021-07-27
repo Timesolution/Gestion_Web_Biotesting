@@ -45,6 +45,7 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         controladorCotizaciones contCot = new controladorCotizaciones();
         controladorCuentaCorriente controladorCC = new controladorCuentaCorriente();
+        controladorReferido controladorReferido = new controladorReferido();
         //Pedido
         Pedido Pedido = new Pedido();
         Cliente cliente = new Cliente();
@@ -112,6 +113,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarFormasVenta();
                     this.cargarEmpresas();
                     this.cargarZonas();
+                    this.cargarReferidos();
                     this.ListEmpresa.SelectedValue = this.idEmpresa.ToString();
                     this.cargarSucursal(Convert.ToInt32(this.ListEmpresa.SelectedValue));
                     this.cargarEntregas();
@@ -411,10 +413,13 @@ namespace Gestion_Web.Formularios.Facturas
                 if (p.tipo.tipo == "Cotizacion") //cotizacion
                 {
                     this.labelNroPedido.Text = "Cotizacion N° " + p.numero;
+                    this.ListReferido.SelectedValue = controladorReferido.ObtenerReferidoCotizacion(p.id);
                 }
                 else if (p.tipo.tipo == "Pedido")
                 {
                     this.labelNroPedido.Text = "Pedido N° " + p.numero;
+                    this.ListReferido.SelectedValue = controladorReferido.ObtenerReferidoPedido(p.id);
+
                 }
 
             }
@@ -462,6 +467,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListVendedor.SelectedValue = p.vendedor.id.ToString();
                 //this.txtPorcDescuento.Text = p.neto10.ToString();
                 this.txtDescuento.Text = p.descuento.ToString();
+                this.ListReferido.SelectedValue = controladorReferido.ObtenerReferidoCotizacion(Convert.ToInt32(idCotizacion.Split(';')[0]));
                 this.cargarItems();
                 this.actualizarTotales();
                 this.obtenerNroPedido();
@@ -2234,6 +2240,16 @@ namespace Gestion_Web.Formularios.Facturas
                             ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
                             ControladorPedido Contpedido1 = new ControladorPedido();
 
+                            if (cotizacion == 1 && ListReferido.SelectedValue != "-1")
+                            {
+                                controladorReferido.EliminarReferidoCotizacion(i);
+                                controladorReferido.AgregarReferidoCotizacion(i,Convert.ToInt32(ListReferido.SelectedValue));
+                            }
+                            else if (cotizacion == 0 && ListReferido.SelectedValue != "-1")
+                            {
+                                controladorReferido.EliminarReferidoPedido(i);
+                                controladorReferido.AgregarReferidoPedido(i, Convert.ToInt32(ListReferido.SelectedValue));
+                            }
                             Log.EscribirSQL(1, "INFO", "verificando check a enviar mail" + chkEnviarMail.Checked + txtMailEntrega.Text);
                             if (this.chkEnviarMail.Checked == true && !String.IsNullOrEmpty(this.txtMailEntrega.Text))
                             {
@@ -2684,6 +2700,16 @@ namespace Gestion_Web.Formularios.Facturas
                         if (i > 0)
                         {
 
+                            if (cotizacion == 1 && ListReferido.SelectedValue != "-1")
+                            {
+                                controladorReferido.EliminarReferidoCotizacion(i);
+                                controladorReferido.AgregarReferidoCotizacion(i, Convert.ToInt32(ListReferido.SelectedValue));
+                            }
+                            else if (cotizacion == 0 && ListReferido.SelectedValue != "-1")
+                            {
+                                controladorReferido.EliminarReferidoPedido(i);
+                                controladorReferido.AgregarReferidoPedido(i, Convert.ToInt32(ListReferido.SelectedValue));
+                            }
                             //Verifico si utiliza modo distribución (Cliente_Referidos, Pedidos_Referidos)
                             ControladorPedidoEntity contPedEnt = new ControladorPedidoEntity();
                             if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
@@ -2934,6 +2960,25 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListZonaEntrega.DataTextField = "nombre";
 
                 this.DropListZonaEntrega.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista zonas. " + ex.Message));
+            }
+        }
+
+        protected void cargarReferidos()
+        {
+            try
+            {
+                List<Referidos> referidos = controladorReferido.ObtenerTodosReferidos();
+                referidos.Insert(0, (new Referidos { id = -1, descripcion = "Seleccione..." }));
+
+                this.ListReferido.DataSource = referidos;
+                this.ListReferido.DataValueField = "id";
+                this.ListReferido.DataTextField = "descripcion";
+
+                this.ListReferido.DataBind();
             }
             catch (Exception ex)
             {

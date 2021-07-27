@@ -49,6 +49,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorCuentaCorriente controladorCC = new controladorCuentaCorriente();
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
+        controladorReferido controladorReferido = new controladorReferido();
         //factura
         Factura nuevaFactura = new Factura();
         Cliente cliente = new Cliente();
@@ -156,6 +157,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarClientes();
                     this.cargarProveedoresCombustible();
                     this.cargarEmpresas();
+                    this.cargarReferidos();
                     this.cargarOperadores();
                     this.cargarMutuales();
                     this.ListEmpresa.SelectedValue = this.idEmpresa.ToString();
@@ -680,6 +682,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListVendedor.SelectedValue = f.vendedor.id.ToString();
                 this.ListSucursal.SelectedValue = f.sucursal.id.ToString();
                 this.ListPuntoVenta.SelectedValue = f.ptoV.id.ToString();
+                this.ListReferido.SelectedValue = controladorReferido.ObtenerReferidoPedido(Convert.ToInt32(pedidos.Split(';')[0]));
                 //cargo los datos de entrega del pedido.
                 this.txtFechaEntrega.Text = f.pedidos[0].fechaEntrega.ToString("dd/MM/yyyy");
                 this.txtHorarioEntrega.Text = f.pedidos[0].horaEntrega;
@@ -1718,6 +1721,25 @@ namespace Gestion_Web.Formularios.Facturas
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando formas pago. " + ex.Message));
+            }
+        }
+
+        protected void cargarReferidos()
+        {
+            try
+            {
+                List<Gestion_Api.Entitys.Referidos> referidos = controladorReferido.ObtenerTodosReferidos();
+                referidos.Insert(0, (new Gestion_Api.Entitys.Referidos { id = -1, descripcion = "Seleccione..." }));
+
+                this.ListReferido.DataSource = referidos;
+                this.ListReferido.DataValueField = "id";
+                this.ListReferido.DataTextField = "descripcion";
+
+                this.ListReferido.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista zonas. " + ex.Message));
             }
         }
         public void cargarFormasVenta()
@@ -4583,7 +4605,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (accion == 13)
                         {
-                            string idfacturas = Request.QueryString["facturas"].Replace(";", "");
+                           string idfacturas = Request.QueryString["facturas"].Replace(";", "");
                             controlador.idFacturaParaHacerNotaDebito = Convert.ToInt32(idfacturas);
                         }
                         i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito);
@@ -4604,6 +4626,13 @@ namespace Gestion_Web.Formularios.Facturas
                                 DescontarPuntos(fact.cliente.id, fact.id, puntos);
                             }
                         }
+                            if(ListReferido.SelectedValue != "-1")
+                        {
+                            controladorReferido.EliminarReferidoFactura(i);
+                            controladorReferido.AgregarReferidoFactura(i, Convert.ToInt32(ListReferido.SelectedValue));
+
+                        }
+
 
                         #region func post generarl
                         if (this.accion == 4)
