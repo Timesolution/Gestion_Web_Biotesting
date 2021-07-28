@@ -69,24 +69,6 @@ namespace Gestion_Web.Formularios.Articulos
         protected global::System.Web.UI.WebControls.PlaceHolder phColumna4;
 
         /// <summary>
-        /// Control phColumna10.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phColumna10;
-
-        /// <summary>
-        /// Control thPrecioVentaMonedaOriginal.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlTableCell thPrecioVentaMonedaOriginal;
-
-        /// <summary>
         /// Control phColumna6.
         /// </summary>
         /// <remarks>

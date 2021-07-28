@@ -255,6 +255,8 @@
                                                     <li><a tabindex="-1" href="/../../Formularios/Clientes/Clientesaspx.aspx">Clientes</a></li>
                                                     <li><a tabindex="-1" href="/../../Formularios/Clientes/FamiliaF.aspx">Familia</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMGruposClientes.aspx">Grupos</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMReferidos.aspx">Referidos</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMSupervisores.aspx">Supervisores</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMCategoriasClientes.aspx">Categorias</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ProspectosF">Prospectos</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
@@ -440,6 +442,7 @@
                                                     <li><a href="/../../Formularios/Facturas/CronogramaPagosF.aspx">Cronograma de Pagos</a></li>
                                                 </ul>
                                             </li>
+                                            <li><a href="/../../Formularios/Facturas/FacturasReferidos.aspx">Referidos Facturas</a></li>
 
                                             <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
                                             <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>

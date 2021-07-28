@@ -119,7 +119,10 @@ namespace Gestion_Web.Formularios.Facturas
                     this.txtFechaDesdeFamilia.Text = fechaD;
                     this.txtFechaHastaFamilia.Text = fechaH;
                     this.DropListSucursal.SelectedValue = suc.ToString();
-                    this.DropListClientes.SelectedValue = idCliente.ToString();
+                    if (idCliente != 0)
+                    {
+                        this.DropListClientes.SelectedValue = idCliente.ToString();
+                    }
                     this.DropListClientesFamilia.SelectedValue = idCliente.ToString();
                     this.ListVendedor.SelectedValue = Vendedor.ToString();
                     this.DropListEstado.SelectedValue = idEstado.ToString();
@@ -350,6 +353,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dt = cargarClientesFamilia();
                     this.btnBuscarCod.Visible = false;
                     this.txtCodCliente.Attributes.Add("disabled", "true");
+                    //this.DropListClientes.Attributes.Add("disabled", "true");
                     //Oculto el Saldo en caso de que el logueado sea un Cliente
                     this.phSaldo.Visible = false;
                 }
@@ -765,15 +769,21 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int supervisor = 0;
+                if (Session["Login_NombrePerfil"].ToString() == "Cliente")
+                {
+                    supervisor = Convert.ToInt32(Session["Login_Vendedor"]);
+                }
+
                 if (fechaD != null && fechaD != null && idSuc != 0 && idEstado != 0 && Session["Login_NombrePerfil"].ToString() == "Cliente")
                 {
-                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2, clientePadre, origen);
+                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2, clientePadre, origen, supervisor);
                     this.cargarPedidos(dt);
                     this.cargarLabel(fechaD, fechaH, idSuc, idCliente, idEstado);
                 }
                 else if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0)
                 {
-                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2, clientePadre, origen);
+                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2, clientePadre, origen, supervisor);
                     this.cargarPedidos(dt);
                     this.cargarLabel(fechaD, fechaH, idSuc, idCliente, idEstado);
                 }
@@ -782,7 +792,7 @@ namespace Gestion_Web.Formularios.Facturas
                     DataTable dt = this.controlador.obtenerPedidosRangoDT(this.txtFechaDesde.Text, this.txtFechaHasta.Text, this.txtFechaEntregaDesde.Text, this.txtFechaEntregaHasta.Text,
                     Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue),
                     Convert.ToInt32(this.DropListEstado.SelectedValue), Convert.ToInt32(this.ListVendedor.SelectedValue), Convert.ToInt32(this.ListTipoEntrega.SelectedValue),
-                    Convert.ToInt32(this.RadioFechaPedido.Checked), Convert.ToInt32(this.RadioFechaEntrega.Checked), clientePadre, origen);
+                    Convert.ToInt32(this.RadioFechaPedido.Checked), Convert.ToInt32(this.RadioFechaEntrega.Checked), clientePadre, origen, supervisor);
                     this.cargarPedidos(dt);
                     this.cargarLabel(this.txtFechaDesde.Text, this.txtFechaHasta.Text, Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue), Convert.ToInt32(this.DropListEstado.SelectedValue));
                 }
@@ -2315,7 +2325,9 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 controladorCliente controladorCliente = new controladorCliente();
-                DataTable dt = contCliente.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+                ControladorSupervision controlSupervision = new ControladorSupervision();
+                
+                DataTable dt = controlSupervision.obtenerClientes_SupervisionesByIdSupervisor(Convert.ToInt32((int)Session["Login_Vendedor"]));
                 if (dt.Rows.Count > 0)
                 {
                     //agrego todos
@@ -2341,6 +2353,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListClientes.DataTextField = "alias";
 
                     this.DropListClientes.DataBind();
+                   // DropListClientes.SelectedValue = clienteUsuario.id.ToString();
                 }
                 else
                 {
@@ -2389,7 +2402,15 @@ namespace Gestion_Web.Formularios.Facturas
 
                     //int i = contPedEntity.
                     string mensaje = contPedEntity.ImportarPedidosTXT(archivo).ToString();
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo(mensaje, ""));
+                    //string mensaje ="funciono";
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", m.mensajeBoxInfo("funciono 1", ""), true);
+                    ScriptManager.RegisterStartupScript(this, this.UpdatePanel1.GetType(), "alert", m.mensajeBoxInfo(mensaje, ""), true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.UpdatePanel1.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //RegisterClientScriptBlock("alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+
                     //if (i > 0)
                     //{
                     //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + i + " pedidos ", "../Clientes/ClientesF.aspx"));

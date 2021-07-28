@@ -10,11 +10,13 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Configuration;
 
 namespace Gestion_Web.Formularios.Personal
 {
     public partial class Empleados : System.Web.UI.Page
     {
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
         controladorEmpleado controlador = new controladorEmpleado();
         controladorRemuneraciones contRem = new controladorRemuneraciones();
 
@@ -26,6 +28,11 @@ namespace Gestion_Web.Formularios.Personal
             try
             {
                 this.VerificarLogin();
+
+                if (esUruguay == 1) {
+                    thTxtCUIT.InnerText = "RUT";
+                    thTxtDNI.InnerText = "C.I";
+                }
                 
                 if (!IsPostBack)
                 {

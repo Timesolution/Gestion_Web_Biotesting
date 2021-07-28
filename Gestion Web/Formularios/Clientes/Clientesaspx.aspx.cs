@@ -24,6 +24,9 @@ namespace Gestion_Web.Formularios.Clientes
 {
     public partial class Clientesaspx : System.Web.UI.Page
     {
+        // verifico si es de uruguay el cuit.
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
+
         private controladorCliente contCliente = new controladorCliente();
         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
         controladorTipoCliente contTipoCliente = new controladorTipoCliente();
@@ -48,6 +51,10 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                if (esUruguay == 1) {
+                    thCUIT.InnerText = "RUT";
+                }
+                
                 this.VerificarLogin();
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.busqueda = Request.QueryString["b"];

@@ -4,7 +4,7 @@
 
     <div class="col-md-12 col-xs-12">
         <div class="widget stacked">
-            <div class="stat"> 
+            <div class="stat">
                 <h5><i class="icon-map-marker"></i>Maestro > Articulos > Articulos</h5>
             </div>
             <div class="widget-header">
@@ -21,7 +21,7 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" id="btnAccion" runat="server">Accion    <span class="caret"></span></button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a id="hrefImportarArticulos" href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato" Visible="false">Importar - Articulos desde Base Externa</a>
+                                        <a id="hrefImportarArticulos" href="#modalConfirmacionImportacionArticulos" data-toggle="modal" style="width: 90%; color: Tomato" visible="false">Importar - Articulos desde Base Externa</a>
                                     </li>
                                     <li>
                                         <asp:LinkButton ID="lbtnExportarArticulos" runat="server" OnClick="lbtnExportarArticulos_Click1" ForeColor="OliveDrab">Reporte - Articulos (.txt)</asp:LinkButton>
@@ -30,7 +30,7 @@
                                         <a href="#modalImprimirArticulosActualizados" data-toggle="modal" style="width: 90%; color: OliveDrab">Reporte - Art. Precios Actualizados</a>
                                     </li>
                                     <li>
-                                        <asp:LinkButton ID="lbtnExportarArticulosMagento" runat="server" OnClick="lbtnExportarArticulosMagento_Click" ForeColor="OliveDrab" Visible="false">Reporte - Articulos Magento</asp:LinkButton>
+                                        <asp:LinkButton ID="lbtnExportarArticulosMagento" href="#modalMagento" Visible="false" runat="server" data-toggle="modal" ForeColor="OliveDrab" >Reporte - Articulos Magento</asp:LinkButton>
 
                                         <a href="#modalConfirmacionArticulo" data-toggle="modal" style="width: 90%">Importar Articulos</a>
                                     </li>
@@ -413,6 +413,59 @@
         </div>
     </div>
 
+    <div id="modalMagento" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Generar reporte magento</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel12" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                    <div class="form-group">
+                                    <label class="col-md-4">Fecha Alta Desde</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtFechaDesdeMagento" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Fecha Alta Hasta</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtFechaHastaMagento" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-2">
+                                            <asp:CheckBox ID="cbxFechasMagento" ToolTip="Sin fechas" runat="server" />
+                                    </div>
+                                    </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Marca</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListMarcaMagento" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            
+
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnMagento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnExportarArticulos_Click1" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div id="modalRecalcular" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -472,7 +525,7 @@
                             </div>
                         </div>
 
-                         <div class="form-group">
+                        <div class="form-group">
                             <label class="col-md-4">Actualizar Margen</label>
                             <div class="col-md-5">
                                 <div class="input-group">
@@ -1328,7 +1381,7 @@
                                     <i class="icon-warning-sign" style="color: orange"></i>
                                 </h1>
                             </div>
-                         
+
                             <div class="form-group">
                                 <label class="col-md-9" style="text-align: justify;">Por la magnitud del proceso a ejecutar, se generara una solicitud de Importacion de Articulos para que trabaje en segundo plano. Mientras tanto, podra seguir haciendo uso del sistema.</label>
                             </div>
@@ -1376,14 +1429,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                                    <label class="col-md-4">Lista de precios</label>
-                                    <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListListaPrecios2" ValidationGroup="BusquedaLista2" runat="server" class="form-control"></asp:DropDownList>
-                                    </div>
+                            <label class="col-md-4">Lista de precios</label>
+                            <div class="col-md-6">
+                                <asp:DropDownList ID="DropListListaPrecios2" ValidationGroup="BusquedaLista2" runat="server" class="form-control"></asp:DropDownList>
+                            </div>
                             <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListListaPrecios2" InitialValue="-1" ValidationGroup="BusquedaLista2" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                                    </div>
-                                </div>
+                                <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListListaPrecios2" InitialValue="-1" ValidationGroup="BusquedaLista2" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                            </div>
+                        </div>
                         <div class="form-group col-md-12">
                             <div class="col-md-3">
                                 <asp:TextBox ID="txtUltimaActualizacionDia" runat="server" class="form-control" MaxLength="3" TextMode="Number" Style="width: 100px" PlaceHolder="Dias"></asp:TextBox>
@@ -1419,6 +1472,8 @@
             $("#<%= txtFechaDesdeNoVendido.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaHastaNoVendido.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtDesdeIEArticulos.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaDesdeMagento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+            $("#<%= txtFechaHastaMagento.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtHastaIEArticulos.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
     </script>
@@ -1632,5 +1687,4 @@
             btn2.disable = false;
         }
     </script>--%>
-
 </asp:Content>

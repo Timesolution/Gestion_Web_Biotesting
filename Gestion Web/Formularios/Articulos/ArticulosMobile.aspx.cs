@@ -421,15 +421,15 @@ namespace Gestion_Web.Formularios.Articulos
                             celPrecioSIva.Text = decimal.Round(Convert.ToDecimal(row["precioSinIva"]) / Convert.ToDecimal(row["cambioMoneda"]), 4).ToString("C");
                         }
                     }
-                    tr.Cells.Add(celMoneda);
+                    //tr.Cells.Add(celMoneda);
                     phColumna4.Visible = true;
                 }
 
-                if (vista.columnaPrecioVentaMonedaOriginal == 1)
-                {
-                    tr.Cells.Add(celPrecioVentaMonedaOriginal);
-                    phColumna10.Visible = true;
-                }
+                //if (vista.columnaPrecioVentaMonedaOriginal == 1)
+                //{
+                //    tr.Cells.Add(celPrecioVentaMonedaOriginal);
+                //    phColumna10.Visible = true;
+                //}
 
                 if (config.precioArticulo.Contains("Con") == true)
                 {

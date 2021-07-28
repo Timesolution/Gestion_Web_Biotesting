@@ -21,6 +21,9 @@ namespace Gestion_Web.Formularios.Articulos
 {
     public partial class ArticulosABM : System.Web.UI.Page
     {
+        // verifico si el sistema es de Uruguay
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
+        //mensajes popUp
         Mensajes m = new Mensajes();
         //controlador
         controladorArticulo controlador = new controladorArticulo();
@@ -52,6 +55,12 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
+                if (esUruguay == 1) {
+                    DivTipoDistribucion.Style.Add("display", "none");
+                    DivTxtUbicacion.Style.Add("display", "none");
+                    DivListPresentaciones.Style.Add("display", "none");
+                    DivTxtImpInternos.Style.Add("display", "none");
+                }
 
                 this.accion = Convert.ToInt32(Request.QueryString["accion"]);
                 this.id = Convert.ToInt32(Request.QueryString["id"]);
@@ -84,7 +93,9 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarSucursal();
                     this.cargarStores();
                     this.cargarDropListSucursales();
-                    cargarSucursalesAlListBoxDeArticulo();
+                    this.cargarSucursalesAlListBoxDeArticulo();
+                    this.cargarIVA();
+                    this.cargarIVAProveedores();
 
                     //cargo fecha de carga
                     //this.txtFechaAlta.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -1425,18 +1436,20 @@ namespace Gestion_Web.Formularios.Articulos
             string p = porcentaje.ToString();
             try
             {
-                if (p == "21.00" || p == "21,00")
-                {
-                    this.DropListPorcentajeIVA.SelectedValue = "21";
-                }
-                if (p == "10.50" || p == "10,50")
-                {
-                    this.DropListPorcentajeIVA.SelectedValue = "10.5";
-                }
-                if (p == "0.00" || p == "0,00")
-                {
-                    this.DropListPorcentajeIVA.SelectedValue = "0";
-                }
+                DropListPorcentajeIVA.SelectedValue = p;
+                
+                //if (p == "21.00" || p == "21,00")
+                //{
+                //    this.DropListPorcentajeIVA.SelectedValue = "21";
+                //}
+                //if (p == "10.50" || p == "10,50")
+                //{
+                //    this.DropListPorcentajeIVA.SelectedValue = "10.5";
+                //}
+                //if (p == "0.00" || p == "0,00")
+                //{
+                //    this.DropListPorcentajeIVA.SelectedValue = "0";
+                //}
             }
             catch (Exception ex)
             {
@@ -4479,6 +4492,52 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        public void cargarIVAProveedores()
+        {
+            try
+            {
+                DataTable dt = controlador.obtenerPorcentajesIVA(esUruguay);
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["iva"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListIva.DataSource = dt;
+                this.DropListIva.DataValueField = "id";
+                this.DropListIva.DataTextField = "iva";
+                this.DropListIva.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando IVA. " + ex.Message));
+            }
+        }
+ 
+        public void cargarIVA()
+        {
+            try
+            {
+                DataTable dt = controlador.obtenerPorcentajesIVA(esUruguay);
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["iva"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.DropListPorcentajeIVA.DataSource = dt;
+                this.DropListPorcentajeIVA.DataValueField = "id";
+                this.DropListPorcentajeIVA.DataTextField = "iva";
+                this.DropListPorcentajeIVA.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando IVA. " + ex.Message));
             }
         }
 

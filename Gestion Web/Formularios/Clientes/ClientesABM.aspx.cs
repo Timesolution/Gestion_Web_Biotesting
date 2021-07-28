@@ -168,7 +168,6 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarClientesReferir();
                     this.cargarBTB();
                     this.cargarEstadosFiltro();
-
                     this.cargarPlanCuentas();
                     this.cargarUsuarios();
 
@@ -196,6 +195,11 @@ namespace Gestion_Web.Formularios.Clientes
                     }
                     if (this.accion == 4)
                     {
+                        if (esUruguay == 1)
+                        {
+                            this.linkIngresosBrutos.Visible = false;
+                            this.DivIIBB.Visible = false;
+                        }
                         this.linkGanancias.Visible = true;
                         this.linkOrdenesCompra.Visible = true;
                         this.linkCodigoBTB.Visible = true;
@@ -470,7 +474,7 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListFormaPago.DataSource = dt;
                 this.DropListFormaPago.DataValueField = "id";
                 this.DropListFormaPago.DataTextField = "forma";
-
+                this.DropListFormaPago.DataBind();
                 
 
 

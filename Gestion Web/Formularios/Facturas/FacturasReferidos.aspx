@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CobrosRealizadosF.aspx.cs" Inherits="Gestion_Web.Formularios.Cobros.CobrosRealizadosF" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="FacturasReferidos.aspx.cs" Inherits="Gestion_Web.Formularios.Cobros.FacturasReferidos" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <div class="main">
@@ -8,7 +8,7 @@
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i>Ventas > Cobros Realizados</h5>
+                        <h5><i class="icon-map-marker"></i>Ventas > Referidos Facturas</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-wrench"></i>
@@ -125,7 +125,7 @@
 
                     <div class="widget-header">
                         <i class="icon-money" style="width: 2%"></i>
-                        <h3 style="width: 75%">Cobros Realizados
+                        <h3 style="width: 75%">Referidos Facturas
                         </h3>
                         <h3>
                             <asp:Label ID="lblSaldo" runat="server" Style="text-align: end" Text="" ForeColor="#0099ff" Font-Bold="true"></asp:Label>
@@ -137,16 +137,17 @@
                             <thead>
                                 <tr>
                                     <th style="text-align: left; width: 10%;">Fecha</th>
-                                    <th style="text-align: left; width: 25%;">Numero</th>
+                                    <th style="text-align: left; width: 22%;">Numero</th>
                                     <th style="text-align: left; width: 20%;">Cliente</th>
+                                    <th style="text-align: left; width: 22%;">Referido</th>
                                     <th style="text-align: right; width: 10%;">Importe</th>
-                                    <th style="text-align: left; width: 25%;">Comentarios</th>
+                                    <th style="text-align: left; width: 10%;">Saldo</th>
                                     <th style="text-align: left; width: 10%;"></th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <asp:PlaceHolder ID="phCobrosRealizados" runat="server"></asp:PlaceHolder>
+                                <asp:PlaceHolder ID="phReferidosFacturas" runat="server"></asp:PlaceHolder>
                             </tbody>
                         </table>
                     </div>
@@ -292,22 +293,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4">Tipo</label>
-                                    <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListTipo" runat="server" class="form-control">
-                                            <asp:ListItem Value="0">Ambos</asp:ListItem>
-                                            <asp:ListItem Value="1">FC</asp:ListItem>
-                                            <asp:ListItem Value="2">PRP</asp:ListItem>
-                                        </asp:DropDownList>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListTipo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-md-4">Vendedores</label>
                                     <div class="col-md-6">
                                         <asp:DropDownList ID="DropListVendedores" runat="server" class="form-control"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Referidos</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListReferidos" runat="server" class="form-control"></asp:DropDownList>
                                         <!-- /input-group -->
                                     </div>
                                 </div>

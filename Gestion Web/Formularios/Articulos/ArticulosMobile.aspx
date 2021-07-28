@@ -69,10 +69,6 @@
                                     <asp:PlaceHolder ID="phColumna4" Visible="false" runat="server">
                                        <%-- <th runat="server" style="width: 5%">Moneda</th>--%>
                                     </asp:PlaceHolder>
-                                
-                                    <asp:PlaceHolder ID="phColumna10" Visible="false" runat="server">
-                                        <th runat="server" id="thPrecioVentaMonedaOriginal" style="width: 5%">P. Venta</th>
-                                    </asp:PlaceHolder>
                                     <asp:PlaceHolder ID="phColumna6" runat="server">
                                         <th runat="server" id="headerPrecio" style="width: 5%">P.Venta en ($)</th>
                                     </asp:PlaceHolder>

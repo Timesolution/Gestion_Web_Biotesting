@@ -54,7 +54,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="name" class="col-md-3">Cuit</label>
+                                                    <label id="lbCUITDNI" runat="server" for="name" class="col-md-3">CUIT</label>
                                                     <div class="col-md-6">
                                                         <asp:TextBox ID="txtCuit" runat="server" MaxLength="11" class="form-control"></asp:TextBox>
                                                     </div>

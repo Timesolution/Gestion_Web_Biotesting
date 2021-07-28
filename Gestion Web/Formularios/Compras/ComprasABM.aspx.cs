@@ -38,6 +38,10 @@ namespace Gestion_Web.Formularios.Compras
         {
             try
             {
+                if (esUruguay == 1) {
+                    TextCUIT.InnerText = "RUT";
+                }
+                
                 VerificarLogin();
                 accion = Convert.ToInt32(Request.QueryString["a"]);
                 idCompra = Convert.ToInt32(Request.QueryString["c"]);

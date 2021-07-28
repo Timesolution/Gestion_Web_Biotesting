@@ -862,7 +862,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue), PRPFacturados);
                 decimal saldo = 0;
 
-                if (dtFacturas != null && dtFacturas.Rows.Count <= 2000)
+                if (dtFacturas != null && dtFacturas.Rows.Count <= 3000)
                 {
                     foreach (DataRow row in dtFacturas.Rows)
                     {
@@ -1459,7 +1459,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (modCliente < 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar datos del cliente a facturar. "));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El CUIT ingresado ya existe en la base de datos o es incorrecto."));
                         return;
                     }
 
@@ -1716,7 +1716,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (modCliente < 0)
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudo modificar datos del cliente a facturar. "));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("El CUIT ingresado ya existe en la base de datos o es incorrecto."));
                     return;
                 }
 
@@ -2179,6 +2179,18 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        protected void btnExportarReporteVentaArticulos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.ExportToExcel(16);
+            }
+            catch
+            {
+
+            }
+        }
         protected void btnImprimirPantalla_Click(object sender, EventArgs e)
         {
             try
@@ -2451,6 +2463,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (accion == 14)
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=14&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        }
+                        if (accion == 16)
+                        {
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=16&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
 
                     }
@@ -3437,7 +3453,7 @@ namespace Gestion_Web.Formularios.Facturas
                 int idIva = this.contCliente.obtenerIvaIdClienteByNombre("No Informa");
                 //c.iva = this.ListIvaFact.Items.FindByValue(idIva.ToString()).Text;
                 c.iva = idIva.ToString();
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                int cMod = this.contCliente.modificarClienteParaRefacturar(c, this.txtCUITfact.Text, c.codigo);
                 return cMod;
             }
             catch
@@ -3543,12 +3559,11 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 //cargo todos los datos del cliente
                 Cliente c = this.contCliente.obtenerClienteID(Convert.ToInt32(this.lblIdCliente.Text));
-                c.cuit = this.txtCUITfact.Text;
                 c.alerta = this.contCliente.obtenerAlertaClienteByID(Convert.ToInt32(this.lblIdCliente.Text));
                 c.alerta.idCliente = c.id;
                 c.iva = this.ListIvaFact.SelectedValue.ToString();
 
-                int cMod = this.contCliente.modificarCliente(c, c.cuit, c.codigo);
+                int cMod = this.contCliente.modificarClienteParaRefacturar(c, this.txtCUITfact.Text, c.codigo);
                 if (cMod > 0)
                 {
                     controladorDireccion contDir = new controladorDireccion();
@@ -3994,7 +4009,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
 
                     if (i > 0)
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 2000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 3000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
                     else
                     {
                         int idError = Log.ObtenerUltimoIDLog();
@@ -5321,11 +5336,11 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idtildado))
                 {
-                    Response.Redirect("ABMFacturas.aspx?accion=13&facturas=" + idtildado +"&numero="+numero);
+                    Response.Redirect("ABMFacturas.aspx?accion=13&facturas=" + idtildado + "&numero=" + numero);
                 }
                 else
                 {
-                    
+
                 }
             }
             catch (Exception ex)

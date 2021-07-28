@@ -337,6 +337,18 @@
                                                 </li>
                                             </ul>
                                         </li>
+
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Reporte Ventas con Articulos</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="btnExportarReporteVentaArticulos" runat="server" OnClick="btnExportarReporteVentaArticulos_Click">
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
+
                                     </ul>
                                 </div>
 

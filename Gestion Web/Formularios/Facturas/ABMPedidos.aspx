@@ -348,6 +348,12 @@
                                                                             <asp:DropDownList ID="DropListZonaEntrega" runat="server" class="form-control"></asp:DropDownList>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="form-group">
+                                                                        <label for="name" class="col-md-4">Referido</label>
+                                                                        <div class="col-md-4">
+                                                                            <asp:DropDownList ID="ListReferido" runat="server" class="form-control"></asp:DropDownList>
+                                                                        </div>
+                                                                    </div>
                                                                     <!-- Envio Mail -->
                                                                     <div class="form-group">
                                                                         <label class="col-md-3">Mail Entrega: </label>

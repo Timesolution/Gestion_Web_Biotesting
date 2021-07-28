@@ -17,9 +17,8 @@ using System.Web.UI.WebControls;
 
 namespace Gestion_Web.Formularios.Cobros
 {
-    public partial class CobrosRealizadosF : System.Web.UI.Page
+    public partial class FacturasReferidos : System.Web.UI.Page
     {
-        int TeamHermanos = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("ReporteVendedores"));
         controladorCobranza contCobranza = new controladorCobranza();
         controladorSucursal contSucursal = new controladorSucursal();
         controladorCuentaCorriente contrCC = new controladorCuentaCorriente();
@@ -45,10 +44,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                if (TeamHermanos == 1)
-                {
-                    BtnExcelVendedores.Visible = false;
-                }
+             
                 this.VerificarLogin();
                 this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
                 this.idEmpresa = Convert.ToInt32(Request.QueryString["empresa"]);
@@ -62,7 +58,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 if (!IsPostBack)
                 {
-                    this.verificarModoBlanco();
+                    //this.verificarModoBlanco();
                     if (idEmpresa == 0 && idSucursal == 0)
                     {
                         //this.idCliente = 1;
@@ -76,6 +72,7 @@ namespace Gestion_Web.Formularios.Cobros
                     }
                     this.cargarClientes();
                     this.cargarVendedores();
+                    cargarReferidos();
                     this.DropListClientes.SelectedValue = this.idCliente.ToString();
                     this.DropListVendedores.SelectedValue = this.vendedor.ToString();
                     this.cargarEmpresas();
@@ -84,7 +81,6 @@ namespace Gestion_Web.Formularios.Cobros
                     this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
                     this.DropListPuntoVta.SelectedValue = this.puntoVenta.ToString();
-                    this.DropListTipo.SelectedValue = this.idTipo.ToString();
                     txtFechaDesde.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
                 }
@@ -147,23 +143,23 @@ namespace Gestion_Web.Formularios.Cobros
                 return -1;
             }
         }
-        public void verificarModoBlanco()
-        {
-            try
-            {
-                Configuracion config = new Configuracion();
-                if (config.modoBlanco == "1")
-                {
-                    this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("Ambos"));
-                    this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("PRP"));
-                    this.idTipo = 0;
-                }
-            }
-            catch
-            {
+        ////public void verificarModoBlanco()
+        //{
+        //    try
+        //    {
+        //        Configuracion config = new Configuracion();
+        //        if (config.modoBlanco == "1")
+        //        {
+        //            this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("Ambos"));
+        //            this.DropListTipo.Items.Remove(this.DropListTipo.Items.FindByText("PRP"));
+        //            this.idTipo = 0;
+        //        }
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
+        //    }
+        //}
         public void cargarClientes()
         {
             try
@@ -223,23 +219,21 @@ namespace Gestion_Web.Formularios.Cobros
                     this.idSucursal = (int)Session["Login_SucUser"];
                     this.idEmpresa = (int)Session["Login_EmpUser"];
                     this.puntoVenta = Convert.ToInt32(DropListPuntoVta.SelectedValue);
-                    this.idTipo = Convert.ToInt32(DropListTipo.SelectedValue);
                     this.fechaD = this.txtFechaDesde.Text;
                     this.fechaH = this.txtFechaHasta.Text;
                     //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                     //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
-                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
-                    phCobrosRealizados.Controls.Clear();
+                    DataTable dtFacturas = this.contFact.obtenerFacturasReferidosRangoDT(fechaD, fechaH,idSucursal, Convert.ToInt32(DropListPuntoVta.SelectedValue),vendedor, idEmpresa, idCliente, 0);
+                    phReferidosFacturas.Controls.Clear();
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
                     //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     //{
 
-                    saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
-                    this.cargarEnPh(dtMovimiento);
+                    saldo += dtFacturas.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                    this.cargarEnPh(dtFacturas);
 
-                    this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
                     //}
                     //else
@@ -250,18 +244,17 @@ namespace Gestion_Web.Formularios.Cobros
                 }
                 else
                 {
-                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
-                    phCobrosRealizados.Controls.Clear();
+                    DataTable dtFactura = this.contFact.obtenerFacturasReferidosRangoDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
+                    phReferidosFacturas.Controls.Clear();
                     decimal saldo = 0;
 
                     ///Si la cantidad de registros obtenidos es mayor a 2000, entonces generamos un reporte en segundo plano para que no lance el timeOut
                     //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     //{
 
-                    saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
-                    this.cargarEnPh(dtMovimiento);
+                    saldo += dtFactura.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                    this.cargarEnPh(dtFactura);
 
-                    this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
 
                     //}
                     //else
@@ -350,7 +343,7 @@ namespace Gestion_Web.Formularios.Cobros
                 infXML.Sucursal = Convert.ToInt32(this.DropListSucursal.SelectedValue);
                 infXML.Cliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
                 infXML.PuntoVenta = Convert.ToInt32(this.DropListPuntoVta.SelectedValue);
-                infXML.Tipo = Convert.ToInt32(this.DropListTipo.SelectedValue);
+                //infXML.Tipo = Convert.ToInt32(this.DropListTipo.SelectedValue);
                 infXML.Vendedor = Convert.ToInt32(this.DropListVendedores.SelectedValue);
             }
             catch (Exception ex)
@@ -423,10 +416,6 @@ namespace Gestion_Web.Formularios.Cobros
                 if (idPuntoVenta > 0)
                 {
                     label += DropListPuntoVta.Items.FindByValue(idPuntoVenta.ToString()).Text + ",";
-                }
-                if (idTipo > -1)
-                {
-                    label += DropListTipo.Items.FindByValue(idTipo.ToString()).Text;
                 }
 
                 this.lblParametros.Text = label;
@@ -581,28 +570,36 @@ namespace Gestion_Web.Formularios.Cobros
                     tr.Cells.Add(celFecha);
 
                     TableCell celNumero = new TableCell();
-                    celNumero.Text = row["TipoDocumento"].ToString() + " " + row["numero"].ToString().PadLeft(8, '0');
+                    celNumero.Text =row["numero"].ToString();
                     celNumero.VerticalAlign = VerticalAlign.Middle;
                     celNumero.HorizontalAlign = HorizontalAlign.Left;
                     tr.Cells.Add(celNumero);
 
                     TableCell celCliente = new TableCell();
-                    celCliente.Text = row["Cliente"].ToString();
+                    celCliente.Text = row["razonSocial"].ToString();
                     celCliente.VerticalAlign = VerticalAlign.Middle;
                     celCliente.HorizontalAlign = HorizontalAlign.Left;
                     tr.Cells.Add(celCliente);
 
+                    TableCell celReferido = new TableCell();
+                    celReferido.Text = row["referido"].ToString();
+                    celReferido.VerticalAlign = VerticalAlign.Middle;
+                    celReferido.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celReferido);
+
                     TableCell celHaber = new TableCell();
-                    celHaber.Text = "$" + row["haber"].ToString().Replace(',', '.');
+                    celHaber.Text = "$" + row["total"].ToString().Replace(',', '.');
                     celHaber.VerticalAlign = VerticalAlign.Middle;
                     celHaber.HorizontalAlign = HorizontalAlign.Right;
                     tr.Cells.Add(celHaber);
 
-                    TableCell celComentarios = new TableCell();
-                    celComentarios.Text = row["Observaciones"].ToString();
-                    celComentarios.VerticalAlign = VerticalAlign.Middle;
-                    celComentarios.HorizontalAlign = HorizontalAlign.Left;
-                    tr.Cells.Add(celComentarios);
+                    TableCell celSaldo = new TableCell();
+                    celSaldo.Text = "$" + row["total"].ToString().Replace(',', '.');
+                    celSaldo.VerticalAlign = VerticalAlign.Middle;
+                    celSaldo.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celSaldo);
+
+
 
                     //agrego fila a tabla
                     TableCell celAccion = new TableCell();
@@ -620,18 +617,10 @@ namespace Gestion_Web.Formularios.Cobros
                     l2.Text = "&nbsp";
                     celAccion.Controls.Add(l2);
 
-                    LinkButton btnEliminar = new LinkButton();
-                    btnEliminar.ID = "btnEliminar_" + row["id"].ToString();
-                    btnEliminar.CssClass = "btn btn-info";
-                    btnEliminar.Attributes.Add("data-toggle", "modal");
-                    btnEliminar.Attributes.Add("href", "#modalConfirmacion");
-                    btnEliminar.Text = "<span class='shortcut-icon icon-trash'></span>";
-                    btnEliminar.OnClientClick = "abrirdialog(" + row["id"].ToString() + ");";
-                    celAccion.Controls.Add(btnEliminar);
                     celAccion.Width = Unit.Percentage(10);
                     tr.Cells.Add(celAccion);
 
-                    phCobrosRealizados.Controls.Add(tr);
+                    phReferidosFacturas.Controls.Add(tr);
                 }
 
             }
@@ -645,7 +634,6 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&fechadesde=" + this.fechaD + "&fechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
                 //cargarMovimientos();
             }
             catch (Exception ex)
@@ -911,12 +899,31 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
+        protected void cargarReferidos()
+        {
+            try
+            {
+                controladorReferido controladorReferido = new controladorReferido();
+                List<Referidos> referidos = controladorReferido.ObtenerTodosReferidos();
+                referidos.Insert(0, (new Referidos { id = -1, descripcion = "Seleccione..." }));
+
+                this.DropListReferidos.DataSource = referidos;
+                this.DropListReferidos.DataValueField = "id";
+                this.DropListReferidos.DataTextField = "descripcion";
+
+                this.DropListReferidos.DataBind();
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
         protected void lbtnReporteDetalleCobros_Click(object sender, EventArgs e)
         {
             try
             {
                 string listaCobros = string.Empty;
-                foreach (Control C in phCobrosRealizados.Controls)
+                foreach (Control C in phReferidosFacturas.Controls)
                 {
                     TableRow tr = C as TableRow;
                     LinkButton lbtn = tr.Cells[5].Controls[0] as LinkButton;

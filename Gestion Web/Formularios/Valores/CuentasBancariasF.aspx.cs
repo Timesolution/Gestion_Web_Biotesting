@@ -6,14 +6,20 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Configuration;
 
 namespace Gestion_Web.Formularios.Valores
 {
     public partial class CuentasBancariasF : System.Web.UI.Page
     {
+        int esUruguay = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsUruguay"));
         ControladorBanco cont = new ControladorBanco();
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (esUruguay == 1)
+            {
+                thCUIT.InnerText = "RUT";
+            }
             this.VerificarLogin();
             this.obtenerCuentas();
         }

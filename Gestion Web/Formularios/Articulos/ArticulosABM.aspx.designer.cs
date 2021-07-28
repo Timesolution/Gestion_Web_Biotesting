@@ -285,6 +285,15 @@ namespace Gestion_Web.Formularios.Articulos
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator14;
 
         /// <summary>
+        /// Control DivTipoDistribucion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivTipoDistribucion;
+
+        /// <summary>
         /// Control ListTipoDistribucion.
         /// </summary>
         /// <remarks>
@@ -463,6 +472,15 @@ namespace Gestion_Web.Formularios.Articulos
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlInputText txtCostoIva;
+
+        /// <summary>
+        /// Control DivTxtImpInternos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivTxtImpInternos;
 
         /// <summary>
         /// Control txtImpInternos.
@@ -717,6 +735,15 @@ namespace Gestion_Web.Formularios.Articulos
         protected global::System.Web.UI.WebControls.DropDownList DropListAparece;
 
         /// <summary>
+        /// Control DivTxtUbicacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivTxtUbicacion;
+
+        /// <summary>
         /// Control txtUbicacion.
         /// </summary>
         /// <remarks>
@@ -724,6 +751,15 @@ namespace Gestion_Web.Formularios.Articulos
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtUbicacion;
+
+        /// <summary>
+        /// Control DivListPresentaciones.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl DivListPresentaciones;
 
         /// <summary>
         /// Control ListPresentaciones.

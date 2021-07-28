@@ -107,22 +107,6 @@ namespace Gestion_Web.Formularios.Facturas
                         if (s == "73")//Ventas.Ventas.Sucursales
                         {
                             string perfil = Session["Login_NombrePerfil"] as string;
-                            if (perfil == "SuperAdministrador" || perfil == "Control de Stock")
-                            {
-                                this.DropListSucursalOrigen.Attributes.Remove("disabled");
-                                this.DropListSucursalDestino.Attributes.Remove("disabled");
-                            }
-                            else
-                            {
-                                if (this.radioDestino.Checked)
-                                {
-                                    this.DropListSucursalOrigen.SelectedValue = Session["Login_SucUser"].ToString();
-                                }
-                                else
-                                {
-                                    this.DropListSucursalDestino.SelectedValue = Session["Login_SucUser"].ToString();
-                                }
-                            }
                             return 1;
                         }
                     }
