@@ -216,8 +216,8 @@ namespace Gestion_Web.Formularios.Cobros
                 if (idCliente == 0 && idEmpresa == 0 && idSucursal == 0 && puntoVenta == 0)
                 {
                     this.idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
-                    this.idSucursal = (int)Session["Login_SucUser"];
-                    this.idEmpresa = (int)Session["Login_EmpUser"];
+                    this.idSucursal = Convert.ToInt32(DropListSucursal.SelectedValue); 
+                    this.idEmpresa = Convert.ToInt32(DropListEmpresa.SelectedValue);
                     this.puntoVenta = Convert.ToInt32(DropListPuntoVta.SelectedValue);
                     this.fechaD = this.txtFechaDesde.Text;
                     this.fechaH = this.txtFechaHasta.Text;
@@ -594,7 +594,7 @@ namespace Gestion_Web.Formularios.Cobros
                     tr.Cells.Add(celHaber);
 
                     TableCell celSaldo = new TableCell();
-                    celSaldo.Text = "$" + row["total"].ToString().Replace(',', '.');
+                    celSaldo.Text = "$" + row["saldo"].ToString().Replace(',', '.');
                     celSaldo.VerticalAlign = VerticalAlign.Middle;
                     celSaldo.HorizontalAlign = HorizontalAlign.Right;
                     tr.Cells.Add(celSaldo);
