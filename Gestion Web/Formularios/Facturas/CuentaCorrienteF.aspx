@@ -42,6 +42,20 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
+                                
+                                <td style="width: 5%">
+                                    <div class="shortcuts" style="height: 100%">
+
+                                        <asp:LinkButton class="btn btn-primary" ToolTip="Cobros" ID="lbnCobros" Visible="false" Style="width: 100%" runat="server" OnClick="lbnCobros_Click"> 
+                                            <i ID="iconCobros" class="fa icon-usd"></i>
+                                        </asp:LinkButton>
+
+                                    </div>
+                                </td>
+
+                                <td>&nbsp
+                                </td>
+                                
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
@@ -50,8 +64,8 @@
                                         </asp:LinkButton>
 
                                     </div>
-
                                 </td>
+
                                 <td>&nbsp
                                 </td>
 
@@ -60,6 +74,7 @@
                                         <asp:Label runat="server" ID="Label3" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
+                               
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
