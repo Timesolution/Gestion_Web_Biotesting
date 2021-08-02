@@ -708,7 +708,6 @@ namespace Gestion_Web.Formularios.Herramientas
         protected global::System.Web.UI.WebControls.LinkButton lbtnModificarCantidadEnVentaEntreSucursales;
 
         /// <summary>
-
         /// txtObservacionesFC control.
         /// </summary>
         /// <remarks>
@@ -727,7 +726,6 @@ namespace Gestion_Web.Formularios.Herramientas
         protected global::System.Web.UI.WebControls.LinkButton lbtnObeservacionesFC;
 
         /// <summary>
-
         /// DropListProveedores control.
         /// </summary>
         /// <remarks>
@@ -781,7 +779,6 @@ namespace Gestion_Web.Formularios.Herramientas
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnModoSeguro;
 
-
         /// <summary>
         /// lbtnAgregarItemsFactura control.
         /// </summary>
@@ -808,6 +805,15 @@ namespace Gestion_Web.Formularios.Herramientas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnFacturarMultiplesVeces;
+
+        /// <summary>
+        /// lbtnGenerarPedidoStockFaltante control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarPedidoStockFaltante;
 
         /// <summary>
         /// lbtnSumaPuntosCobro control.
@@ -844,6 +850,7 @@ namespace Gestion_Web.Formularios.Herramientas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnFacturarMultiplesVecesRemito;
+
         /// <summary>
         /// UpdatePanel2 control.
         /// </summary>
@@ -942,7 +949,6 @@ namespace Gestion_Web.Formularios.Herramientas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnGuardarPersonalizar;
-
 
         /// <summary>
         /// UpdatePanel3 control.

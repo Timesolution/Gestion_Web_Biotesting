@@ -626,6 +626,12 @@
                                                 <asp:LinkButton ID="lbtnFacturarMultiplesVeces" runat="server" OnClick="lbtnFacturarMultiplesVeces_Click" />
                                             </div>
                                         </div>
+                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Generar Pedido Stock Faltante:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnGenerarPedidoStockFaltante" runat="server" OnClick="lbtnGenerarPedidoStockFaltante_Click" />
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Sumar puntos cobro:</label>
                                             <div class="col-md-2">
