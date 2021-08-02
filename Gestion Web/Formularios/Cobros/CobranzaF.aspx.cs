@@ -58,13 +58,16 @@ namespace Gestion_Web.Formularios.Facturas
                         btnSiguiente.Visible = false;
                     }
 
-                    if (idEmpresa == 0 && idSucursal == 0)
+                    if (idEmpresa == 0)
                     {
                         //this.idCliente = 1;
-                        this.idSucursal = (int)Session["Login_SucUser"];
                         this.idEmpresa =  (int)Session["Login_EmpUser"];
                         //this.puntoVenta = this.contCobranza.obtenerPrimerPuntoVenta(idSucursal, idEmpresa);
                         //this.puntoVenta = 1;
+                    }
+                    if(idSucursal == 0)
+                    {
+                        this.idSucursal = (int)Session["Login_SucUser"];
                     }
                     this.cargarClientes();
                     this.DropListClientes.SelectedValue = this.idCliente.ToString();

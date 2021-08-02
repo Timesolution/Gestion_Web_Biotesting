@@ -716,6 +716,12 @@ namespace Gestion_Web.Formularios.Articulos
                 dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
+                this.ListGruposExportadorPrecios.DataSource = dt;
+                this.ListGruposExportadorPrecios.DataValueField = "id";
+                this.ListGruposExportadorPrecios.DataTextField = "descripcion";
+
+                this.ListGruposExportadorPrecios.DataBind();
+
                 //agrego todos
                 DataRow dr2 = dt.NewRow();
                 dr2["descripcion"] = "Todos SubGrupos";
@@ -727,6 +733,8 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListGrupo.DataTextField = "descripcion";
 
                 this.ListGrupo.DataBind();
+
+    
 
             }
             catch (Exception ex)
@@ -800,6 +808,12 @@ namespace Gestion_Web.Formularios.Articulos
                 this.ListMarcaMagento.DataTextField = "marca";
 
                 this.ListMarcaMagento.DataBind();
+
+                this.ListMarcaExportadorPrecios.DataSource = dt;
+                this.ListMarcaExportadorPrecios.DataValueField = "id";
+                this.ListMarcaExportadorPrecios.DataTextField = "marca";
+
+                this.ListMarcaExportadorPrecios.DataBind();
 
             }
             catch (Exception ex)
@@ -2717,6 +2731,109 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
+            }
+        }
+
+        protected void btnExportadorPrecios_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                controladorReportes controladorReportes = new controladorReportes();
+
+                string rutaCSV = Server.MapPath("../ArchivosExportacion/Salida/");
+
+                if (!Directory.Exists(rutaCSV))
+                {
+                    Directory.CreateDirectory(rutaCSV);
+                }
+
+                string archivoCSV = controladorReportes.generarArchivoExportadorArticulosPrecio(rutaCSV,Convert.ToInt32(ListMarcaExportadorPrecios.SelectedValue),Convert.ToInt32(ListGruposExportadorPrecios.SelectedValue));
+
+                System.IO.FileStream fs = null;
+                fs = System.IO.File.Open(archivoCSV, System.IO.FileMode.Open);
+
+                byte[] btFile = new byte[fs.Length];
+                fs.Read(btFile, 0, Convert.ToInt32(fs.Length));
+                fs.Close();
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/octet-stream";
+                this.Response.AddHeader("Content-disposition", "attachment; filename= Articulos_Precios.csv");
+                this.Response.BinaryWrite(btFile);
+                this.Response.End();
+
+            }
+            catch (Exception ex)
+            {
+                if (!ex.Message.Contains("Thread was being aborted"))
+                {
+                    int idError = Log.EscribirSQLDevuelveID(1, "ERROR", "CATCH: Ocurrio un error grabando el pedido de la Importacion. Ubicacion: Articulos.aspx. Metodo: lbtnExportarArticulos_Click. Excepcion: " + ex.Message);
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+                }
+            }
+        }
+
+        protected void lbtnImportarArticulos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Boolean fileOK = false;
+
+                if (FileUploadImportador.HasFile)
+                {
+                    String fileExtension = System.IO.Path.GetExtension(FileUploadImportador.FileName).ToLower();
+
+                    String[] allowedExtensions = { ".csv" };
+
+                    for (int i = 0; i < allowedExtensions.Length; i++)
+                    {
+                        if (fileExtension == allowedExtensions[i])
+                        {
+                            fileOK = true;
+                        }
+                    }
+                }
+
+                if (fileOK)
+                {
+                    //guardo nombre archivo
+                    //string archivo = Server.MapPath("~/") + FileUploadImportador.FileName;
+                    Stream archivo = FileUploadImportador.FileContent;
+                    //lo subo
+                    //FileUploadImportador.PostedFile.SaveAs(path + FileUploadImportador.FileName);
+
+                    //int i = contPedEntity.
+                    string mensaje = controlador.ImportarPedidosExcel(archivo).ToString();
+                    //string mensaje ="funciono";
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "alert", m.mensajeBoxInfo("funciono 1", ""), true);
+                    ScriptManager.RegisterStartupScript(this, this.UpdatePanel1.GetType(), "alert", m.mensajeBoxInfo(mensaje, ""), true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.UpdatePanel1.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //RegisterClientScriptBlock("alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + " pedidos ", "../Clientes/ClientesF.aspx"));
+
+                    //if (i > 0)
+                    //{
+                    //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxInfo("Proceso finalizado con exito. Se importaron: " + i + " pedidos ", "../Clientes/ClientesF.aspx"));
+                    //}
+                    //else
+                    //{
+                    //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("No se pudieron importar una o mas pacientes. "));
+                    //}
+
+                    FileUploadImportador.Dispose();
+                    //File.Delete(Server.MapPath(".") + "/" + FileUploadImportador.FileName);
+                }
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe cargar un archivo '.txt'!. "));
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

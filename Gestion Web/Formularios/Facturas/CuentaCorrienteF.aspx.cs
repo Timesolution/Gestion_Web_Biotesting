@@ -91,6 +91,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.btnImpagas.Visible = true;
                     this.btnImprimir.Visible = true;
                     this.btnAccion.Visible = true;
+                    this.lbnCobros.Visible = true;
                 }
 
                 if (accion == 1)
@@ -996,6 +997,14 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
             }
 
+        }
+
+        protected void lbnCobros_Click(object sender, EventArgs e)
+        {
+            if (this.idCliente != 0 && this.idTipo >= 0 && this.idSucursal > 0) 
+            {
+                Response.Redirect("../Cobros/CobranzaF.aspx?cliente=" + this.idCliente + "&sucursal=" + this.idSucursal + "&tipo=" + this.idTipo);
+            }
         }
     }
 }
