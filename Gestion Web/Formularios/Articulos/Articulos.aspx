@@ -34,6 +34,13 @@
 
                                         <a href="#modalConfirmacionArticulo" data-toggle="modal" style="width: 90%">Importar Articulos</a>
                                     </li>
+                                    <li>
+                                        <asp:LinkButton ID="lbtnExportarArticulosModificadorPrecio" href="#modalExportarArticulosModificadorPrecio"  runat="server" data-toggle="modal" ForeColor="OliveDrab" >Exportar Articulos - Modificar Precios </asp:LinkButton>
+
+                                    </li>
+                                    <li>
+                                                <a data-toggle="modal" href="#modalImportarArticulos">Importar Precios Articulos</a>
+                                            </li>
                                 </ul>
                             </div>
                         </td>
@@ -413,7 +420,47 @@
         </div>
     </div>
 
-    <div id="modalMagento" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalExportarArticulosModificadorPrecio" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Generar exportacion articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel13" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Marca</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListMarcaExportadorPrecios" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Grupo</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListGruposExportadorPrecios" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            
+
+                                </div>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnExportadorPrecios" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnExportadorPrecios_Click" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div><div id="modalMagento" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -1406,6 +1453,71 @@
     </div>
 
     <%-- Fin Importacion de articulos --%>
+
+       <div id="modalImportarArticulos" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Importador</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel14" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                    <label class="col-md-4">Archivo:</label>
+                                    <div class="col-md-8">
+                                        <asp:FileUpload ID="FileUploadImportador" runat="server" />
+                                    </div>
+                                </div>
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
+
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#modalConfirmacionArticulos" data-toggle="modal" class="btn btn-success" data-dismiss="modal"><span class='shortcut-icon icon-ok'></span></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!--MODAL Confirmacion Importacion Pedidos-->
+        <div id="modalConfirmacionArticulos" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Confirmacion de Importacion de Articulos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <div class="form-group">
+                                <div class="col-md-2">
+                                    <h1>
+                                        <i class="icon-warning-sign" style="color: orange"></i>
+                                    </h1>
+                                </div>
+                                <div class="col-md-7">
+                                    <h5>
+                                        <asp:Label runat="server" ID="Label4" Text="Esta seguro que desea importar los articulos?" Style="text-align: center"></asp:Label>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button ID="lbtnImportarArticulos" runat="server" OnClick="lbtnImportarArticulos_Click" Text="Aceptar" class="btn btn-success"/>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL Confirmacion Importacion Pedidos-->
 
     <%-- MODAL IMPRIMIR ART. ACTUALIZADOS --%>
 
