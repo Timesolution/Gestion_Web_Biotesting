@@ -1011,7 +1011,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phCotizaciones.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    if (!tr.Cells[5].Text.Contains("Anulada"))
+                    if (!tr.Cells[4].Text.Contains("Anulada"))
                     {
                         CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
                         if (ch.Checked == true)

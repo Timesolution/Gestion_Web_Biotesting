@@ -2606,7 +2606,7 @@ namespace Gestion_Web.Formularios.Articulos
                     DataTable dt = this.controlador.ObtenerArticulosUltimaFechaActualizacionPersonalizado(fechaBuscar);
 
                     if (dt.Rows.Count > 0)
-                        Response.Redirect("ReporteAF.aspx?e=1&accion=8&d=" + cantidadDias);
+                        Response.Redirect("ReporteAF.aspx?e=1&accion=8&d=" + cantidadDias + "&l=" + this.DropListListaPrecios2.SelectedValue, false);
                     else
                         ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxAtencion("No se han encontrado resultados para imprimir."));
                 }
