@@ -9534,6 +9534,8 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int EsIntegral = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsIntegral"));
+
                 if (configuracion.infoImportacionFacturas == "1")
                 {
                     ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
@@ -9548,18 +9550,39 @@ namespace Gestion_Web.Formularios.Facturas
                     if (art.Articulos_Despachos.Count > 0)
                     {
                         Pais pais = contPais.obtenerPaisID(art.procedencia.Value);
-                        var datos = art.Articulos_Despachos.FirstOrDefault();
+                        if (EsIntegral == 1)
+                        {
+                            if (pais.descripcion == "IMPORTADO")
+                            {
+                                var datos = art.Articulos_Despachos.FirstOrDefault();
 
-                        if (datos.FechaDespacho != null && !articulo.descripcion.Contains("Fecha despacho:"))
-                            articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
-                        if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !articulo.descripcion.Contains("D.I.:"))
-                            articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
-                        if (!String.IsNullOrEmpty(datos.Lote) && !articulo.descripcion.Contains("Lote:"))
-                            articulo.descripcion += " |" + "Lote: " + datos.Lote;
-                        if (!String.IsNullOrEmpty(datos.Vencimiento) && !articulo.descripcion.Contains("Vencimiento:"))
-                            articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
-                        if (pais != null && !articulo.descripcion.Contains("Procedencia:"))
-                            articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
+                                if (datos.FechaDespacho != null && !articulo.descripcion.Contains("Fecha despacho:"))
+                                    articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
+                                if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !articulo.descripcion.Contains("D.I.:"))
+                                    articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
+                                if (!String.IsNullOrEmpty(datos.Lote) && !articulo.descripcion.Contains("Lote:"))
+                                    articulo.descripcion += " |" + "Lote: " + datos.Lote;
+                                if (!String.IsNullOrEmpty(datos.Vencimiento) && !articulo.descripcion.Contains("Vencimiento:"))
+                                    articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
+                                if (pais != null && !articulo.descripcion.Contains("Procedencia:"))
+                                    articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
+                            }
+                        }
+                        else 
+                        {
+                            var datos = art.Articulos_Despachos.FirstOrDefault();
+
+                            if (datos.FechaDespacho != null && !articulo.descripcion.Contains("Fecha despacho:"))
+                                articulo.descripcion += " |" + "Fecha despacho: " + datos.FechaDespacho.Value.ToString("dd/MM/yyyy");
+                            if (!String.IsNullOrEmpty(datos.NumeroDespacho) && !articulo.descripcion.Contains("D.I.:"))
+                                articulo.descripcion += " |" + "D.I.: " + datos.NumeroDespacho;
+                            if (!String.IsNullOrEmpty(datos.Lote) && !articulo.descripcion.Contains("Lote:"))
+                                articulo.descripcion += " |" + "Lote: " + datos.Lote;
+                            if (!String.IsNullOrEmpty(datos.Vencimiento) && !articulo.descripcion.Contains("Vencimiento:"))
+                                articulo.descripcion += " |" + "Vencimiento: " + datos.Vencimiento;
+                            if (pais != null && !articulo.descripcion.Contains("Procedencia:"))
+                                articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
+                        }
                     }
                 }
 
