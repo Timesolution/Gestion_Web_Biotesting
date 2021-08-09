@@ -862,7 +862,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue), PRPFacturados);
                 decimal saldo = 0;
 
-                if (dtFacturas != null && dtFacturas.Rows.Count <= 3000)
+                if (dtFacturas != null && dtFacturas.Rows.Count <= 4000)
                 {
                     foreach (DataRow row in dtFacturas.Rows)
                     {
@@ -4009,7 +4009,7 @@ namespace Gestion_Web.Formularios.Facturas
                     int i = controladorInformesEntity.generarPedidoDeInforme(infXML, ip);
 
                     if (i > 0)
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 3000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", m.mensajeBoxInfo("Se ha generado una solicitud de reporte de ventas con el nombre de <strong>" + ip.NombreInforme + "</strong> porque la cantidad de registros encontrados es mayor a 4000. Podra visualizar el estado del reporte en <strong><a href='/Formularios/Reportes/InformesF.aspx'>Informes Solicitados</a></strong>.", null));
                     else
                     {
                         int idError = Log.ObtenerUltimoIDLog();

@@ -236,6 +236,16 @@ namespace Gestion_Web.Formularios.Herramientas
                     this.lbtnEnviarMailPedido.CssClass = "btn btn-danger";
                     this.lbtnEnviarMailPedido.Text = "Desactivado";
                 }
+                if (configuracion.generarPedidoStockFaltante == "1")
+                {
+                    this.lbtnGenerarPedidoStockFaltante.CssClass = "btn btn-success";
+                    this.lbtnGenerarPedidoStockFaltante.Text = "Activado";
+                }
+                else
+                {
+                    this.lbtnGenerarPedidoStockFaltante.CssClass = "btn btn-danger";
+                    this.lbtnGenerarPedidoStockFaltante.Text = "Desactivado";
+                }
 
                 // Visualizacion de Cheques
                 this.cargarVisualizacionCheques();
@@ -1686,5 +1696,31 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
+        protected void lbtnGenerarPedidoStockFaltante_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (configuracion.generarPedidoStockFaltante == "0")
+                    configuracion.generarPedidoStockFaltante = "1";
+                else
+                    configuracion.generarPedidoStockFaltante = "0";
+
+                int i = configuracion.ModificarGenerarPedidoStockFaltante(configuracion.generarPedidoStockFaltante);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion Facturar mas de una vez un remito.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: Facturar mas de una vez un pedido modificada con exito!. \", {type: \"info\"}); location.href('PanelControl.aspx');", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion:Facturar mas de una vez un pedido!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+
+        }
     }
 }

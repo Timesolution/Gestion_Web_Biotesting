@@ -496,13 +496,25 @@ namespace Gestion_Web.Formularios.Facturas
 
                 Literal lDetail = new Literal();
                 lDetail.ID = "btnEditar_" + p["id"].ToString();
-                lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" >";
+                lDetail.Text = "<a href=\"ABMPedidos.aspx?accion=2&id=" + p["id"].ToString() + "\" class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"Editar\" style=\"font-size:12pt;\">";
                 lDetail.Text += "<i class=\"shortcut-icon icon-pencil\"></i>";
                 lDetail.Text += "</a>";
                 //if (this.verificarPermisoEditar() > 0)
                 //{
                 celAccion.Controls.Add(lDetail);
                 //}
+
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp";
+                celAccion.Controls.Add(l1);
+
+                Literal lCRM = new Literal();
+                lCRM.ID = "btnCRM_" + p["id"].ToString();
+                lCRM.Text = "<a href=\"../Clientes/ClientesABM.aspx?accion=2&id=" + p["Cliente"].ToString() + "#Eventos\"  class=\"btn btn-info ui-tooltip\" data-toggle=\"tooltip\" title data-original-title=\"CRM\" style=\"font-size:12pt;\">";
+                lCRM.Text += "<i class=\"shortcut-icon icon-eye-open\"></i>";
+                lCRM.Text += "</a>";
+    
+                celAccion.Controls.Add(lCRM);
 
                 if (estado.id != 3)
                 {
@@ -1011,7 +1023,7 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phCotizaciones.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    if (!tr.Cells[5].Text.Contains("Anulada"))
+                    if (!tr.Cells[4].Text.Contains("Anulada"))
                     {
                         CheckBox ch = tr.Cells[5].Controls[2] as CheckBox;
                         if (ch.Checked == true)

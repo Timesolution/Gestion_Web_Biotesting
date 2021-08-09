@@ -215,7 +215,7 @@
                                             <h3>Prox. vencimientos CRM</h3>
                                         </td>
                                         <td style="width: 8%">
-                                            <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=01/01/2000&fechaVencimientoDesde=<%=DateTime.Now.ToString("dd/MM/yyyy") %>&fechaVencimientoHasta=<%=DateTime.Now.AddDays(7).ToString("dd/MM/yyyy") %>&cl=-1&estado=1&fpf=0&fpfv=1&us=-1" target="_blank" style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas">
+                                            <a class="btn ui-tooltip" href="Formularios/Facturas/CRM.aspx?fechadesde=01/01/2000&fechaHasta=01/01/2000&fechaVencimientoDesde=<%=DateTime.Now.ToString("dd/MM/yyyy") %>&fechaVencimientoHasta=<%=DateTime.Now.AddDays(7).ToString("dd/MM/yyyy") %>&cl=-1&estado=0&fpf=0&fpfv=1&us=-1&des=" target="_blank" style="color: black; margin-bottom: 2%;" title data-original-title="Ver mas">
                                                 <i class='fa fa-arrow-right'></i>
                                             </a>
                                         </td>
