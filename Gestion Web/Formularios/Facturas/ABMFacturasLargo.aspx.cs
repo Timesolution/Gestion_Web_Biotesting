@@ -12374,7 +12374,7 @@ namespace Gestion_Web.Formularios.Facturas
                     fact.articulo = articulo;
                     fact.cantidad = 1;
                     fact.precioUnitario = articulo.precioSinIva;
-                    fact.total = (fact.precioUnitario * fact.cantidad);
+                    fact.total = (articulo.precioVenta * fact.cantidad);
                     fact.precioSinIva = articulo.precioSinIva;
 
                     this.nuevaFactura.items.Add(fact);

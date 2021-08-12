@@ -505,7 +505,7 @@
 
 
                     <div class="modal-footer">
-                        <asp:LinkButton ID="btnMagento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnExportarArticulos_Click1" />
+                        <asp:LinkButton ID="btnMagento" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnMagento_Click" />
                     </div>
                 </div>
 
