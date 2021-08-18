@@ -2675,7 +2675,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
 
         }
-        public void SolicitarReporteArticulosTxt()
+        public void SolicitarReporteArticulosTxt(int accion)
         {
             try
             {
@@ -2694,7 +2694,7 @@ namespace Gestion_Web.Formularios.Articulos
                 }
                 infXML.Marca = Convert.ToInt32(ListMarcaMagento.SelectedValue);
                 ///Cargo el objeto Informes_Pedidos
-                cargarDatosInformePedido(ip, 2);
+                cargarDatosInformePedido(ip, accion);
                 
 
                 ///Cargo el objeto InformeXML
@@ -2727,7 +2727,7 @@ namespace Gestion_Web.Formularios.Articulos
         {
             try
             {
-                SolicitarReporteArticulosTxt();
+                SolicitarReporteArticulosTxt(1);
             }
             catch (Exception ex)
             {
@@ -2834,6 +2834,17 @@ namespace Gestion_Web.Formularios.Articulos
             catch (Exception ex)
             {
 
+            }
+        }
+
+        protected void btnMagento_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SolicitarReporteArticulosTxt(2);
+            }
+            catch (Exception ex)
+            {
             }
         }
     }

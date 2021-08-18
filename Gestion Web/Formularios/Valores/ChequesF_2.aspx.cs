@@ -446,12 +446,14 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control C in phCheques.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    String estadoCh = tr.Cells[tr.Cells.Count-3].Text;
+                    TextBox tb = tr.Cells[tr.Cells.Count - 1].Controls[4] as TextBox;
+                    string estadoCh = tb.ID.Split('_')[1];
                     CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
-                    //Si esta seleccionado, tiene estado disponible y es de terceros guardo el id.
-                    if (ch.Checked == true && estadoCh == "Disponible")
+                    var cheque = this.controlador.obtenerChequeId(Convert.ToInt32(ch.ID.Split('_')[1]));
+                    //Si esta seleccionado, tiene estado entregado .
+                    if (ch.Checked == true && estadoCh == "1")
                     {
-                        idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                        idtildado += ch.ID.Split('_')[1] + ";";
                     }
                 }
                 if (idtildado == "")
@@ -528,8 +530,9 @@ namespace Gestion_Web.Formularios.Valores
                 foreach (Control C in phCheques.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    String estadoCh = tr.Cells[12].Controls[4].ID.Split('_')[1];
-                    CheckBox ch = tr.Cells[12].Controls[2] as CheckBox;
+                    TextBox tb = tr.Cells[tr.Cells.Count -1].Controls[4] as TextBox;
+                    string estadoCh = tb.ID.Split('_')[1];
+                    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
                     var cheque = this.controlador.obtenerChequeId(Convert.ToInt32(ch.ID.Split('_')[1]));
                     //Si esta seleccionado, tiene estado entregado .
                     if (ch.Checked == true && estadoCh == "3" && cheque.origen == "P")
@@ -821,7 +824,7 @@ namespace Gestion_Web.Formularios.Valores
                     celEstado.Text = "Imputado a Cta.";
                 if (ch.Cheque.estado == 6)
                     celEstado.Text = "Debitado";
-
+                celEstado.ID = ch.Cheque.id + "_" + ch.Cheque.estado.ToString();
                 celEstado.VerticalAlign = VerticalAlign.Middle;
                 celEstado.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celEstado);
