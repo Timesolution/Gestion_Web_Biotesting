@@ -189,6 +189,7 @@ namespace Gestion_Web.Formularios.Cobros
                 DataTable dtDocumentos = controlador.obtenerDocumentosCancelados(mov.id);
                 DataTable dtCheques = controlador.obtenerDetalleCheques(mov.id);
                 DataTable dtTransferencia = controlador.obtenerDetalleTransferencia(mov.id);
+                DataTable dtDatosCliente = controlador.obtenerDatosCobrosClientes(mov.id);
 
                 try
                 {
@@ -237,6 +238,7 @@ namespace Gestion_Web.Formularios.Cobros
                 ReportDataSource rds5 = new ReportDataSource("DetalleCheques", dtCheques);
                 ReportDataSource rds6 = new ReportDataSource("DetalleTransferencia", dtTransferencia);
                 ReportDataSource rds7 = new ReportDataSource("DatosEmpresa", dtEmpresa);
+                ReportDataSource rds8 = new ReportDataSource("DetalleCliente", dtDatosCliente); 
                 ReportParameter param = new ReportParameter("ParamComentarios", comentarios);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
@@ -247,6 +249,7 @@ namespace Gestion_Web.Formularios.Cobros
                 this.ReportViewer1.LocalReport.DataSources.Add(rds5);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds6);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds7);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds8);
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.Refresh();
 
