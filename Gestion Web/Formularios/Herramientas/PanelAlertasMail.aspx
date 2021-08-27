@@ -24,6 +24,29 @@
                                     <asp:Panel ID="PanelConfig" runat="server">
 
                                         <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Ubicacion del Logo</label>
+                                            <div class="col-md-4">
+                                                <asp:DropDownList ID="ddlUbicacion" runat="server" class="form-control" ToolTip="Ubicacion del logo en el mail">
+                                                    <asp:ListItem Text="Cabecera" Value="0"></asp:ListItem>
+                                                    <asp:ListItem Text="Firma" Value="1"></asp:ListItem>
+                                                </asp:DropDownList>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnUbicacion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnUbicacion_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" id="divFirma" runat="server" style="display:none">
+                                            <label for="validateSelect" class="col-md-4">Texto de la firma</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtFirma" runat="server" TextMode="MultiLine" class="form-control" Rows="6" ToolTip="Texto que ira en la firma"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnFirma" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnFirma_Click" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-4">Observaciones de mail paciente agendado</label>
                                             <div class="col-md-4">
                                                 <asp:TextBox ID="txtObservacionesAgenda" runat="server" TextMode="MultiLine" class="form-control" Rows="6" ToolTip="Observaciones del mail"></asp:TextBox>
@@ -206,6 +229,15 @@
                 txt.style.visibility = "hidden";
             }
 
+        }
+
+        function pageLoad()
+        {
+            if (document.getElementById('<%= ddlUbicacion.ClientID %>').value == "1")
+            {               
+                document.getElementById('<%= divFirma.ClientID %>').setAttribute('display', 'block')
+                document.getElementById('<%= divFirma.ClientID %>').style.display = 'block'
+            }
         }
 
     </script>
