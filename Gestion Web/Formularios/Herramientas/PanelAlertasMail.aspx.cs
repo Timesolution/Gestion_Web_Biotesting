@@ -30,6 +30,12 @@ namespace Gestion_Web.Formularios.Herramientas
                     CargarFormularios();
                     CargarPrefijosCelular();
                 }
+
+                if (ddlUbicacion.SelectedValue == "1")
+                {
+                    divFirma.Attributes.Remove("display");
+                }
+
             }
             catch
             {
@@ -163,6 +169,8 @@ namespace Gestion_Web.Formularios.Herramientas
                 txtDiasDespuesDeTurno.Text = this.configuracion.DiasDespuesAtendidoMail;
                 txtEnvioNotificacion.Text = this.configuracion.ObservacionDespuesAtendido;
                 ddlFormularioNotificacion.SelectedValue = this.configuracion.FormularioDespuesAtendido;
+                ddlUbicacion.SelectedValue = this.configuracion.UbicacionLogoMail;
+                txtFirma.Text = this.configuracion.ObservacionFirmaMail;
             }
             catch (Exception ex)
             {
@@ -448,6 +456,52 @@ namespace Gestion_Web.Formularios.Herramientas
             catch (Exception ex)
             {
                 Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: PaisCelularPrederminado " + ex.Message);
+            }
+        }
+
+        protected void lbtnUbicacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.UbicacionLogoMail = ddlUbicacion.SelectedValue;
+
+                int i = configuracion.ModificarUbicacionLogoMail(configuracion.UbicacionLogoMail);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion de la ubicacion del logo en el mail");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion de la ubicacion del logo en el mail. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar la ubicacion del logo en el mail\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: UbicacionLogoMail " + ex.Message);
+            }
+        }
+
+        protected void lbtnFirma_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.configuracion.ObservacionFirmaMail = txtFirma.Text;
+
+                int i = configuracion.ModificarObservacionFirmaMail(configuracion.ObservacionFirmaMail);
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico la configuracion del texto de la firma en los mails.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Se modifico la configuracion del texto de la firma en los mails. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo guardar el texto de la firma en los mails\", {type: \"info\"});", true);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error actualizar Configuracion: FormularioDespuesAtendido " + ex.Message);
             }
         }
     }
