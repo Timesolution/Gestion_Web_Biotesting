@@ -31,8 +31,9 @@
                                                                 <asp:TextBox ID="txtCodigoCliente" runat="server" class="form-control"></asp:TextBox>
                                                                 <label class="col-md-4"></label>
                                                             </div>
-                                                            <div class="col-md-2">
+                                                            <div class="col-md-4">
                                                                 <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                                                <asp:LinkButton runat="server" Text="<span class='shortcut-icon icon-pencil'></span>" class="btn btn-info" data-toggle="modal" href="#modalDatosCliente" />
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
@@ -72,8 +73,8 @@
                                                         <div role="form" class="form-horizontal col-md-12">
                                                             <div class="form-inline">
                                                                 <label class="col-md-12">
-                                                                    <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label></label>
-
+                                                                    <label class="col-md-12">
+                                                                        <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label></label>
                                                             </div>
 
                                                             <div class="form-inline">
@@ -2036,191 +2037,339 @@
         </div>
         <%-- FIN MODAL --%>
 
-        <%-- MODAL CALCULAR RETENCION CON MONTO --%>
-        <div id="modalCalcularRetencionConUnMonto" class="modal fade" tabindex="-1" role="dialog">
+        <%-- Modal DATOS CLIENTE  --%>
+        <div id="modalDatosCliente" class="modal fade" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button id="btnCerrarModalRetencionMonto" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
-                        <h4 class="modal-title">Aplicar Retencion</h4>
+                        <h4 class="modal-title">Datos cliente</h4>
                     </div>
                     <div class="modal-body" style="padding-bottom: 0px;">
+                        <asp:UpdatePanel runat="server">
+                            <ContentTemplate>
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="row" style="margin-top: 2%">
+                                        <label class="col-sm-2 control-label editable">Tipo IVA</label>
+                                        <div class="col-sm-8">
+                                            <asp:DropDownList ID="ListTipo" Style="margin-left: 3%;" class="form-control m-b" runat="server">
+                                            </asp:DropDownList>
+                                        </div>
 
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <label for="validateSelect" class="col-md-3">Monto de Retencion</label>
-                                <div class="col-md-5">
-                                    <div class="input-group">
-                                        <asp:TextBox ID="txtMontoRetencionCalcular" runat="server" class="form-control" TextMode="Number" Text="100" ValidationGroup="MontoDescuentoGroup" />
-                                        <span class="input-group-addon">$</span>
+                                    </div>
+                                    <div class="row" style="margin-top: 2%">
+                                        <label class="col-sm-2 control-label editable">CUIT</label>
+                                        <div class="col-sm-8">
+                                            <asp:TextBox ID="txtCUIT" MaxLength="15" onkeypress="javascript:return validarSoloNro(event)" Style="margin-left: 3%;" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 2%">
+                                        <label class="col-sm-2 control-label editable">Tipo IVA</label>
+                                        <div class="col-sm-8">
+                                            <asp:DropDownList ID="ListIVA" Style="margin-left: 3%;" class="form-control m-b" runat="server">
+                                            </asp:DropDownList>
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="col-md-1">
-                                    <asp:RequiredFieldValidator ErrorMessage="*" Font-Bold="true" ForeColor="Red" ValidationGroup="PorcentajeCantGroup" ControlToValidate="txtMontoRetencionCalcular" runat="server" />
                                 </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <asp:UpdatePanel ID="updatePanel15" runat="server">
-                            <ContentTemplate>
-                                <asp:Label ID="Label4" runat="server" Style="display: none;"></asp:Label>
-                                <asp:LinkButton ID="btnCalcularRetencionPorMonto" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar Retencion" ValidationGroup="MontoDescuentoGroup" OnClick="btnCalcularRetencionPorMonto_Click" />
                             </ContentTemplate>
                         </asp:UpdatePanel>
+
+                        <div class="modal-footer">
+                           <asp:HiddenField runat="server" ID="tipoDocumento"></asp:HiddenField>
+                           <asp:HiddenField runat="server" ID="fueActualizado"></asp:HiddenField>
+                            <button type="button" id="btnEditarDatosCliente" class="buttonLoading btn btn-success" onclick="editarDatosCliente();">Guardar</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <%-- FIN MODAL --%>
 
-        <%--MODAL BUSCAR ARTICULOS --%>
-        <div id="modalBuscarArticuloDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
-            <asp:Panel ID="Panel2" runat="server">
-                <div class="modal-dialog" style="width: 60%;">
+
+            <%-- FIN Modal DATOS CLIENTE --%>
+
+            <%-- MODAL CALCULAR RETENCION CON MONTO --%>
+            <div id="modalCalcularRetencionConUnMonto" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" id="btnCerrarModalBuscarArticulo" onclick="CerrarModalBuscarArticulo()" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Busqueda de Articulos</h4>
+                            <button id="btnCerrarModalRetencionMonto" type="button" class="close" data-dismiss="modal" aria-hidden="true" style="display: none;">×</button>
+                            <h4 class="modal-title">Aplicar Retencion</h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="padding-bottom: 0px;">
+
                             <div role="form" class="form-horizontal col-md-12">
                                 <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-4">Buscar Articulo</label>
-                                            <div class="col-md-3">
-                                                <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button id="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
-                                            </div>
-                                            <asp:UpdateProgress ID="UpdateProgress3" runat="server">
-                                                <ProgressTemplate>
-                                                    <div class="col-md-4">
-                                                        <i class="fa fa-spinner fa-spin" id="spinnerCargandoArticulos"></i>
-                                                        <label id="lblCargandoArticulo" class="col-md-10">Cargando articulo por favor aguarde.</label>
-                                                    </div>
-                                                </ProgressTemplate>
-                                            </asp:UpdateProgress>
+                                    <label for="validateSelect" class="col-md-3">Monto de Retencion</label>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtMontoRetencionCalcular" runat="server" class="form-control" TextMode="Number" Text="100" ValidationGroup="MontoDescuentoGroup" />
+                                            <span class="input-group-addon">$</span>
                                         </div>
                                     </div>
+                                    <div class="col-md-1">
+                                        <asp:RequiredFieldValidator ErrorMessage="*" Font-Bold="true" ForeColor="Red" ValidationGroup="PorcentajeCantGroup" ControlToValidate="txtMontoRetencionCalcular" runat="server" />
+                                    </div>
                                 </div>
-                                <table class="table table-striped table-bordered" id="articulosTabla">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 10%">Codigo</th>
-                                            <th style="width: 20%">Descripcion</th>
-                                            <th style="width: 10%">Stock</th>
-                                            <th style="width: 10%">Moneda</th>
-                                            <th style="width: 10%">P.Venta</th>
-                                            <th style="width: 20%"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
-                                    </tbody>
-                                </table>
                             </div>
-                            <div class="modal-footer">
-                                <asp:Button ID="btnAgregarArticulosBuscadosATablaItems" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success" />
-                                <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <asp:UpdatePanel ID="updatePanel15" runat="server">
+                                <ContentTemplate>
+                                    <asp:Label ID="Label4" runat="server" Style="display: none;"></asp:Label>
+                                    <asp:LinkButton ID="btnCalcularRetencionPorMonto" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success ui-tooltip" data-toggle="tooltip" title data-original-title="Agregar Retencion" ValidationGroup="MontoDescuentoGroup" OnClick="btnCalcularRetencionPorMonto_Click" />
+                                </ContentTemplate>
+                            </asp:UpdatePanel>
                         </div>
                     </div>
                 </div>
-            </asp:Panel>
-        </div>
-        <%--        MODAL BUSCAR CLIENTE--%>
+            </div>
+            <%-- FIN MODAL --%>
 
-        <div id="modalBuscarClienteDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
-            <asp:Panel ID="Panel1" runat="server">
-                <div class="modal-dialog" style="width: 60%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" id="btnCerrarModalBuscarCliente" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 class="modal-title">Busqueda de Clientes</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div role="form" class="form-horizontal col-md-12">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="name" class="col-md-4">Buscar Cliente</label>
-                                            <div class="col-md-3">
-                                                <asp:TextBox ID="txtDescripcionCliente" class="form-control" runat="server"></asp:TextBox>
+            <%--MODAL BUSCAR ARTICULOS --%>
+            <div id="modalBuscarArticuloDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
+                <asp:Panel ID="Panel2" runat="server">
+                    <div class="modal-dialog" style="width: 60%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" id="btnCerrarModalBuscarArticulo" onclick="CerrarModalBuscarArticulo()" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title">Busqueda de Articulos</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name" class="col-md-4">Buscar Articulo</label>
+                                                <div class="col-md-3">
+                                                    <asp:TextBox ID="txtDescripcionArticulo" class="form-control" runat="server"></asp:TextBox>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button id="btnBuscarArticuloDescripcion" type="button" onclick="CargarArticulos()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
+                                                </div>
+                                                <asp:UpdateProgress ID="UpdateProgress3" runat="server">
+                                                    <ProgressTemplate>
+                                                        <div class="col-md-4">
+                                                            <i class="fa fa-spinner fa-spin" id="spinnerCargandoArticulos"></i>
+                                                            <label id="lblCargandoArticulo" class="col-md-10">Cargando articulo por favor aguarde.</label>
+                                                        </div>
+                                                    </ProgressTemplate>
+                                                </asp:UpdateProgress>
                                             </div>
-                                            <div class="col-md-1">
-                                                <button id="btnBuscarClienteDescripcion" type="button" onclick="BuscarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
-                                            </div>
-                                            <asp:UpdateProgress ID="UpdateProgress4" runat="server">
-                                                <ProgressTemplate>
-                                                    <div class="col-md-4">
-                                                        <i class="fa fa-spinner fa-spin" id="spinnerCargandoClientes"></i>
-                                                        <label id="lblCargandoCliente" class="col-md-10">Cargando cliente por favor aguarde.</label>
-                                                    </div>
-                                                </ProgressTemplate>
-                                            </asp:UpdateProgress>
                                         </div>
                                     </div>
+                                    <table class="table table-striped table-bordered" id="articulosTabla">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%">Codigo</th>
+                                                <th style="width: 20%">Descripcion</th>
+                                                <th style="width: 10%">Stock</th>
+                                                <th style="width: 10%">Moneda</th>
+                                                <th style="width: 10%">P.Venta</th>
+                                                <th style="width: 20%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <asp:PlaceHolder ID="phBuscarArticulo" runat="server"></asp:PlaceHolder>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <table class="table table-striped table-bordered" id="clientesTabla">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 10%">Codigo</th>
-                                            <th style="width: 20%">Razon Social</th>
-                                            <th style="width: 20%">Alias</th>
-                                            <th style="width: 5%"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <asp:PlaceHolder ID="phBuscarCliente" runat="server"></asp:PlaceHolder>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                                <div class="modal-footer">
+                                    <asp:Button ID="btnAgregarArticulosBuscadosATablaItems" UseSubmitBehavior="false" OnClientClick="AgregarArticulosMultiples()" Text="Agregar" runat="server" class="btn btn-success" />
+                                    <button type="button" onclick="CerrarModalBuscarArticulo()" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </asp:Panel>
+                </asp:Panel>
+            </div>
+            <%--        MODAL BUSCAR CLIENTE--%>
+
+            <div id="modalBuscarClienteDescripcion" onkeypress="javascript:return validarEnter(event)" class="modal fade" tabindex="-1" role="dialog">
+                <asp:Panel ID="Panel1" runat="server">
+                    <div class="modal-dialog" style="width: 60%;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" id="btnCerrarModalBuscarCliente" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title">Busqueda de Clientes</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div role="form" class="form-horizontal col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="name" class="col-md-4">Buscar Cliente</label>
+                                                <div class="col-md-3">
+                                                    <asp:TextBox ID="txtDescripcionCliente" class="form-control" runat="server"></asp:TextBox>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button id="btnBuscarClienteDescripcion" type="button" onclick="BuscarClientes()" class="btn btn-info"><span class='shortcut-icon icon-search'></span></button>
+                                                </div>
+                                                <asp:UpdateProgress ID="UpdateProgress4" runat="server">
+                                                    <ProgressTemplate>
+                                                        <div class="col-md-4">
+                                                            <i class="fa fa-spinner fa-spin" id="spinnerCargandoClientes"></i>
+                                                            <label id="lblCargandoCliente" class="col-md-10">Cargando cliente por favor aguarde.</label>
+                                                        </div>
+                                                    </ProgressTemplate>
+                                                </asp:UpdateProgress>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-bordered" id="clientesTabla">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 10%">Codigo</th>
+                                                <th style="width: 20%">Razon Social</th>
+                                                <th style="width: 20%">Alias</th>
+                                                <th style="width: 5%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <asp:PlaceHolder ID="phBuscarCliente" runat="server"></asp:PlaceHolder>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </asp:Panel>
+            </div>
+            <%--Fin modalGrupo--%>
         </div>
-        <%--Fin modalGrupo--%>
-    </div>
-    <!-- /main -->
+        <!-- /main -->
 
-    <link href="../../css/pages/reports.css" rel="stylesheet">
-    <!-- Core Scripts - Include with every page -->
-    <script src="../../Scripts/jquery-1.10.2.js"></script>
+        <link href="../../css/pages/reports.css" rel="stylesheet">
+        <!-- Core Scripts - Include with every page -->
+        <script src="../../Scripts/jquery-1.10.2.js"></script>
 
-    <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
-    <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
-    <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
-    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-    <script src="../../Scripts/libs/bootstrap.min.js"></script>
+        <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
+        <script src="../../Scripts/libs/jquery-ui-1.10.0.custom.min.js"></script>
+        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+        <script src="../../../Scripts/plugins/dataTables/custom.tables.js"></script>
+        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+        <script src="../../Scripts/libs/bootstrap.min.js"></script>
 
-    <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
+        <script src="../../Scripts/plugins/hoverIntent/jquery.hoverIntent.minified.js"></script>
 
-    <script src="../../Scripts/Application.js"></script>
+        <script src="../../Scripts/Application.js"></script>
 
-    <script src="../../Scripts/demo/gallery.js"></script>
+        <script src="../../Scripts/demo/gallery.js"></script>
 
-    <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
-    <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
-    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
-    <script src="../../Scripts/demo/notifications.js"></script>
+        <script src="../../Scripts/plugins/msgGrowl/js/msgGrowl.js"></script>
+        <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
+        <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
+        <script src="../../Scripts/demo/notifications.js"></script>
 
-    <script src="../../Scripts/bootstrap.min.js"></script>
+        <script src="../../Scripts/bootstrap.min.js"></script>
 
 
-    <script>
+        <script>
 
-        function test(txt) {
-            var totalPuntos = document.getElementById("<%= txtPuntosTotales.ClientID %>").value;
+            function editarDatosCliente() {
+                var idCliente = MainContent_HiddenField_IdCliente.value;
+                var cuit = MainContent_txtCUIT.value.replace(',', '');
+                var tipoIVA = MainContent_ListIVA.value;
+                var tipoClienteId = MainContent_ListTipo.value;
+                var tipoClienteDescripcion = $("#MainContent_ListTipo option:selected").text();
+                var datos = idCliente + ',' + cuit + ',' + tipoIVA + ',' + tipoClienteDescripcion + ',' + tipoClienteId;
+                $.ajax({
+                    method: "POST",
+                    url: "ABMFacturasLargo.aspx/EditarDatosCliente",
+                    data: '{datos: "' + datos + '" }',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: (error) => {
+                        console.log(JSON.stringify(error));
+                        //$.msgbox("No se pudo cargar la tabla", { type: "error" });
+                    },
+                    success: cargarLabelDatosCliente
+                });
+            }
+            function cargarLabelDatosCliente(response) {
+                var data = response.d;
+                var obj = JSON.parse(data);
+                if (obj < 0) {
+                    if (obj == -99) {
+                        $.msgbox("El CUIT ingresado no tiene formato valido", { type: "error" });
+                        return false;
+                    }
+                    else {
+                        $.msgbox("No se pudo modificar el cliente", { type: "error" });
+                        return false;
+                    }
+                    
+                }
+                else {
+
+
+                    MainContent_labelCliente.innerHTML = MainContent_labelCliente.innerHTML.split('-')[0] + '- ' + $("#MainContent_ListIVA option:selected").text() + ' - ' + MainContent_txtCUIT.value + ' - ' + MainContent_labelCliente.innerHTML.split('-')[3];
+                    var accion = getUrlVars()["accion"] || 0;
+                    var labelCliente = MainContent_labelCliente.innerHTML;
+                    var cliente = MainContent_DropListClientes.value;
+                    var puntoVenta = MainContent_ListPuntoVenta.value;
+                    var tipo = MainContent_tipoDocumento.value || 0;
+                    var datos = accion + ';' + labelCliente + ';' + puntoVenta + ';' + cliente + ';' + tipo
+                    $.ajax({
+                        method: "POST",
+                        url: "ABMFacturasLargo.aspx/obtenerNroFacturaWM",
+                        data: '{datos: "' + datos + '" }',
+                        contentType: "application/json",
+                        dataType: 'json',
+                        error: (error) => {
+                            console.log(JSON.stringify(error));
+                            //$.msgbox("No se pudo cargar la tabla", { type: "error" });
+                        },
+                        success: cargarLabelFactura
+                    });
+                    $("#modalDatosCliente").modal('hide');
+                    $('.modal-backdrop').remove();
+                    $.msgbox("Se modifico el cliente", { type: "info" });
+                }
+
+            }
+            function cargarLabelFactura(response) {
+                var data = response.d;
+
+                if (MainContent_labelCliente.innerHTML.split('-')[1].includes('No Informa')) {
+                    document.getElementById('MainContent_lbtnAccion').innerHTML = "PRP <span class='caret'></span>";
+                    var boton = document.getElementById('MainContent_lbtnFC');
+                    if (boton != null) {
+                        boton.style.visibility = 'hidden'
+                        boton.style.display = 'none'
+
+                    }
+                }
+                else {
+                    document.getElementById('MainContent_lbtnAccion').innerHTML = "FC <span class='caret'></span>";
+                    var boton = document.getElementById('MainContent_lbtnFC');
+                    if (boton != null) {
+                        boton.style.visibility = ''
+                        boton.style.display = 'block'
+
+                    }
+                }
+                MainContent_labelNroFactura.innerHTML = data;
+                MainContent_fueActualizado.value = "1";
+            }
+            function getUrlVars() {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for (var i = 0; i < hashes.length; i++) {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            }
+            function test(txt) {
+                var totalPuntos = document.getElementById("<%= txtPuntosTotales.ClientID %>").value;
             var totalCanjear = document.getElementById("<%= txtCanjearPuntos.ClientID %>").value;
             var puntos = parseInt(totalPuntos);
             var canje = parseInt(totalCanjear);
@@ -2231,17 +2380,17 @@
                 var restan = puntos - canje;
 
                 document.getElementById("<%= txtRestanPuntosTotales.ClientID %>").value = restan;
+                }
+
+
+
             }
 
+        </script>
 
-
-        }
-
-    </script>
-
-    <script>
-        function pageLoad() {
-            if (document.getElementById('<%= hiddenPtoVtaTipo.ClientID%>').value == 1) {
+        <script>
+            function pageLoad() {
+                if (document.getElementById('<%= hiddenPtoVtaTipo.ClientID%>').value == 1) {
                 $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy', minDate: '-6D', maxDate: '+0D' });
             }
             else {
@@ -2290,361 +2439,361 @@
             var updateProgress4 = $get('<%= UpdateProgress4.ClientID %>');
             var dynamicLayout4 = '<%= UpdateProgress4.DynamicLayout.ToString().ToLower() %>';
 
-            if (dynamicLayout4) {
-                updateProgress4.style.display = "block";
+                if (dynamicLayout4) {
+                    updateProgress4.style.display = "block";
+                }
+                else {
+                    updateProgress4.style.visibility = "visible";
+                }
             }
-            else {
-                updateProgress4.style.visibility = "visible";
-            }
-        }
-    </script>
+        </script>
 
-    <script>
-        $(function () {
-            $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        <script>
+            $(function () {
+                $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaSolicitudManual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
-    </script>
-    <script>
+        </script>
+        <script>
 
-        $(function () {
-            $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
+            $(function () {
+                $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
         });
 
-    </script>
-    <script>
-        function BuscarArticulo(descripcion, idSucursal) {
-            if (idSucursal <= 0) {
-                $.msgbox("Debe seleccionar una sucursal!", { type: "alert" });
-            }
-            else {
-                var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
-                btnBuscarArticulosDescripcion.disabled = true;
+        </script>
+        <script>
+            function BuscarArticulo(descripcion, idSucursal) {
+                if (idSucursal <= 0) {
+                    $.msgbox("Debe seleccionar una sucursal!", { type: "alert" });
+                }
+                else {
+                    var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
+                    btnBuscarArticulosDescripcion.disabled = true;
 
+                    $.ajax({
+                        type: "POST",
+                        url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
+                        data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
+                        contentType: "application/json",
+                        dataType: 'json',
+                        error: function () {
+                            $.msgbox("No se pudo buscar el articulo!", { type: "error" });
+                            BuscarArticulo("", idSucursal);
+                        },
+                        success: OnSuccessBuscarArticulo
+                    });
+                }
+            }
+
+            function CerrarModalBuscarArticulo() {
                 $.ajax({
                     type: "POST",
-                    url: "ABMFacturasLargo.aspx/BuscarArticulosPorDescripcion",
-                    data: '{codigoArticulo: "' + descripcion + '", idSucursal: "' + idSucursal + '"}',
+                    url: "ABMFacturasLargo.aspx/CerrarModalBuscarArticulosPorDescripcion",
                     contentType: "application/json",
                     dataType: 'json',
                     error: function () {
-                        $.msgbox("No se pudo buscar el articulo!", { type: "error" });
-                        BuscarArticulo("", idSucursal);
-                    },
-                    success: OnSuccessBuscarArticulo
+                        $.msgbox("No se pudo cerrar el modal!", { type: "error" });
+                    }
                 });
             }
-        }
 
-        function CerrarModalBuscarArticulo() {
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/CerrarModalBuscarArticulosPorDescripcion",
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    $.msgbox("No se pudo cerrar el modal!", { type: "error" });
-                }
-            });
-        }
+            function OnSuccessBuscarArticulo(response) {
+                var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
+                btnBuscarArticulosDescripcion.disabled = false;
 
-        function OnSuccessBuscarArticulo(response) {
-            var btnBuscarArticulosDescripcion = document.getElementById("btnBuscarArticuloDescripcion");
-            btnBuscarArticulosDescripcion.disabled = false;
+                var data = response.d;
+                var obj = JSON.parse(data);
 
-            var data = response.d;
-            var obj = JSON.parse(data);
+                $("#articulosTabla").dataTable().fnDestroy();
+                $('#articulosTabla').find("tr:gt(0)").remove();
 
-            $("#articulosTabla").dataTable().fnDestroy();
-            $('#articulosTabla').find("tr:gt(0)").remove();
+                for (var i = 0; i < obj.length; i++) {
+                    $('#articulosTabla').append(
+                        "<tr> " +
+                        "<td> " + obj[i].codigo + "</td>" +
+                        "<td> " + obj[i].descripcion + "</td>" +
+                        "<td> " + obj[i].stock + "</td>" +
+                        "<td> " + obj[i].moneda + "</td>" +
+                        '<td style="text-align:right"> ' + obj[i].precioVenta + "</td>" +
+                        "<td> " + CrearBotonesAccion(obj[i].codigo) + "</td>" +
+                        "</tr> ");
+                };
 
-            for (var i = 0; i < obj.length; i++) {
-                $('#articulosTabla').append(
-                    "<tr> " +
-                    "<td> " + obj[i].codigo + "</td>" +
-                    "<td> " + obj[i].descripcion + "</td>" +
-                    "<td> " + obj[i].stock + "</td>" +
-                    "<td> " + obj[i].moneda + "</td>" +
-                    '<td style="text-align:right"> ' + obj[i].precioVenta + "</td>" +
-                    "<td> " + CrearBotonesAccion(obj[i].codigo) + "</td>" +
-                    "</tr> ");
-            };
+                $('#articulosTabla').on("click", "button[name=\"btnAgregarArticulo\"]", function (button) {
+                    AgregarArticuloBuscadoPorDescripcion(button);
+                });
 
-            $('#articulosTabla').on("click", "button[name=\"btnAgregarArticulo\"]", function (button) {
-                AgregarArticuloBuscadoPorDescripcion(button);
-            });
+                document.getElementById("MainContent_txtDescripcionArticulo").value = "";
 
-            document.getElementById("MainContent_txtDescripcionArticulo").value = "";
+                var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
+                lblCargandoArticulo.innerHTML = "";
 
-            var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
-            lblCargandoArticulo.innerHTML = "";
-
-            $("#spinnerCargandoArticulos").hide();
-        }
-
-        function CrearBotonesAccion(codigo) {
-            var accion = "";
-
-            accion += "<button id='btn_" + codigo + "' name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
-            accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='input_" + codigo + "' type=\"checkbox\"></span> "
-
-            return accion;
-        }
-
-        function OnSuccessCargarClientes(response) {
-            var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
-            btnBuscarClienteDescripcion.disabled = false;
-
-            var data = response.d;
-            var obj = JSON.parse(data);
-
-            $("#clientesTabla").dataTable().fnDestroy();
-            $('#clientesTabla').find("tr:gt(0)").remove();
-
-            for (var i = 0; i < obj.length; i++) {
-                $('#clientesTabla').append(
-                    "<tr> " +
-                    "<td> " + obj[i].codigo + "</td>" +
-                    "<td> " + obj[i].razonSocial + "</td>" +
-                    "<td> " + obj[i].alias + "</td>" +
-                    "<td> " + CrearBotonesAccionCliente(obj[i].id) + "</td>" +
-                    "</tr> ");
-            };
-
-            $('#clientesTabla').on("click", "button[name=\"btnAgregarCliente\"]", function (button) {
-                AgregarCliente(button);
-            });
-
-            document.getElementById("MainContent_txtDescripcionCliente").value = "";
-
-            var lblCargandoCliente = document.getElementById("lblCargandoCliente");
-            lblCargandoCliente.innerHTML = "";
-
-            $("#spinnerCargandoClientes").hide();
-        }
-
-        function CrearBotonesAccionCliente(id) {
-            var accion = "";
-
-            accion += "<button id='btn_" + id + "' name='btnAgregarCliente' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
-
-            return accion;
-        }
-    </script>
-
-    <script type="text/javascript">
-        function CargarArticulos() {
-            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
-            var idSucursal = ddlSucursal.selectedOptions[0].value;
-
-            var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
-            lblCargandoArticulo.innerHTML = "Cargando articulos por favor aguarde.";
-
-            $("#spinnerCargandoArticulos").show();
-
-            var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
-
-            BuscarArticulo(descripcionArticulo.value, idSucursal);
-        }
-
-        function AgregarArticuloBuscadoPorDescripcion(button) {
-            var descripcionArticulo = document.getElementById("MainContent_txtCodigo");
-
-            descripcionArticulo.value = button.currentTarget.id.replace("btn_", "");
-
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/AgregarArticulosPorDescripcion",
-                data: '{codigoArticulo: "' + descripcionArticulo.value + '"}',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    $.msgbox("No se pudo agregar el articulo!", { type: "error" });
-                }
-            });
-        }
-
-        function AgregarArticulosMultiples() {
-            var btnAgregarArticulosMultiple = document.getElementById("MainContent_btnAgregarArticulosBuscadosATablaItems");
-            btnAgregarArticulosMultiple.disabled = true;
-            btnAgregarArticulosMultiple.value = "Aguarde...";
-
-            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
-            var idSucursal = ddlSucursal.selectedOptions[0].value;
-
-            var checkedNodes = $('#articulosTabla').find('input[type="checkbox"]:checked');
-
-            var codigosArticulos = "";
-
-            for (var i = 0; i < checkedNodes.length; i++) {
-                codigosArticulos += checkedNodes[i].id.replace("input_", "") + ";";
+                $("#spinnerCargandoArticulos").hide();
             }
 
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/AgregarMultiplesArticulosPorDescripcion",
-                data: '{codigosArticulos: "' + codigosArticulos + '"}',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    $.msgbox("No se pudieron agregar los articulos!", { type: "error" });
+            function CrearBotonesAccion(codigo) {
+                var accion = "";
+
+                accion += "<button id='btn_" + codigo + "' name='btnAgregarArticulo' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+                accion += "<span class=\"btn btn-info\" style=\"font-size:7pt;\"><input id='input_" + codigo + "' type=\"checkbox\"></span> "
+
+                return accion;
+            }
+
+            function OnSuccessCargarClientes(response) {
+                var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
+                btnBuscarClienteDescripcion.disabled = false;
+
+                var data = response.d;
+                var obj = JSON.parse(data);
+
+                $("#clientesTabla").dataTable().fnDestroy();
+                $('#clientesTabla').find("tr:gt(0)").remove();
+
+                for (var i = 0; i < obj.length; i++) {
+                    $('#clientesTabla').append(
+                        "<tr> " +
+                        "<td> " + obj[i].codigo + "</td>" +
+                        "<td> " + obj[i].razonSocial + "</td>" +
+                        "<td> " + obj[i].alias + "</td>" +
+                        "<td> " + CrearBotonesAccionCliente(obj[i].id) + "</td>" +
+                        "</tr> ");
+                };
+
+                $('#clientesTabla').on("click", "button[name=\"btnAgregarCliente\"]", function (button) {
+                    AgregarCliente(button);
+                });
+
+                document.getElementById("MainContent_txtDescripcionCliente").value = "";
+
+                var lblCargandoCliente = document.getElementById("lblCargandoCliente");
+                lblCargandoCliente.innerHTML = "";
+
+                $("#spinnerCargandoClientes").hide();
+            }
+
+            function CrearBotonesAccionCliente(id) {
+                var accion = "";
+
+                accion += "<button id='btn_" + id + "' name='btnAgregarCliente' class='btn btn-info' > <span class='shortcut-icon icon-ok'></span></button > ";
+
+                return accion;
+            }
+        </script>
+
+        <script type="text/javascript">
+            function CargarArticulos() {
+                var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+                var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+                var lblCargandoArticulo = document.getElementById("lblCargandoArticulo");
+                lblCargandoArticulo.innerHTML = "Cargando articulos por favor aguarde.";
+
+                $("#spinnerCargandoArticulos").show();
+
+                var descripcionArticulo = document.getElementById("MainContent_txtDescripcionArticulo");
+
+                BuscarArticulo(descripcionArticulo.value, idSucursal);
+            }
+
+            function AgregarArticuloBuscadoPorDescripcion(button) {
+                var descripcionArticulo = document.getElementById("MainContent_txtCodigo");
+
+                descripcionArticulo.value = button.currentTarget.id.replace("btn_", "");
+
+                $.ajax({
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/AgregarArticulosPorDescripcion",
+                    data: '{codigoArticulo: "' + descripcionArticulo.value + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudo agregar el articulo!", { type: "error" });
+                    }
+                });
+            }
+
+            function AgregarArticulosMultiples() {
+                var btnAgregarArticulosMultiple = document.getElementById("MainContent_btnAgregarArticulosBuscadosATablaItems");
+                btnAgregarArticulosMultiple.disabled = true;
+                btnAgregarArticulosMultiple.value = "Aguarde...";
+
+                var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+                var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+                var checkedNodes = $('#articulosTabla').find('input[type="checkbox"]:checked');
+
+                var codigosArticulos = "";
+
+                for (var i = 0; i < checkedNodes.length; i++) {
+                    codigosArticulos += checkedNodes[i].id.replace("input_", "") + ";";
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/AgregarMultiplesArticulosPorDescripcion",
+                    data: '{codigosArticulos: "' + codigosArticulos + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudieron agregar los articulos!", { type: "error" });
+                    }
+                });
+            }
+
+            function AgregarCliente(button) {
+                var idCliente = button.currentTarget.id.replace("btn_", "");
+
+                $.ajax({
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/AgregarCliente",
+                    data: '{idCliente: "' + idCliente + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudo agregar el cliente!", { type: "error" });
+                    }
+                });
+            }
+
+            function CargarClientes() {
+                $.ajax({
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/CargarClientes",
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudo cargar el cliente!", { type: "error" });
+                    },
+                    success: OnSuccessCargarClientes
+                });
+            }
+
+            function BuscarClientes() {
+                var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
+                btnBuscarClienteDescripcion.disabled = true;
+
+                var lblCargandoCliente = document.getElementById("lblCargandoCliente");
+                lblCargandoCliente.innerHTML = "Cargando cliente por favor aguarde.";
+
+                $("#spinnerCargandoClientes").show();
+
+                var descripcionCliente = document.getElementById("MainContent_txtDescripcionCliente").value;
+
+                $.ajax({
+                    type: "POST",
+                    url: "ABMFacturasLargo.aspx/BuscarCliente",
+                    data: '{razonSocial: "' + descripcionCliente + '"}',
+                    contentType: "application/json",
+                    dataType: 'json',
+                    error: function () {
+                        $.msgbox("No se pudo buscar el cliente!", { type: "error" });
+                    },
+                    success: OnSuccessCargarClientes
+                });
+            }
+
+            function BuscarClienteDefaultButton() {
+                $("#btnBuscarClienteDescripcion").click();
+            }
+            function BuscarArticuloDefaultButton() {
+                $("#btnBuscarArticuloDescripcion").click();
+            }
+        </script>
+        <script>
+
+            $(function () {
+                var modal = document.getElementById('modalBuscarArticuloDescripcion');
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                        CerrarModalBuscarArticulo();
+                    }
                 }
             });
-        }
 
-        function AgregarCliente(button) {
-            var idCliente = button.currentTarget.id.replace("btn_", "");
+        </script>
 
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/AgregarCliente",
-                data: '{idCliente: "' + idCliente + '"}',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    $.msgbox("No se pudo agregar el cliente!", { type: "error" });
-                }
-            });
-        }
+        <script type="text/javascript">
 
-        function CargarClientes() {
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/CargarClientes",
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    $.msgbox("No se pudo cargar el cliente!", { type: "error" });
-                },
-                success: OnSuccessCargarClientes
-            });
-        }
+            function darclick() {
+                document.getElementById("<%= this.lbtnAgregarArticuloASP.ClientID %>").click();
+            }
 
-        function BuscarClientes() {
-            var btnBuscarClienteDescripcion = document.getElementById("btnBuscarClienteDescripcion");
-            btnBuscarClienteDescripcion.disabled = true;
-
-            var lblCargandoCliente = document.getElementById("lblCargandoCliente");
-            lblCargandoCliente.innerHTML = "Cargando cliente por favor aguarde.";
-
-            $("#spinnerCargandoClientes").show();
-
-            var descripcionCliente = document.getElementById("MainContent_txtDescripcionCliente").value;
-
-            $.ajax({
-                type: "POST",
-                url: "ABMFacturasLargo.aspx/BuscarCliente",
-                data: '{razonSocial: "' + descripcionCliente + '"}',
-                contentType: "application/json",
-                dataType: 'json',
-                error: function () {
-                    $.msgbox("No se pudo buscar el cliente!", { type: "error" });
-                },
-                success: OnSuccessCargarClientes
-            });
-        }
-
-        function BuscarClienteDefaultButton() {
-            $("#btnBuscarClienteDescripcion").click();
-        }
-        function BuscarArticuloDefaultButton() {
-            $("#btnBuscarArticuloDescripcion").click();
-        }
-    </script>
-    <script>
-
-        $(function () {
-            var modal = document.getElementById('modalBuscarArticuloDescripcion');
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function (event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                    CerrarModalBuscarArticulo();
+            function bloquear() {
+                if (Page_ClientValidate("TelefonoGroup")) {
+                    document.getElementById("<%= this.btnEnviarCodigoCredito.ClientID %>").setAttribute("disabled", "disabled");
                 }
             }
-        });
-
-    </script>
-
-    <script type="text/javascript">
-
-        function darclick() {
-            document.getElementById("<%= this.lbtnAgregarArticuloASP.ClientID %>").click();
-        }
-
-        function bloquear() {
-            if (Page_ClientValidate("TelefonoGroup")) {
-                document.getElementById("<%= this.btnEnviarCodigoCredito.ClientID %>").setAttribute("disabled", "disabled");
+            function desbloquearEnvioCod() {
+                document.getElementById("<%= this.btnEnviarCodigoCredito.ClientID %>").removeAttribute("disabled");
             }
-        }
-        function desbloquearEnvioCod() {
-            document.getElementById("<%= this.btnEnviarCodigoCredito.ClientID %>").removeAttribute("disabled");
-        }
 
-        function desbloquear() {
-            if (!Page_ClientValidate("FacturaGroup")) {
-                document.getElementById("<%= this.btnAgregarRemitir.ClientID %>").removeAttribute("disabled");
+            function desbloquear() {
+                if (!Page_ClientValidate("FacturaGroup")) {
+                    document.getElementById("<%= this.btnAgregarRemitir.ClientID %>").removeAttribute("disabled");
                 document.getElementById("<%= this.btnAgregarRemitir.ClientID %>").removeAttribute("style");
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("disabled");
                 document.getElementById("<%= this.btnAgregar.ClientID %>").removeAttribute("style");
+                }
             }
-        }
 
-        function foco() {
-            var modalArticulosVisible = $('#modalBuscarArticuloDescripcion').is(':visible');
-            var modalClientesVisible = $('#modalBuscarClienteDescripcion').is(':visible');
+            function foco() {
+                var modalArticulosVisible = $('#modalBuscarArticuloDescripcion').is(':visible');
+                var modalClientesVisible = $('#modalBuscarClienteDescripcion').is(':visible');
 
-            if (!modalArticulosVisible && !modalClientesVisible) {
-                document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
+                if (!modalArticulosVisible && !modalClientesVisible) {
+                    document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
                 var note = document.getElementById("<%= this.txtCantidad.ClientID %>");
-                var screenPosition = note.getBoundingClientRect();
+                    var screenPosition = note.getBoundingClientRect();
 
-                window.scrollTo(0, screenPosition.bottom / 2);
+                    window.scrollTo(0, screenPosition.bottom / 2);
+                }
             }
-        }
 
-        function focoDesc() {
+            function focoDesc() {
             <%--document.getElementById("<%= this.TxtDescuentoArri.ClientID %>").focus();--%>
             document.getElementById("<%= this.txtPUnitario.ClientID %>").focus();
-        }
+            }
 
-    </script>
+        </script>
 
-    <script>
+        <script>
 
-        function updateboxCredito(valor, id) {
-            var textboxAnticipo = document.getElementById("<%=txtAnticipo.ClientID%>");
+            function updateboxCredito(valor, id) {
+                var textboxAnticipo = document.getElementById("<%=txtAnticipo.ClientID%>");
             var textboxAnticipoManual = document.getElementById("<%=txtAnticipoSolicitudManual.ClientID%>");
-            var chk1 = document.getElementById("cbSeleccion_" + id);
+                var chk1 = document.getElementById("cbSeleccion_" + id);
 
-            if (chk1.checked) {
-                textboxAnticipo.value = parseFloat(parseFloat(textboxAnticipo.value) + Math.abs(parseFloat(valor))).toFixed(2);
-                textboxAnticipoManual.value = parseFloat(parseFloat(textboxAnticipoManual.value) + Math.abs(parseFloat(valor))).toFixed(2);
-            }
-            else {
-                textboxAnticipo.value = parseFloat(parseFloat(textboxAnticipo.value) - Math.abs(parseFloat(valor))).toFixed(2)
-                textboxAnticipoManual.value = parseFloat(parseFloat(textboxAnticipoManual.value) - Math.abs(parseFloat(valor))).toFixed(2)
-            }
+                if (chk1.checked) {
+                    textboxAnticipo.value = parseFloat(parseFloat(textboxAnticipo.value) + Math.abs(parseFloat(valor))).toFixed(2);
+                    textboxAnticipoManual.value = parseFloat(parseFloat(textboxAnticipoManual.value) + Math.abs(parseFloat(valor))).toFixed(2);
+                }
+                else {
+                    textboxAnticipo.value = parseFloat(parseFloat(textboxAnticipo.value) - Math.abs(parseFloat(valor))).toFixed(2)
+                    textboxAnticipoManual.value = parseFloat(parseFloat(textboxAnticipoManual.value) - Math.abs(parseFloat(valor))).toFixed(2)
+                }
 
-        }
-
-        function updateboxMutual(valor, id) {
-            var textboxAnticipoMutual = document.getElementById("<%=txtAnticipoMutual.ClientID%>");
-            var chk1 = document.getElementById("cbSeleccionMutual_" + id);
-
-            if (chk1.checked) {
-                textboxAnticipoMutual.value = parseFloat(parseFloat(textboxAnticipoMutual.value) + Math.abs(parseFloat(valor))).toFixed(2);
-            }
-            else {
-                textboxAnticipoMutual.value = parseFloat(parseFloat(textboxAnticipoMutual.value) - Math.abs(parseFloat(valor))).toFixed(2)
             }
 
-            __doPostBack("txtAnticipoMutual", "TextChanged");
+            function updateboxMutual(valor, id) {
+                var textboxAnticipoMutual = document.getElementById("<%=txtAnticipoMutual.ClientID%>");
+                var chk1 = document.getElementById("cbSeleccionMutual_" + id);
 
-        }
+                if (chk1.checked) {
+                    textboxAnticipoMutual.value = parseFloat(parseFloat(textboxAnticipoMutual.value) + Math.abs(parseFloat(valor))).toFixed(2);
+                }
+                else {
+                    textboxAnticipoMutual.value = parseFloat(parseFloat(textboxAnticipoMutual.value) - Math.abs(parseFloat(valor))).toFixed(2)
+                }
 
-        function updatebox(valor, id) {
-            var cantActual = document.getElementById("<%=lblTrazaActual.ClientID%>").textContent;
+                __doPostBack("txtAnticipoMutual", "TextChanged");
+
+            }
+
+            function updatebox(valor, id) {
+                var cantActual = document.getElementById("<%=lblTrazaActual.ClientID%>").textContent;
             var cantTotal = document.getElementById("<%=lblTrazaTotal.ClientID%>").textContent;
 
             var chk1 = document.getElementById(id);
@@ -2664,15 +2813,15 @@
                     cantActual = parseInt(parseInt(cantActual) - 1);
                 }
                 document.getElementById('<%= lblTrazaActual.ClientID %>').textContent = cantActual;
+                }
+
             }
-
-        }
-        function updateNroSolicitud(valor, id, anticipo) {
+            function updateNroSolicitud(valor, id, anticipo) {
 
 
-            var chk1 = document.getElementById(id);
-            if (chk1.checked) {
-                document.getElementById('<%=txtNroSolicitud.ClientID%>').value = valor;
+                var chk1 = document.getElementById(id);
+                if (chk1.checked) {
+                    document.getElementById('<%=txtNroSolicitud.ClientID%>').value = valor;
                 document.getElementById('<%=txtAnticipo.ClientID%>').value = anticipo;
                 document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = anticipo;
             }
@@ -2680,206 +2829,204 @@
                 document.getElementById('<%= txtNroSolicitud.ClientID %>').value = "";
                 document.getElementById('<%=txtAnticipo.ClientID%>').value = "";
                 <%--document.getElementById('<%=txtAnticipoSolicitudManual.ClientID%>').value = ""--%>;
+                }
+
+            }
+        </script>
+
+        <script src="../../js/daypilot-modal-2.0.js"></script>
+        <script>
+            function abrirdialog() {
+                document.getElementById('abreDialog').click();
+            }
+            function abrirdialog2() {
+                document.getElementById('abreDialog2').click();
+            }
+            function abrirdialog3() {
+                document.getElementById('abreDialog3').click();
+            }
+            function abrirCargaTraza() {
+                $('#modalCargaTrazabilidad').modal('show');
             }
 
-        }
-    </script>
+        </script>
 
-    <script src="../../js/daypilot-modal-2.0.js"></script>
-    <script>
-        function abrirdialog() {
-            document.getElementById('abreDialog').click();
-        }
-        function abrirdialog2() {
-            document.getElementById('abreDialog2').click();
-        }
-        function abrirdialog3() {
-            document.getElementById('abreDialog3').click();
-        }
-        function abrirCargaTraza() {
-            $('#modalCargaTrazabilidad').modal('show');
-        }
+        <script>
+            function abrirModalMutuales() {
+                $('#modalMutuales').modal('show');
+            }
+        </script>
+        <script>
+            function abrirModalBuscarArticulo() {
+                $('#modalBuscarArticuloDescripcion').modal('show');
+            }
+            function cerrarModalBuscarArticulo() {
+                $('#modalBuscarArticuloDescripcion').modal('hide');
+            }
+        </script>
+        <script>
+            function modalCalcularDescuentoConUnMonto() {
+                $('#modal').modal('show');
+            }
+        </script>
 
-    </script>
+        <script>
+            function cerrarModal() {
+                document.getElementById('btnCerrarTraza').click();
+            }
+            function cerrarModal2() {
+                document.getElementById('btnCerrarTraza2').click();
+            }
+            function cerrarModalTarjeta() {
+                document.getElementById('btnCerrarTarjetas').click();
+            }
+            function cerrarModalCredito() {
+                document.getElementById('btnCerrarCreditos2').click();
+            }
+            function cerrarModalDatosExtra() {
+                document.getElementById('btnCerrarDatosExtra').click();
+            }
+            function cerrarModalMutuales() {
+                document.getElementById('btnCerrarMutuales').click();
+            }
+            function cerrarModalEditarDesc() {
+                document.getElementById('btnCerrarEditarDesc').click();
+            }
+            function clickTab() {
+                document.getElementById("<%= this.linkCombustible.ClientID %>").click();
+            }
+            function cerrarModalDescuentoMonto() {
+                document.getElementById('btnCerrarModalDescuentoMonto').click();
+            }
+            function cerrarModalRetencionMonto() {
+                document.getElementById('btnCerrarModalRetencionMonto').click();
+            }
+        </script>
 
-    <script>
-        function abrirModalMutuales() {
-            $('#modalMutuales').modal('show');
-        }
-    </script>
-    <script>
-        function abrirModalBuscarArticulo() {
-            $('#modalBuscarArticuloDescripcion').modal('show');
-        }
-        function cerrarModalBuscarArticulo() {
-            $('#modalBuscarArticuloDescripcion').modal('hide');
-        }
-    </script>
-    <script>
-        function modalCalcularDescuentoConUnMonto() {
-            $('#modal').modal('show');
-        }
-    </script>
-
-    <script>
-        function cerrarModal() {
-            document.getElementById('btnCerrarTraza').click();
-        }
-        function cerrarModal2() {
-            document.getElementById('btnCerrarTraza2').click();
-        }
-        function cerrarModalTarjeta() {
-            document.getElementById('btnCerrarTarjetas').click();
-        }
-        function cerrarModalCredito() {
-            document.getElementById('btnCerrarCreditos2').click();
-        }
-        function cerrarModalDatosExtra() {
-            document.getElementById('btnCerrarDatosExtra').click();
-        }
-        function cerrarModalMutuales() {
-            document.getElementById('btnCerrarMutuales').click();
-        }
-        function cerrarModalEditarDesc() {
-            document.getElementById('btnCerrarEditarDesc').click();
-        }
-        function clickTab() {
-            document.getElementById("<%= this.linkCombustible.ClientID %>").click();
-        }
-        function cerrarModalDescuentoMonto() {
-            document.getElementById('btnCerrarModalDescuentoMonto').click();
-        }
-        function cerrarModalRetencionMonto() {
-            document.getElementById('btnCerrarModalRetencionMonto').click();
-        }
-    </script>
-
-    <script>
-        function openModal(cod, nro, text) {
-            $('#modalEnvioSMS').modal('show');
-            document.getElementById("<%= this.txtCodArea.ClientID %>").value = cod;
+        <script>
+            function openModal(cod, nro, text) {
+                $('#modalEnvioSMS').modal('show');
+                document.getElementById("<%= this.txtCodArea.ClientID %>").value = cod;
             document.getElementById("<%= this.txtTelefono.ClientID %>").value = nro;
             document.getElementById("<%= this.txtMensajeSMS.ClientID %>").value = text;
-        }
-        function alertaSMSSaldoMax(text) {
-
-            document.getElementById("<%= this.lblAvisoSMSSaldoMax.ClientID %>").value = text;
-        }
-    </script>
-    <script>
-        function ActualizarTotalArticulos() {
-            var cant = 0;
-            for (var i = 1; i < document.getElementById('articulosTabla').rows.length; i++) {
-                cant += document.getElementById('articulosTabla').rows[i].cells[1].childNodes[0].value;
             }
-            document.getElementById('<%= lblArtTotales2%>').value = cant;
-            return false;
-        }
+            function alertaSMSSaldoMax(text) {
 
-        function createC() {
-            //var d = document.getElementById("TheBody_txtDescripcion").value;
-            //              var resource = d.options[d.selectedIndex].value;
-
-            var modal = new DayPilot.Modal();
-            modal.closed = function () {
-                if (this.result == "OK") {
-                    __doPostBack("UpdateButton", "");
+                document.getElementById("<%= this.lblAvisoSMSSaldoMax.ClientID %>").value = text;
+            }
+        </script>
+        <script>
+            function ActualizarTotalArticulos() {
+                var cant = 0;
+                for (var i = 1; i < document.getElementById('articulosTabla').rows.length; i++) {
+                    cant += document.getElementById('articulosTabla').rows[i].cells[1].childNodes[0].value;
                 }
-            };
-            //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
-            modal.showUrl("BuscarCliente.aspx?accion=1");
-        }
-
-        function createA() {
-            //var d = document.getElementById("TheBody_txtDescripcion").value;
-            //              var resource = d.options[d.selectedIndex].value;
-            document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
-
-            var ddlSucursal = document.getElementById("MainContent_ListSucursal");
-            var idSucursal = ddlSucursal.selectedOptions[0].value;
-
-            //ListSucursalCliente
-            var modal = new DayPilot.Modal();
-            modal.closed = function () {
-                if (this.result == "OK") {
-                    __doPostBack("UpdateButton", "");
-                }
-            };
-            //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
-            modal.showUrl("BuscarArticulos.aspx?accion=1&suc=" + idSucursal);
-        }
-
-        function edit(id) {
-            var modal = new DayPilot.Modal();
-            modal.closed = function () {
-                if (this.result == "OK") {
-                    __doPostBack("UpdateButton", "");
-                }
-            };
-            modal.showUrl("ModalEdit.aspx?id=" + id);
-        }
-
-
-
-
-    </script>
-
-    <script>
-        //valida los campos solo numeros
-        function validarNro(e) {
-            var key;
-            if (window.event) // IE
-            {
-                key = e.keyCode;
-            }
-            else if (e.which) // Netscape/Firefox/Opera
-            {
-                key = e.which;
-            }
-
-            if (key < 48 || key > 57) {
-                if (key == 46 || key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
-                { return true; }
-                else { return false; }
-            }
-            return true;
-        }
-        //valida los campos solo numeros
-        function validarNroSinComa(e) {
-            var key;
-            if (window.event) // IE
-            {
-                key = e.keyCode;
-            }
-            else if (e.which) // Netscape/Firefox/Opera
-            {
-                key = e.which;
-            }
-
-            if (key < 48 || key > 57) {
-                if (key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
-                { return true; }
-                else { return false; }
-            }
-            return true;
-        }
-        function validarEnter(e) {
-            var key;
-            if (window.event) // IE
-            {
-                key = e.keyCode;
-            }
-            else if (e.which) // Netscape/Firefox/Opera
-            {
-                key = e.which;
-            }
-
-            if (key == 13) {
+                document.getElementById('<%= lblArtTotales2%>').value = cant;
                 return false;
             }
-            return true;
-        }
-    </script>
+
+            function createC() {
+                //var d = document.getElementById("TheBody_txtDescripcion").value;
+                //              var resource = d.options[d.selectedIndex].value;
+
+                var modal = new DayPilot.Modal();
+                modal.closed = function () {
+                    if (this.result == "OK") {
+                        __doPostBack("UpdateButton", "");
+                    }
+                };
+                //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
+                modal.showUrl("BuscarCliente.aspx?accion=1");
+            }
+
+            function createA() {
+                //var d = document.getElementById("TheBody_txtDescripcion").value;
+                //              var resource = d.options[d.selectedIndex].value;
+                document.getElementById("<%= this.txtCantidad.ClientID %>").focus();
+
+                var ddlSucursal = document.getElementById("MainContent_ListSucursal");
+                var idSucursal = ddlSucursal.selectedOptions[0].value;
+
+                //ListSucursalCliente
+                var modal = new DayPilot.Modal();
+                modal.closed = function () {
+                    if (this.result == "OK") {
+                        __doPostBack("UpdateButton", "");
+                    }
+                };
+                //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
+                modal.showUrl("BuscarArticulos.aspx?accion=1&suc=" + idSucursal);
+            }
+
+            function edit(id) {
+                var modal = new DayPilot.Modal();
+                modal.closed = function () {
+                    if (this.result == "OK") {
+                        __doPostBack("UpdateButton", "");
+                    }
+                };
+                modal.showUrl("ModalEdit.aspx?id=" + id);
+            }
 
 
+
+
+        </script>
+
+        <script>
+            //valida los campos solo numeros
+            function validarNro(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
+
+                if (key < 48 || key > 57) {
+                    if (key == 46 || key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                    { return true; }
+                    else { return false; }
+                }
+                return true;
+            }
+            //valida los campos solo numeros
+            function validarNroSinComa(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
+
+                if (key < 48 || key > 57) {
+                    if (key == 8)// || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
+                    { return true; }
+                    else { return false; }
+                }
+                return true;
+            }
+            function validarEnter(e) {
+                var key;
+                if (window.event) // IE
+                {
+                    key = e.keyCode;
+                }
+                else if (e.which) // Netscape/Firefox/Opera
+                {
+                    key = e.which;
+                }
+
+                if (key == 13) {
+                    return false;
+                }
+                return true;
+            }
+        </script>
 </asp:Content>
