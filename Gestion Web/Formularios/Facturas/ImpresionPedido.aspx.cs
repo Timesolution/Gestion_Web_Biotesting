@@ -90,6 +90,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (accion == 1 && monedaOriginal == 0)
                     {
+                        
                         this.generarReporte2(idPedido);
                     }
                     if (accion == 2)
@@ -209,7 +210,6 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-
         private void generarReporte2(int idPedido)
         {
             try
@@ -385,7 +385,16 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+                if (this.cotizacion == 1)
+                {
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Cotizacion.rdlc");
+                }
+                else
+                {
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+                }
+                //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
                 //ReportDataSource rds = new ReportDataSource("DetallePedido", dtDetalle);
                 ReportDataSource rds = new ReportDataSource("DatosDetalle", dtDetalle);
