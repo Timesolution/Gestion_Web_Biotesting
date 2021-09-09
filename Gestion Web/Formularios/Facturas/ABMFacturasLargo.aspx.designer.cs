@@ -2418,6 +2418,51 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarMontoParaCalcularPorcentajeDescuento;
 
         /// <summary>
+        /// ListTipo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListTipo;
+
+        /// <summary>
+        /// txtCUIT control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCUIT;
+
+        /// <summary>
+        /// ListIVA control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ListIVA;
+
+        /// <summary>
+        /// tipoDocumento control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField tipoDocumento;
+
+        /// <summary>
+        /// fueActualizado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField fueActualizado;
+
+        /// <summary>
         /// txtMontoRetencionCalcular control.
         /// </summary>
         /// <remarks>

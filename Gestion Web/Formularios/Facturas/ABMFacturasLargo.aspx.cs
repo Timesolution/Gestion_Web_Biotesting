@@ -115,6 +115,13 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.cargarItems();
                 }
+                if(fueActualizado.Value == "1")
+                {
+                    obtenerNroFactura();
+                    cambiarLabelNro();
+                    fueActualizado.Value = "";
+
+                }
                 if (!IsPostBack)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Ingreso a facturacion.");
@@ -160,6 +167,8 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarProveedoresCombustible();
                     this.cargarEmpresas();
                     this.cargarReferidos();
+                    this.cargarIvaClientes();
+                    this.cargarTipoClientes();
                     this.cargarOperadores();
                     this.cargarMutuales();
                     this.ListEmpresa.SelectedValue = this.idEmpresa.ToString();
@@ -604,6 +613,10 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 List<Remito> r = new List<Remito>();
 
                 var idsRemitos = id_rem.Split(';').ToList();
@@ -663,6 +676,10 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
                 string tieneEstetica = WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica");
                 Configuracion config = new Configuracion();
@@ -757,6 +774,10 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if(nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }  
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
                 this.cargarSucursal(f.empresa.id);
                 this.cargarPuntoVta(f.sucursal.id);
@@ -818,6 +839,10 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
                 this.cargarSucursal(f.empresa.id);
                 this.cargarPuntoVta(f.sucursal.id);
@@ -921,6 +946,10 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 Factura f = this.controlador.obtenerFacturaId(Convert.ToInt32(facturas));
                 var clienteAux = this.contCliente.obtenerClienteID(f.cliente.id);
                 if (!string.IsNullOrEmpty(idCLiente))//si cambiaron el cliente al momento de facturar
@@ -1032,9 +1061,10 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (!String.IsNullOrEmpty(s))
                     {
+                        string perfil = Session["Login_NombrePerfil"] as string;
+
                         if (s == "39")
                         {
-                            string perfil = Session["Login_NombrePerfil"] as string;
                             if (perfil == "SuperAdministrador")
                             {
                                 this.ListSucursal.Attributes.Remove("disabled");
@@ -2047,18 +2077,29 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (this.cliente != null)
                 {
-
+                    controladorCliente controladorCliente = new controladorCliente();
+                    this.cliente = controladorCliente.obtenerClienteID(this.cliente.id);
                     //Cargo el total de los puntos.
                     CargarPuntosCliente(idCliente);
                     cargarClienteEnLista(cliente.id);
                     this.lblMovSolicitud.Text = "";
+                    txtCUIT.Text = this.cliente.cuit;
+                    ListTipo.SelectedValue = cliente.tipoCliente.id.ToString();
+
                     if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
+
                         this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                        ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
+
                     }
                     else
                     {
+
                         this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                        ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
+
+
                     }
                     if (this.cliente.cuit.Length == 11)
                     {
@@ -2265,6 +2306,44 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error buscando cliente. " + ex.Message));
             }
         }
+        private void cargarTipoClientes()
+        {
+            try
+            {
+                controladorTipoCliente contTipoCliente = new controladorTipoCliente();
+                this.ListTipo.DataSource = contTipoCliente.obtenerTiposClientes();
+                this.ListTipo.DataValueField = "id";
+                this.ListTipo.DataTextField = "tipo";
+
+                this.ListTipo.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista tipo cliente. " + ex.Message));
+            }
+        }
+        private void cargarIvaClientes()
+        {
+            try
+            {
+                controladorCliente controladorCliente = new controladorCliente();
+                this.ListIVA.DataSource = controladorCliente.obtenerIvaClientes();
+                this.ListIVA.DataValueField = "id";
+                this.ListIVA.DataTextField = "descripcion";
+
+                this.ListIVA.DataBind();
+                ListItem ls = new ListItem();
+                ls.Text = "Seleccione...";
+                ls.Value = "-1";
+
+                this.ListIVA.Items.Insert(0, ls);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando lista de tipos de IVA. " + ex.Message));
+            }
+        }
+
 
         public void CargarPuntosCliente(int idCliente)
         {
@@ -2517,6 +2596,24 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                controladorCliente controladorCliente = new controladorCliente();
+                this.cliente = controladorCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
+                decimal saldoOperativo = ObtenerSaldoOperativo();
+                if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
+                {
+
+                    this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                    ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
+
+                }
+                else
+                {
+
+                    this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                    ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
+
+
+                }
                 this.btnFacturaE.Visible = false;
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
@@ -3886,11 +3983,15 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
+               
 
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
                 this.nuevaFactura.tipo = this.cargarTiposFactura(lbl[0]);
-
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 //impuestos vta de combustible
                 decimal impuestosCombustible = 0;
                 this.nuevaFactura.provCombustibles = Convert.ToInt32(this.ListProveedorCombustible.SelectedValue);
@@ -4204,18 +4305,18 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             this.ImprimirFactura(fact.id, fact.tipo.id, 0);
                         }
-                            //mando imprimir factura
-                            string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
-                            if (imprimir == "1")
-                            {
-                                //imprimo factura
-                                this.ImprimirFactura(fact.id, fact.tipo.id, 0);
-                            }
-                            else
-                            {
-                                Session["Factura"] = null;
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
-                            }
+                        //mando imprimir factura
+                        string imprimir = WebConfigurationManager.AppSettings.Get("Imprime");
+                        if (imprimir == "1")
+                        {
+                            //imprimo factura
+                            this.ImprimirFactura(fact.id, fact.tipo.id, 0);
+                        }
+                        else
+                        {
+                            Session["Factura"] = null;
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Factura agregada. \", {type: \"info\"}); location.href = 'ABMFacturasLargo.aspx';", true);
+                        }
                     }
                     else
                     {
@@ -4613,7 +4714,7 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         if (accion == 13)
                         {
-                           string idfacturas = Request.QueryString["facturas"].Replace(";", "");
+                            string idfacturas = Request.QueryString["facturas"].Replace(";", "");
                             controlador.idFacturaParaHacerNotaDebito = Convert.ToInt32(idfacturas);
                         }
                         i = this.controlador.ProcesarFactura(domicilioEntrega, fact, dtPago, user, generaRemito);
@@ -4634,7 +4735,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 DescontarPuntos(fact.cliente.id, fact.id, puntos);
                             }
                         }
-                            if(ListReferido.SelectedValue != "-1")
+                        if (ListReferido.SelectedValue != "-1")
                         {
                             controladorReferido.EliminarReferidoFactura(i);
                             controladorReferido.AgregarReferidoFactura(i, Convert.ToInt32(ListReferido.SelectedValue));
@@ -6829,6 +6930,10 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal dto = Convert.ToDecimal(txtPorcDescuento.Text);
                 decimal dtoMax = Convert.ToDecimal(c.maxDtoFactura);
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
 
                 //si tiene seteado limite
                 if (dtoMax > 0)
@@ -9568,7 +9673,7 @@ namespace Gestion_Web.Formularios.Facturas
                                     articulo.descripcion += " |" + "Procedencia: " + pais.descripcion;
                             }
                         }
-                        else 
+                        else
                         {
                             var datos = art.Articulos_Despachos.FirstOrDefault();
 
@@ -10634,6 +10739,10 @@ namespace Gestion_Web.Formularios.Facturas
                 //documento
                 string[] lbl = this.labelNroFactura.Text.Split('°');
                 this.nuevaFactura.tipo = this.cargarTiposFactura(lbl[0]);
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 decimal iva = 0;
 
                 #region impuestos combustibles
@@ -11725,7 +11834,198 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelMutuales, UpdatePanelMutuales.GetType(), "alert", "$.msgbox(\"Ocurrió un error formateando campos de mutual. Excepción:" + Ex.Message + " \");", true);
             }
         }
+
+        [WebMethod]
+        public static string obtenerNroFacturaWM(string datos)
+        {
+            try
+            {
+                Configuracion c = new Configuracion();
+                controladorFacturacion controlador = new controladorFacturacion();
+                controladorSucursal cs = new controladorSucursal();
+                int accion = Convert.ToInt32(datos.Split(';')[0]);
+                string labelCliente = datos.Split(';')[1];
+                int ptoVenta = Convert.ToInt32(datos.Split(';')[2]);
+                int idCliente = Convert.ToInt32(datos.Split(';')[3]);
+                string tipoNuevaFactura = datos.Split(';')[4];
+                PuntoVenta pv = cs.obtenerPtoVentaId(ptoVenta);
+                string labelNroFactura = "";
+                if (accion != 6 && accion != 7 && accion != 13)
+                {
+                    string[] cliente = labelCliente.Split('-');
+                    if ((cliente[1].Contains("Responsable Inscripto") || (cliente[1].Contains("Responsable Monotributo") || (cliente[1].Contains("Monotributista Social")))) && (c.monotributo != "1" && c.monotributo != "2"))
+                    {
+                        //como estoy en cotizacion pido el ultimo numero de este documento
+                        int nro = controlador.obtenerFacturaNumero(ptoVenta, "Factura A");
+                        labelNroFactura = "Factura A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                    }
+                    else if (cliente[1].Contains("Responsable Inscripto") && c.monotributo == "2")
+                    {
+                        //como estoy en cotizacion pido el ultimo numero de este documento
+                        int nro = controlador.obtenerFacturaNumero(ptoVenta, "Factura A");
+                        labelNroFactura = "Factura M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                    }
+                    else
+                    {
+                        if (cliente[1].Contains("Cliente del Exterior") || cliente[1].Contains("IVA Liberado"))
+                        {
+                            //como estoy en cotizacion pido el ultimo numero de este documento
+                            int nro = controlador.obtenerFacturaNumero(ptoVenta, "Factura E");
+                            labelNroFactura = "Factura E N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            if (pv.formaFacturar == "Electronica")
+                            {
+                                controladorCliente contCliente = new controladorCliente();
+                                DataTable dt = contCliente.obtenerIdImpositivoCliente(idCliente);
+                                if(dt.Rows.Count < 0)
+                                {
+                                    labelNroFactura += ";2";
+
+                                }
+                                else
+                                {
+                                    labelNroFactura += ";1";
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //si el iva es "No informa" presupuesto
+                            if (cliente[1].Contains("No Informa"))
+                            {
+                                //como estoy en cotizacion pido el ultimo numero de este documento
+                                int nro = controlador.obtenerFacturaNumero(ptoVenta, "Presupuesto");
+                                labelNroFactura = "Presupuesto N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                            else
+                            {
+                                //como estoy en cotizacion pido el ultimo numero de este documento
+                                if (c.monotributo == "1")
+                                {
+                                    int nro = controlador.obtenerFacturaNumero(ptoVenta, "Factura C");
+                                    labelNroFactura = "Factura C N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                                }
+                                else
+                                {
+                                    int nro = controlador.obtenerFacturaNumero(ptoVenta, "Factura B");
+                                    labelNroFactura = "Factura B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    //si vengo de Factura-Accion-NotadeCredito me fijo en el tipo de doc del que vengo y no el tipo de IVA del cliente
+                    string tipoDoc = tipoNuevaFactura;
+                    if (tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("PRP"))
+                    {
+                        int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito PRP");
+                        labelNroFactura = "Nota de Credito PRP N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                    }
+                    else
+                    {
+                        if (tipoDoc.Contains("Factura A") || tipoDoc.Contains("Credito A") || tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M") || tipoDoc.Contains("Debito A"))
+                        {
+                            if (accion == 13)
+                            {
+                                int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Debito A");
+                                labelNroFactura = "Nota de Debito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                            else
+                            {
+                                int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito A");
+
+                                if (tipoDoc.Contains("Factura M") || tipoDoc.Contains("Credito M"))
+                                    labelNroFactura = "Nota de Credito M N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                                else
+                                    labelNroFactura = "Nota de Credito A N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                        }
+                        else if (tipoDoc.Contains("Factura B") || tipoDoc.Contains("Credito B") || tipoDoc.Contains("Debito B"))
+                        {
+                            if (accion == 13)
+                            {
+                                int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Debito B");
+                                labelNroFactura = "Nota de Debito B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                            else
+                            {
+                                int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito B");
+                                labelNroFactura = "Nota de Credito B N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                            }
+                        }
+                        else
+                        {
+                            if (tipoDoc.Contains("Factura E") || tipoDoc.Contains("Credito E"))
+                            {
+                                int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito E");
+                                labelNroFactura = "Nota de Credito E N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                                if (pv.formaFacturar == "Electronica")
+                                {
+                                    labelNroFactura += ";1";
+
+                                    //this.validarIdImpositivoCliente();
+                                }
+                            }
+                            else
+                            {
+                                if (c.monotributo == "1")
+                                {
+                                    int nro = controlador.obtenerFacturaNumero(ptoVenta, "Nota de Credito C");
+                                    labelNroFactura = "Nota de Credito C N° " + pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                                }
+                            }
+                        }
+                    }
+                }
+                return labelNroFactura;
+            }
+            catch (Exception ex)
+            {
+                return "-1";
+            }
+        }
         #endregion
+        [WebMethod]
+        public static string EditarDatosCliente(string datos)
+        {
+            try
+            {
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = 5000000;
+                string resultadoJSON;
+                controladorCliente controlador = new controladorCliente();
+                Gestor_Solution.Modelo.Cliente cliente = controlador.obtenerClienteID(Convert.ToInt32(datos.Split(',')[0]));
+                cliente.iva = datos.Split(',')[2];
+                cliente.cuit = datos.Split(',')[1];
+                cliente.tipoCliente.descripcion = datos.Split(',')[3];
+                cliente.tipoCliente.id = Convert.ToInt32(datos.Split(',')[4]);
+                if (controlador.validateCuit(cliente.cuit,cliente.tipoCliente.descripcion) || cliente.iva == "1")
+                {
+                    int i = controlador.modificarCliente(cliente, cliente.cuit, cliente.codigo, 1);
+                    if (i > 0)
+                    {
+                        return i.ToString();
+                    }
+                    else
+                    {
+                        resultadoJSON = i.ToString();
+                    }
+                }
+                else
+                {
+                    resultadoJSON = "-99";
+                }
+                return resultadoJSON;
+            }
+            catch (Exception ex)
+            {
+                return "-1";
+            }
+        }
 
         #region DATOS EXTRAS
         public int verificarDatosExtrasCargados(ItemFactura item)
@@ -11876,6 +12176,10 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 this.nuevaFactura = Session["Factura"] as Factura;
+                if (nuevaFactura.tipo != null)
+                {
+                    tipoDocumento.Value = nuevaFactura.tipo.tipo;
+                }
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
                 Configuracion config = new Configuracion();
                 Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio));

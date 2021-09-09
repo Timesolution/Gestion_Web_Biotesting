@@ -180,6 +180,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                if (fechaD == null && fechaH == null && suc == 0 && cliente == 0)
+                {
+                    suc = (int)Session["Login_SucUser"];
+                    this.cargarSucursal();
+
+                    fechaD = DateTime.Now.ToString("dd/MM/yyyy");
+                    fechaH = DateTime.Now.ToString("dd/MM/yyyy");
+                    idSuc = suc;
+                    cliente = cliente;
+                }
                 decimal saldo = 0;
 
                 DataTable dtRemitos = controlador.obtenerRemitosRangoTipoDTLista(fechaD, fechaH, idSuc, cliente, sinFactura, anuladas);
