@@ -20,6 +20,8 @@ namespace Gestion_Web.Formularios.Facturas
 {
     public partial class ImpresionPedido : System.Web.UI.Page
     {
+        //probablemente V=1.21 sea solo para Integral
+        //private const double V = 1.21;
         Mensajes m = new Mensajes();
         private int idPedido;
         private int accion;
@@ -220,6 +222,10 @@ namespace Gestion_Web.Formularios.Facturas
                 string zona = string.Empty;
                 string telefono = string.Empty;
                 string formaPago = string.Empty;
+
+                //si es INTEGRAL tener en cuenta que 'Cotizacion.rdlc' total subtotal y precio unitario se /1.21
+                int EsIntegral = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsIntegral"));
+
                 ControladorClienteEntity controlCli = new ControladorClienteEntity();
                 ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
                 controladorZona controlZona = new controladorZona();
@@ -230,7 +236,8 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDatos = controlador.obtenerDatosPedido(idPedido);
                 DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
                 DataTable dtTotal = controlador.obtenerTotalPedido(idPedido);
-
+                Pedido P = controlador.obtenerPedidoId(idPedido);
+                
                 dtDatos.Columns.Add("codigoBarra");
                 Articulo a = new Articulo();
                 foreach (DataRow rowDatos in dtDatos.Rows)
@@ -328,10 +335,31 @@ namespace Gestion_Web.Formularios.Facturas
 
                 ///subtotal, retencion, descuento, total
                 DataRow row = dtTotal.Rows[0];
-                decimal subtotal = Convert.ToDecimal(row["subtotal"]);
+
                 decimal descuento = Convert.ToDecimal(row["descuento"]);
+
+                //PARA INTEGRAL SE LE QUITA EL IVA DEL 1.21 CUANDO HACE UNA COTIZACION
+                if (this.cotizacion == 1 && EsIntegral==1)
+                {
+                    descuento = Decimal.Round(Convert.ToDecimal(row["descuento"]), 2);
+                }
+
+                decimal subtotal = Convert.ToDecimal(row["subtotal"]) + descuento;
                 decimal retencion = Convert.ToDecimal(row["retenciones"]);
                 decimal total = Convert.ToDecimal(row["TotalFinal"]);
+                
+                
+                if (this.cotizacion == 1 && EsIntegral==1)
+                {
+                    foreach (DataRow rowDatos in dtDatos.Rows)
+                    {
+                            Decimal d = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]) , 2);
+                            rowDatos[3] = d;
+                            Decimal t = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]), 2);// * Convert.ToDecimal( rowDatos["Cantidad"]);
+                            rowDatos["Total"] = t;
+                    }
+                    dtTotal.Rows[0][0] = dtTotal.Rows[0][1];
+                }
 
                 ///Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
                 if (imprimirOtraDivisa > 0)
@@ -368,9 +396,10 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter paramTel = new ReportParameter("ParamTel", telefono);
                 ReportParameter paramFormaPago = new ReportParameter("ParamFormaPago", formaPago);
 
-                ReportParameter param1 = new ReportParameter("ParamSubtotal", subtotal.ToString("C"));
-                ReportParameter param2 = new ReportParameter("ParamRetencion", retencion.ToString("C"));
-                ReportParameter param3 = new ReportParameter("ParamDescuento", descuento.ToString("C"));
+                ReportParameter param1 = new ReportParameter("ParamSubtotal", subtotal.ToString());
+                ReportParameter param2 = new ReportParameter("ParamRetencion", retencion.ToString());
+                ReportParameter param3 = new ReportParameter("ParamDescuento", descuento.ToString());
+
                 //parametros Datos empresa
                 ReportParameter param4 = new ReportParameter("ParamRazonSoc", razonSoc);
                 ReportParameter param5 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
@@ -378,6 +407,9 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param7 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
+               // param11 se carga solo para Integral.
+                ReportParameter param11 = new ReportParameter("ParamPorcentaje", P.neto10.ToString() + "%");
+                
 
 
                 string imagen = this.generarCodigo(idPedido);
@@ -385,7 +417,8 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                if (this.cotizacion == 1)
+                //Integral tiene una 'cotizacion.rdlc' especial. Los demás usan 'Pedidos.rdlc'
+                if (this.cotizacion == 1 && EsIntegral==1)
                 {
                     this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Cotizacion.rdlc");
                 }
@@ -402,6 +435,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds3 = new ReportDataSource("TotalPedido", dtTotal);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
+                
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
@@ -418,6 +452,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param8);
                 this.ReportViewer1.LocalReport.SetParameters(param9);
                 this.ReportViewer1.LocalReport.SetParameters(param10);
+                
+                if (EsIntegral == 1)
+                    this.ReportViewer1.LocalReport.SetParameters(param11);
+
 
                 //this.ReportViewer1.LocalReport.SetParameters(rpHora);
                 //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);

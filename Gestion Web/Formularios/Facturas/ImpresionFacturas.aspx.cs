@@ -126,6 +126,10 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte17(fechaD, fechaH, suc, tipofact, cliente);//Detalle ventas de presupuestos facturados
                     }
+                    if(accion == 17)
+                    {
+                        this.generarReporte18(fechaD, fechaH, suc, tipofact, cliente);//Detalle de facturas mas su correspondiente pedido
+                    }
                 }
             }
             catch (Exception ex)
@@ -134,6 +138,55 @@ namespace Gestion_Web.Formularios.Facturas
                 Log.EscribirSQL(1, "ERROR", "Error al mostrar detalle de Presupuesto. " + ex.Message);
             }
         }
+
+        private void generarReporte18(string fechaD, string fechaH, int suc, int tipofact, int cliente)
+        {
+            try
+            {
+                DataTable dtPedidoxFactura = this.controlador.ObtenerPedidoxFactura(fechaD, fechaH);
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("PedidosxFacturas.rdlc");
+                ReportDataSource rds = new ReportDataSource("PedidosxFacturas", dtPedidoxFactura);
+
+                ReportParameter param = new ReportParameter("ParamDesde", fechaD);
+                ReportParameter param2 = new ReportParameter("ParamHasta", fechaH);
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+                this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+               
+                    //get xls content
+                    Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                    String filename = string.Format("{0}.{1}", "PedidosxFacturas", "xls");
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/ms-excel";
+                this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                this.Response.BinaryWrite(xlsContent);
+
+                this.Response.End();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         private void generarReporte2(string fechaD, string fechaH, int idSuc, int tipo, int cliente)
         {
             try
@@ -1031,6 +1084,16 @@ namespace Gestion_Web.Formularios.Facturas
                     dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                 }
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
+                DataColumn dcSaldo = new DataColumn();
+                dcSaldo.DataType = typeof(string);
+                dcSaldo.ColumnName = "Saldo";
+                dtDetalles.Columns.Add(dcSaldo);
+                double sueldo = 0;
+                foreach (DataRow dr in dtDetalles.Rows)
+                {
+                    sueldo += Convert.ToDouble( dr.ItemArray[12]) + Convert.ToDouble( dr.ItemArray[13]);
+                    dr["Saldo"] = sueldo.ToString();
+                }
 
                 Decimal total = 0;
 

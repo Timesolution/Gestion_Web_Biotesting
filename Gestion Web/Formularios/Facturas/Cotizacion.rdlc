@@ -438,7 +438,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!PrecioUnitario.Value</Value>
+                                  <Value>=Round(Fields!PrecioUnitario.Value/1.21,2)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -471,7 +471,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Total.Value</Value>
+                                  <Value>=Round(Fields!Total.Value/1.21,2)</Value>
                                   <Style>
                                     <FontSize>9pt</FontSize>
                                   </Style>
@@ -785,7 +785,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Round(Sum(Fields!Total.Value)/1.21,2)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -1562,7 +1562,7 @@
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>2.35479cm</Height>
+          <Height>4.33916cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1621,7 +1621,7 @@
               <rd:DefaultName>Textbox34</rd:DefaultName>
               <Top>0.68476cm</Top>
               <Left>12.47846cm</Left>
-              <Height>0.73229cm</Height>
+              <Height>1.10271cm</Height>
               <Width>3.37312cm</Width>
               <ZIndex>1</ZIndex>
               <Style>
@@ -1652,8 +1652,8 @@
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>1.59344cm</Top>
-              <Left>0.50112cm</Left>
+              <Top>2.94282cm</Top>
+              <Left>0.47404cm</Left>
               <Height>0.6cm</Height>
               <Width>6.78625cm</Width>
               <ZIndex>2</ZIndex>
@@ -1680,8 +1680,13 @@
                         <Format>'$'#,0.00</Format>
                       </Style>
                     </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+                <Paragraph>
+                  <TextRuns>
                     <TextRun>
-                      <Value>=Parameters!ParamSubtotal.Value</Value>
+                      <Value />
                       <Style>
                         <FontSize>11pt</FontSize>
                         <Format>'$'#,0.00</Format>
@@ -1697,9 +1702,6 @@
               <Height>0.73229cm</Height>
               <Width>3.88412cm</Width>
               <ZIndex>3</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1722,24 +1724,21 @@
                       <Style />
                     </TextRun>
                     <TextRun>
-                      <Value>=Parameters!ParamDescuento.Value</Value>
+                      <Value>=Parameters!ParamPorcentaje.Value</Value>
                       <Style />
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox13</rd:DefaultName>
               <Top>0.68476cm</Top>
-              <Left>5.18266cm</Left>
+              <Left>4.56163cm</Left>
               <Height>0.73229cm</Height>
-              <Width>3.42762cm</Width>
+              <Width>4.69363cm</Width>
               <ZIndex>4</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1772,13 +1771,10 @@
               </Paragraphs>
               <rd:DefaultName>Textbox14</rd:DefaultName>
               <Top>0.68476cm</Top>
-              <Left>8.78667cm</Left>
-              <Height>0.73229cm</Height>
+              <Left>9.43165cm</Left>
+              <Height>1.10271cm</Height>
               <Width>2.87042cm</Width>
               <ZIndex>5</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1817,6 +1813,74 @@
               <Height>0.6cm</Height>
               <Width>2.67268cm</Width>
               <ZIndex>6</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="TotalFinal2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Round(Parameters!ParamDescuento.Value/1.21,2)</Value>
+                      <Style>
+                        <FontSize>11pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>TotalFinal</rd:DefaultName>
+              <Top>0.68476cm</Top>
+              <Left>5.29763cm</Left>
+              <Height>0.73229cm</Height>
+              <Width>4.12634cm</Width>
+              <ZIndex>7</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="TotalFinal3">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=System.Math.Round(Parameters!ParamDescuento.Value / 1.21, 2)+First(Fields!TotalFinal.Value, "TotalPedido")</Value>
+                      <Style>
+                        <FontSize>11pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>TotalFinal</rd:DefaultName>
+              <Top>0.68476cm</Top>
+              <Left>0.29418cm</Left>
+              <Height>0.73229cm</Height>
+              <Width>4.12634cm</Width>
+              <ZIndex>8</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1912,6 +1976,12 @@
     </ReportParameter>
     <ReportParameter Name="ParamZona">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamPorcentaje">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
