@@ -145,10 +145,7 @@
         </div>
         <!-- /content -->
     </div>
-    <!-- /account-container -->
-    <div class="login-extra">
-        Olvido su <a href="#" id="rc" data-toggle="modal" onclick="validar()">Contraseña</a> ?
-    </div>
+  
     
         
 

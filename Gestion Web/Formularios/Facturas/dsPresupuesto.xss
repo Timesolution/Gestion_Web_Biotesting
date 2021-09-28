@@ -7,18 +7,18 @@
 <DiagramLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ex:showrelationlabel="False" ViewPortX="99" ViewPortY="112" xmlns:ex="urn:schemas-microsoft-com:xml-msdatasource-layout-extended" xmlns="urn:schemas-microsoft-com:xml-msdatasource-layout">
   <Shapes>
     <Shape ID="DesignTable:SumaPresupuesto" ZOrder="14" X="109" Y="127" Height="119" Width="170" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="115" />
-    <Shape ID="DesignTable:DetallePresupuesto" ZOrder="13" X="295" Y="122" Height="220" Width="178" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="216" />
+    <Shape ID="DesignTable:DetallePresupuesto" ZOrder="13" X="295" Y="122" Height="308" Width="273" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="304" />
     <Shape ID="DesignTable:DatosFactura" ZOrder="11" X="1048" Y="376" Height="334" Width="192" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="330" />
-    <Shape ID="DesignTable:DatosPresupuesto" ZOrder="12" X="647" Y="125" Height="238" Width="171" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="234" />
+    <Shape ID="DesignTable:DatosPresupuesto" ZOrder="12" X="606" Y="125" Height="308" Width="212" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="304" />
     <Shape ID="DesignTable:dtCodigoBarra" ZOrder="2" X="832" Y="130" Height="48" Width="151" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="44" />
     <Shape ID="DesignTable:ComentarioRemitos" ZOrder="10" X="1020" Y="131" Height="86" Width="181" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="82" />
-    <Shape ID="DesignTable:ComentariosFactura" ZOrder="8" X="1217" Y="132" Height="144" Width="182" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="140" />
+    <Shape ID="DesignTable:ComentariosFactura" ZOrder="8" X="1217" Y="132" Height="200" Width="318" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="196" />
     <Shape ID="DesignTable:FacturasRemitos" ZOrder="9" X="1021" Y="231" Height="86" Width="161" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="82" />
     <Shape ID="DesignTable:RemitoFactura" ZOrder="7" X="841" Y="230" Height="68" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="64" />
-    <Shape ID="DesignTable:DatosIIBB" ZOrder="6" X="125" Y="373" Height="470" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="466" />
+    <Shape ID="DesignTable:DatosIIBB" ZOrder="6" X="125" Y="373" Height="470" Width="193" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="466" />
     <Shape ID="DesignTable:Descuentos" ZOrder="5" X="467" Y="435" Height="238" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="234" />
     <Shape ID="DesignTable:TotalesFactura" ZOrder="4" X="769" Y="464" Height="257" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="253" />
-    <Shape ID="DesignTable:DetalleRemitos" ZOrder="3" X="1432" Y="378" Height="105" Width="154" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="101" />
+    <Shape ID="DesignTable:DetalleRemitos" ZOrder="3" X="1432" Y="378" Height="254" Width="248" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="250" />
     <Shape ID="DesignTable:dtCodigoQr" ZOrder="1" X="851" Y="370" Height="48" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="44" />
   </Shapes>
   <Connectors />

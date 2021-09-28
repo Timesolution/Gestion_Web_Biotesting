@@ -645,7 +645,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&fechadesde=" + this.fechaD + "&fechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
+                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&Fechadesde=" + this.fechaD + "&FechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
                 //cargarMovimientos();
             }
             catch (Exception ex)

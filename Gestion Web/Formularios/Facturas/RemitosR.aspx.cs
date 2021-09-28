@@ -55,11 +55,12 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!IsPostBack)
                 {
                     this.cargarClientes();
+                    this.cargarSucursal();
 
                     if (fechaD == null && fechaH == null && suc == 0 && cliente == 0)
                     {
                         suc = (int)Session["Login_SucUser"];
-                        this.cargarSucursal();
+                        //this.cargarSucursal();
 
                         this.fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                         this.fechaH = DateTime.Now.ToString("dd/MM/yyyy");
@@ -68,7 +69,6 @@ namespace Gestion_Web.Formularios.Facturas
                         this.DropListSucursal.SelectedValue = suc.ToString();
                         this.DropListClientes.SelectedValue = cliente.ToString();
                     }
-                    this.cargarSucursal();
                     this.txtFechaDesde.Text = fechaD;
                     this.txtFechaHasta.Text = fechaH;
                     this.DropListSucursal.SelectedValue = suc.ToString();
@@ -83,8 +83,8 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                 }
-
                 this.cargarRemitosRango(fechaD, fechaH, suc, cliente, sinFactura, anuladas);
+
             }
             catch (Exception ex)
             {
@@ -183,7 +183,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (fechaD == null && fechaH == null && suc == 0 && cliente == 0)
                 {
                     suc = (int)Session["Login_SucUser"];
-                    this.cargarSucursal();
+                    //this.cargarSucursal();
 
                     fechaD = DateTime.Now.ToString("dd/MM/yyyy");
                     fechaH = DateTime.Now.ToString("dd/MM/yyyy");

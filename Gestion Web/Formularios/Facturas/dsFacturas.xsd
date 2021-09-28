@@ -175,6 +175,21 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="PedidosxFacturas" msprop:Generator_TableClassName="PedidosxFacturasDataTable" msprop:Generator_TableVarName="tablePedidosxFacturas" msprop:Generator_RowChangedName="PedidosxFacturasRowChanged" msprop:Generator_TablePropName="PedidosxFacturas" msprop:Generator_RowDeletingName="PedidosxFacturasRowDeleting" msprop:Generator_RowChangingName="PedidosxFacturasRowChanging" msprop:Generator_RowEvHandlerName="PedidosxFacturasRowChangeEventHandler" msprop:Generator_RowDeletedName="PedidosxFacturasRowDeleted" msprop:Generator_RowClassName="PedidosxFacturasRow" msprop:Generator_UserTableName="PedidosxFacturas" msprop:Generator_RowEvArgName="PedidosxFacturasRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idFactura" msprop:Generator_ColumnVarNameInTable="columnidFactura" msprop:Generator_ColumnPropNameInRow="idFactura" msprop:Generator_ColumnPropNameInTable="idFacturaColumn" msprop:Generator_UserColumnName="idFactura" type="xs:string" minOccurs="0" />
+              <xs:element name="TipoFactura" msprop:Generator_ColumnVarNameInTable="columnTipoFactura" msprop:Generator_ColumnPropNameInRow="TipoFactura" msprop:Generator_ColumnPropNameInTable="TipoFacturaColumn" msprop:Generator_UserColumnName="TipoFactura" type="xs:string" minOccurs="0" />
+              <xs:element name="numFactura" msprop:Generator_ColumnVarNameInTable="columnnumFactura" msprop:Generator_ColumnPropNameInRow="numFactura" msprop:Generator_ColumnPropNameInTable="numFacturaColumn" msprop:Generator_UserColumnName="numFactura" type="xs:string" minOccurs="0" />
+              <xs:element name="fechaFactura" msprop:Generator_ColumnVarNameInTable="columnfechaFactura" msprop:Generator_ColumnPropNameInRow="fechaFactura" msprop:Generator_ColumnPropNameInTable="fechaFacturaColumn" msprop:Generator_UserColumnName="fechaFactura" type="xs:string" minOccurs="0" />
+              <xs:element name="idPedido" msprop:Generator_ColumnVarNameInTable="columnidPedido" msprop:Generator_ColumnPropNameInRow="idPedido" msprop:Generator_ColumnPropNameInTable="idPedidoColumn" msprop:Generator_UserColumnName="idPedido" type="xs:string" minOccurs="0" />
+              <xs:element name="numPedido" msprop:Generator_ColumnVarNameInTable="columnnumPedido" msprop:Generator_ColumnPropNameInRow="numPedido" msprop:Generator_ColumnPropNameInTable="numPedidoColumn" msprop:Generator_UserColumnName="numPedido" type="xs:string" minOccurs="0" />
+              <xs:element name="fechaPedido" msprop:Generator_ColumnVarNameInTable="columnfechaPedido" msprop:Generator_ColumnPropNameInRow="fechaPedido" msprop:Generator_ColumnPropNameInTable="fechaPedidoColumn" msprop:Generator_UserColumnName="fechaPedido" type="xs:string" minOccurs="0" />
+              <xs:element name="totalFact" msprop:Generator_ColumnVarNameInTable="columntotalFact" msprop:Generator_ColumnPropNameInRow="totalFact" msprop:Generator_ColumnPropNameInTable="totalFactColumn" msprop:Generator_UserColumnName="totalFact" type="xs:string" minOccurs="0" />
+              <xs:element name="totalPed" msprop:Generator_ColumnVarNameInTable="columntotalPed" msprop:Generator_ColumnPropNameInRow="totalPed" msprop:Generator_ColumnPropNameInTable="totalPedColumn" msprop:Generator_UserColumnName="totalPed" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
   </xs:element>

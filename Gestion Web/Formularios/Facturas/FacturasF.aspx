@@ -349,6 +349,16 @@
                                             </ul>
                                         </li>
 
+                                        <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Pedidos x Factura</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <asp:LinkButton ID="lbtnPedidosxFactura" runat="server" OnClick="lbtnPedidosxFactura_Click" >
+                                                        <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                        &nbsp Exportar
+                                                    </asp:LinkButton>
+                                                </li>
+                                            </ul>
+                                        </li>
                                     </ul>
                                 </div>
 

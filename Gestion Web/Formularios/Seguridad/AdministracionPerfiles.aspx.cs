@@ -293,11 +293,13 @@ namespace Gestion_Web.Formularios.Seguridad
 
 
                 int i = this.controlador.modificarPerfilesMenu(perfiles);
+                //int i = 1;
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Modifico Configuracion de Permisos de Perfil: " + this.DropListPermiso.SelectedItem.Text);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Configuracion actualizada con exito", "AdministracionPerfiles.aspx"));
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Configuracion 2 actualizada con exito", "AdministracionPerfiles.aspx"));
 
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Configuración actualizada con exito.", ""));
                 }
                 else
                 {
