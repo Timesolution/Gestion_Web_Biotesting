@@ -492,6 +492,15 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.LinkButton btnExportarReporteVentaArticulos;
 
         /// <summary>
+        /// Control lbtnPedidosxFactura.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnPedidosxFactura;
+
+        /// <summary>
         /// Control labelSaldo.
         /// </summary>
         /// <remarks>

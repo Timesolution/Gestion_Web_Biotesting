@@ -2202,6 +2202,36 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        protected void lbtnPedidosxFactura_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.ExportToExcel(17);
+                //string idtildado = "";
+                //string numero = "";
+                //foreach (Control C in phFacturas.Controls)
+                //{
+                //    TableRow tr = C as TableRow;
+                //    CheckBox ch = tr.Cells[tr.Cells.Count - 1].Controls[2] as CheckBox;
+                //    if (ch.Checked == true)
+                //    {
+                //        numero += tr.Cells[2].Text;
+                //        idtildado += ch.ID.Split('_')[1] + ";";
+                //    }
+                //    if (idtildado.Split(';').Count() > 1 && idtildado.Split(';')[1] != "")
+                //    {
+                //        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Debe seleccionar solo una Factura"));
+                //        return;
+                //    }
+                //}
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
+            }
+        }
         protected void lbtnImprimirTodo_Click(object sender, EventArgs e)
         {
             try
@@ -2467,6 +2497,10 @@ namespace Gestion_Web.Formularios.Facturas
                         if (accion == 16)
                         {
                             Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=16&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        }
+                        if (accion == 17)
+                        {
+                            Response.Redirect("/Formularios/Facturas/ImpresionFacturas.aspx?a=17&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue + "&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&e=1" + "&anuladas=" + anuladas + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                         }
 
                     }
@@ -5348,5 +5382,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando pedidos para facturar. " + ex.Message));
             }
         }
+
+        
     }
 }

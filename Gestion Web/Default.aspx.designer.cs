@@ -159,6 +159,33 @@ namespace Gestion_Web
         protected global::System.Web.UI.WebControls.PlaceHolder phClientes;
 
         /// <summary>
+        /// Control btnHacerPedido.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnHacerPedido;
+
+        /// <summary>
+        /// Control btnCuentaCorriente.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCuentaCorriente;
+
+        /// <summary>
+        /// Control btnCliente2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCliente2;
+
+        /// <summary>
         /// Control phImportacion.
         /// </summary>
         /// <remarks>

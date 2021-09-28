@@ -23,6 +23,7 @@ namespace Gestion_Web
         controladorCliente contCliente = new controladorCliente();
         controladorArticulo contArticulo = new controladorArticulo();
         ControladorEmpresa contEmp = new ControladorEmpresa();
+        controladorUsuario contUser= new controladorUsuario();
         UsuarioMemo user = new UsuarioMemo();
         int idMemo;
         int valor;
@@ -93,31 +94,86 @@ namespace Gestion_Web
                 {
                     //verifico perfil
                     string perfil = Session["Login_NombrePerfil"] as string;
-                    if (perfil == "Cliente")
+                    if (WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
                     {
-                        //desactivo acciones
-                        this.phClientes.Visible = true;
+
+                        if (perfil == "Cliente")
+                        {
+                            //desactivo acciones
+                            this.phClientes.Visible = true;
+                            DataTable dt = contUser.ComprobarVCCyVP();
+                            if (dt.Rows[0]["estado"].ToString() == "0" && perfil == "Cliente")
+                            {
+                                btnHacerPedido.Visible = false;
+                            }
+                            if (dt.Rows[1]["estado"].ToString() == "0" && perfil == "Cliente")
+                            {
+                                btnCuentaCorriente.Visible = false;
+                            }
+                            if (perfil == "Cliente")
+                            {
+                                btnCliente2.Visible = false;
+                            }
+                        }
+                        if (perfil == "Distribuidor")
+                        {
+                            this.phClientes.Visible = true;
+                            btnCliente2.Visible = true;
+                        }
+
+                        if (perfil != "Distribuidor" && perfil != "Cliente")
+                        {
+
+                            //importacion, usa PARKER
+                            if (perfil == "Importacion")
+                            {
+                                this.phImportacion.Visible = true;
+                                return;
+                            }
+
+                            this.phMain.Visible = true;
+                            //verifico si es super admin                        
+                            if (perfil == "SuperAdministrador")
+                            {
+                                this.facturasSucursales = 1;
+                            }
+                            if (perfil == "Vendedor")
+                            {
+                                this.lbtnAlertaPedidos.Attributes.Add("style", "display:none;");
+                            }
+                        }
                     }
                     else
                     {
-                        //importacion, usa PARKER
-                        if (perfil == "Importacion")
-                        {
-                            this.phImportacion.Visible = true;
-                            return;
-                        }
 
-                        this.phMain.Visible = true;
-                        //verifico si es super admin                        
-                        if (perfil == "SuperAdministrador")
+                        if (perfil == "Cliente")
                         {
-                            this.facturasSucursales = 1;
+                            //desactivo acciones
+                            this.phClientes.Visible = true;
+
                         }
-                        if (perfil == "Vendedor")
+                        else
                         {
-                            this.lbtnAlertaPedidos.Attributes.Add("style", "display:none;");
+                            //importacion, usa PARKER
+                            if (perfil == "Importacion")
+                            {
+                                this.phImportacion.Visible = true;
+                                return;
+                            }
+
+                            this.phMain.Visible = true;
+                            //verifico si es super admin                        
+                            if (perfil == "SuperAdministrador")
+                            {
+                                this.facturasSucursales = 1;
+                            }
+                            if (perfil == "Vendedor")
+                            {
+                                this.lbtnAlertaPedidos.Attributes.Add("style", "display:none;");
+                            }
                         }
                     }
+
                     string nombreUser = Session["Login_UserNafta"] as string;
                     if (nombreUser == "GNC" || nombreUser == "Nafta" || nombreUser == "Playa")
                     {
@@ -610,7 +666,5 @@ namespace Gestion_Web
 
             }
         }
-
-
     }
 }

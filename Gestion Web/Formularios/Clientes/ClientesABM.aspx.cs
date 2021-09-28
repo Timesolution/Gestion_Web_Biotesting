@@ -621,6 +621,13 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListTipo.DataTextField = "tipo";
 
                 this.DropListTipo.DataBind();
+
+                string perfil = Session["Login_NombrePerfil"] as string;
+                if (perfil == "Distribuidor" && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
+                {
+                    this.DropListTipo.SelectedValue = "14";
+                    this.DropListTipo.Attributes.Add("disabled", "disabled");
+                }
             }
             catch (Exception ex)
             {
@@ -1774,6 +1781,14 @@ namespace Gestion_Web.Formularios.Clientes
                             {
                                 var idDistribuidor = (int)Session["Login_Vendedor"];
                                 Clientes_Referidos cr = new Clientes_Referidos();
+
+                                
+                                if (DropListTipo.SelectedItem.Text.ToLower() == "vendedor" && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
+                                {
+                                    cr.Padre = idDistribuidor;
+                                    cr.Hijo = i;
+                                }
+                                // TENER EN CUENTA QUE EL "IF" COMENTADO ES EL ORIGINAL. EL DE ARRIBA ES UN CAMBIO PARA TESTING
                                 if (DropListTipo.SelectedItem.Text.ToLower() == "lider")
                                 {
                                     cr.Padre = idDistribuidor;

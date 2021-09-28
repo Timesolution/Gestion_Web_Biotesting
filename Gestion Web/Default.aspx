@@ -271,22 +271,34 @@
                                 <div class="shortcuts">
                                     <a href="Formularios/Articulos/ArticulosC.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-bookmark"></i>
-                                        <span class="shortcut-label">Articulos</span>
+                                        <span class="shortcut-label">Pedidos</span>
                                     </a>
 
-                                    <a href="Formularios/Facturas/ABMPedidos.aspx" class="shortcut">
+                                    <asp:LinkButton ID="btnHacerPedido" runat="server" CssClass="shortcut" href="Formularios/Facturas/ABMPedidos.aspx">
                                         <i class="shortcut-icon icon-plus"></i>
                                         <span class="shortcut-label">Hacer Pedido</span>
-                                    </a>
+                                    </asp:LinkButton>
+                                    <%--<a href="Formularios/Facturas/ABMPedidos.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-plus"></i>
+                                        <span class="shortcut-label">Hacer Pedido</span>
+                                    </a>--%>
 
                                     <a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-shopping-cart"></i>
                                         <span class="shortcut-label">Listado Pedidos</span>
                                     </a>
-                                    <a href="Formularios/Facturas/CuentaCorrienteF.aspx" class="shortcut">
+                                    <asp:LinkButton ID="btnCuentaCorriente" runat="server" CssClass="shortcut" href="Formularios/Facturas/CuentaCorrienteF.aspx">
                                         <i class="shortcut-icon icon-th-list"></i>
                                         <span class="shortcut-label">Cuenta Corriente</span>
-                                    </a>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton ID="btnCliente2" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Clientes/ClientesABM.aspx?accion=1">
+                                        <i class="shortcut-icon icon-group"></i>
+                                        <span class="shortcut-label">Clientes</span>
+                                    </asp:LinkButton>
+                                   <%-- <a href="Formularios/Facturas/CuentaCorrienteF.aspx" class="shortcut">
+                                        <i class="shortcut-icon icon-th-list"></i>
+                                        <span class="shortcut-label">Cuenta Corriente</span>
+                                    </a>--%>
                                 </div>
                             </div>
                         </div>
