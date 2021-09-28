@@ -164,7 +164,7 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 this.DropListSucursal.DataSource = dt;
-                this.DropListSucursal.DataValueField = "Id";
+                this.DropListSucursal.DataValueField = "id";
                 this.DropListSucursal.DataTextField = "nombre";
 
                 this.DropListSucursal.DataBind();

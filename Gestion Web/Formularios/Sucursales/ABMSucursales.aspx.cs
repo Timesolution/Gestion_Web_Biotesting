@@ -170,7 +170,7 @@ namespace Gestion_Web.Formularios.Sucursales
             {
                 phSucursales.Controls.Clear();
                 int empresa = (int)Session["Login_EmpUser"];
-                List<Sucursal> sucursales = this.controlador.obtenerSucursalesList();
+                List<Sucursal> sucursales = this.controlador.obtenerSucursalesList(); //nos da null
                 foreach (Sucursal sucu in sucursales)
                 {
                     if (sucu.empresa.id == empresa)

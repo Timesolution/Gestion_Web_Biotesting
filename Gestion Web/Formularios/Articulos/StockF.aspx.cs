@@ -25,6 +25,7 @@ namespace Gestion_Web.Formularios.Articulos
         private int idArticulo;
         private string fechaD;
         private string fechaH;
+        private int sucursal;
 
         private int permisoEditar = 0;
         
@@ -37,6 +38,7 @@ namespace Gestion_Web.Formularios.Articulos
                 this.fechaD = Request.QueryString["fd"];
                 this.fechaH = Request.QueryString["fh"];
                 this.suc = Convert.ToInt32(Request.QueryString["s"]);
+                this.sucursal = (int)Session["Login_SucUser"]; 
 
                 this.VerificarLogin();                    
 
@@ -189,7 +191,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 int suc = (int)Session["Login_SucUser"];
                 phStock.Controls.Clear();
-                List<Stock> stocks = this.contArticulo.obtenerStockArticulo(this.idArticulo);
+                List<Stock> stocks = this.contArticulo.obtenerStockArticulo(this.idArticulo,this.sucursal);
                 stocks = stocks.OrderBy(x => x.sucursal.nombre).ToList();
                 foreach (Stock s in stocks)
                 {
@@ -217,7 +219,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
                 if (this.idArticulo > 0)
                 {
-                    var list = this.contArticulo.obtenerStockArticulo(this.idArticulo);
+                    var list = this.contArticulo.obtenerStockArticulo(this.idArticulo,this.sucursal);
                     decimal total = 0;
 
                     if (list != null)
@@ -373,7 +375,7 @@ namespace Gestion_Web.Formularios.Articulos
             try
             {
                 phStockAgrupado.Controls.Clear();
-                DataTable dt = this.contArticulo.obtenerStockSucursalesDT(this.idArticulo);
+                DataTable dt = this.contArticulo.obtenerStockSucursalesDT(this.idArticulo,this.sucursal);
                 foreach (DataRow dr in dt.Rows)
                 {
                     this.cargarStockSucursal(dr);
@@ -660,7 +662,7 @@ namespace Gestion_Web.Formularios.Articulos
                 foreach (var a in articulos)                
                 {
                     //List<Stock> stocks = this.controlador.obtenerStockArticulo(a.id);// obtengo stocks del art en todas las suc
-                    List<Stock> stocks = this.contArticulo.obtenerStockArticuloReduc(a.id);// obtengo stocks del art en todas las suc
+                    List<Stock> stocks = this.contArticulo.obtenerStockArticuloReduc(a.id,this.sucursal);// obtengo stocks del art en todas las suc
                     if (stocks != null && stocks.Count > 0)
                     {
                         Stock s = stocks.Where(x => x.sucursal.id == sucursal.id).FirstOrDefault();//filtro y obtengo id stock en esta suc      
