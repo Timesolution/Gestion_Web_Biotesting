@@ -20,7 +20,7 @@ namespace Gestion_Web.Formularios.Seguridad
         controladorVendedor contVendedor = new controladorVendedor();
         private int idUsuario;
         private int valor;
-        private int SeguridadCambiosSucursal=0;
+        private int SeguridadCambiosSucursal = 0;
         private string perfil = "";
         int idSucursal = 0;
         int idEmpresa = 0;
@@ -195,7 +195,7 @@ namespace Gestion_Web.Formularios.Seguridad
                 this.DropListEmpresa.DataBind();
 
 
-                if (this.SeguridadCambiosSucursal==0)
+                if (this.SeguridadCambiosSucursal == 0)
                 {
                     this.DropListEmpresa.SelectedValue = idEmpresa.ToString();
                     this.DropListEmpresa.Attributes.Add("disabled", "disabled");
@@ -480,36 +480,43 @@ namespace Gestion_Web.Formularios.Seguridad
         {
             try
             {
-                Usuario user = new Usuario();
-                user.usuario = this.txtUsuario.Text;
-                user.contraseña = this.txtContraseña.Text;
-                user.sucursal.id = Convert.ToInt32(this.DropListSucursal.SelectedValue);
-                user.empresa.id = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
-                user.perfil.id = Convert.ToInt32(this.DropListPerfil.SelectedValue);
-                user.ptoVenta.id = Convert.ToInt32(this.DropListPtoVenta.SelectedValue);
-                if (this.DropListPerfil.SelectedItem.Text == "Vendedor")
+                if (controlador.obtenerUsuariosByNombreEquals(txtUsuario.Text).Rows.Count == 0)
                 {
-                    user.vendedor.id = Convert.ToInt32(this.ListVendedores.SelectedValue);
-                }
-                if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
-                {
-                    user.vendedor.id = Convert.ToInt32(this.ListClientes.SelectedValue);
-                }
-                user.estado = 1;
-                int i = this.controlador.agregarUsuarios(user);
-                if (i > 0)
-                {
-                    //agrego bien
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Alta Usuario: " + user.usuario);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario agregado con exito", "ABMUsuarios.aspx?valor=1"));
-                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
-                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
+                    Usuario user = new Usuario();
+                    user.usuario = this.txtUsuario.Text;
+                    user.contraseña = this.txtContraseña.Text;
+                    user.sucursal.id = Convert.ToInt32(this.DropListSucursal.SelectedValue);
+                    user.empresa.id = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
+                    user.perfil.id = Convert.ToInt32(this.DropListPerfil.SelectedValue);
+                    user.ptoVenta.id = Convert.ToInt32(this.DropListPtoVenta.SelectedValue);
+                    if (this.DropListPerfil.SelectedItem.Text == "Vendedor")
+                    {
+                        user.vendedor.id = Convert.ToInt32(this.ListVendedores.SelectedValue);
+                    }
+                    if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
+                    {
+                        user.vendedor.id = Convert.ToInt32(this.ListClientes.SelectedValue);
+                    }
+                    user.estado = 1;
+                    int i = this.controlador.agregarUsuarios(user);
+                    if (i > 0)
+                    {
+                        //agrego bien
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Alta Usuario: " + user.usuario);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario agregado con exito", "ABMUsuarios.aspx?valor=1"));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
+                        ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Cliente agregado.\", {type: \"info\"});", true);
+                    }
+                    else
+                    {
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando Usuario"));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
+                        ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
+                    }
                 }
                 else
                 {
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error agregando Usuario"));
-                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
-                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente.\", {type: \"error\"});", true);
+                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente,ya existe un usuario con ese nombre registrado.\", {type: \"error\"});", true);
                 }
             }
             catch (Exception ex)
@@ -522,36 +529,43 @@ namespace Gestion_Web.Formularios.Seguridad
         {
             try
             {
-                Usuario user = new Usuario();
-                user.id = this.idUsuario;
-                user.usuario = this.txtUsuario.Text;
-                user.contraseña = this.txtContraseña.Text;
-                user.sucursal.id = Convert.ToInt32(this.DropListSucursal.SelectedValue);
-                user.empresa.id = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
-                user.perfil.id = Convert.ToInt32(this.DropListPerfil.SelectedValue);
-                user.ptoVenta.id = Convert.ToInt32(this.DropListPtoVenta.SelectedValue);
+                if (controlador.obtenerUsuariosByNombreEquals(txtUsuario.Text).Rows.Count == 0 || controlador.obtenerUsuariosID(idUsuario).usuario == txtUsuario.Text)
+                {
+                    Usuario user = new Usuario();
+                    user.id = this.idUsuario;
+                    user.usuario = this.txtUsuario.Text;
+                    user.contraseña = this.txtContraseña.Text;
+                    user.sucursal.id = Convert.ToInt32(this.DropListSucursal.SelectedValue);
+                    user.empresa.id = Convert.ToInt32(this.DropListEmpresa.SelectedValue);
+                    user.perfil.id = Convert.ToInt32(this.DropListPerfil.SelectedValue);
+                    user.ptoVenta.id = Convert.ToInt32(this.DropListPtoVenta.SelectedValue);
 
-                if (this.DropListPerfil.SelectedItem.Text == "Vendedor")
-                {
-                    user.vendedor.id = Convert.ToInt32(this.ListVendedores.SelectedValue);
-                }
-                if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
-                {
-                    user.vendedor.id = Convert.ToInt32(this.ListClientes.SelectedValue);
-                }
-                user.estado = 1;
-                int i = this.controlador.modificarUsuarios(user);
-                if (i > 0)
-                {
-                    //agrego bien
-                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Modifico Usuario: " + user.usuario);
-                    ScriptManager.RegisterStartupScript(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Usuario modificado con exito.\", {type: \"info\"}); location.href = 'UsuariosF.aspx';", true);
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario modificado con exito", "UsuariosF.aspx"));
+                    if (this.DropListPerfil.SelectedItem.Text == "Vendedor")
+                    {
+                        user.vendedor.id = Convert.ToInt32(this.ListVendedores.SelectedValue);
+                    }
+                    if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
+                    {
+                        user.vendedor.id = Convert.ToInt32(this.ListClientes.SelectedValue);
+                    }
+                    user.estado = 1;
+                    int i = this.controlador.modificarUsuarios(user);
+                    if (i > 0)
+                    {
+                        //agrego bien
+                        Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", " Modifico Usuario: " + user.usuario);
+                        ScriptManager.RegisterStartupScript(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Usuario modificado con exito.\", {type: \"info\"}); location.href = 'UsuariosF.aspx';", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Usuario modificado con exito", "UsuariosF.aspx"));
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error modificando Usuario"));
+
+                    }
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error modificando Usuario"));
-
+                    ScriptManager.RegisterStartupScript(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Error agregando cliente,ya existe un usuario con ese nombre registrado.\", {type: \"error\"});", true);
                 }
             }
             catch
