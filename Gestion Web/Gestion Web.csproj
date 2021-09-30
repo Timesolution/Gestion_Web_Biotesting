@@ -54,10 +54,11 @@
     </Reference>
     <Reference Include="Estetica Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Estetica_Api\Estetica Api\bin\Debug\Estetica Api.dll</HintPath>
+      <HintPath>..\..\Estetica Api\Estetica Api\bin\Release\Estetica Api.dll</HintPath>
     </Reference>
-    <Reference Include="Gestion Api">
-      <HintPath>..\..\Gestion_Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+    <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Gestion Api\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -107,7 +108,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Millas_Api">
-      <HintPath>..\..\..\Millas\Millas_Api\bin\Debug\Millas_Api.dll</HintPath>
+      <HintPath>..\..\Depedencias\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -117,7 +118,7 @@
     </Reference>
     <Reference Include="Planario_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Auxiliar\Planario_Api.dll</HintPath>
+      <HintPath>..\..\Depedencias\Planario_Api.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -127,8 +128,12 @@
     <Reference Include="QRCoder, Version=1.4.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\QRCoder.1.4.1\lib\net40\QRCoder.dll</HintPath>
     </Reference>
-    <Reference Include="Store_Api">
-      <HintPath>Auxiliar\Store_Api.dll</HintPath>
+    <Reference Include="Report_Api">
+      <HintPath>..\..\Depedencias\Report_Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Store_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Depedencias\Store_Api.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -194,8 +199,9 @@
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Task_Api">
-      <HintPath>Auxiliar\Task_Api.dll</HintPath>
+    <Reference Include="Task_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Depedencias\Task_Api.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -823,6 +829,7 @@
     </Content>
     <Content Include="Formularios\Articulos\StockValorizadoDetalladoR.rdlc" />
     <Content Include="Formularios\Articulos\ListaCatalogoR.rdlc" />
+    <Content Include="Formularios\Facturas\Cotizacion.rdlc" />
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
