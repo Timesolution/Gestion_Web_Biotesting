@@ -360,6 +360,7 @@
     <Content Include="Error404.aspx" />
     <Content Include="font\fontawesome-webfont.svg" />
     <Content Include="font\glyphicons-halflings-regular.svg" />
+    <Content Include="Formularios\Articulos\ArticulosMobile.aspx" />
     <Content Include="Formularios\Articulos\ComparativaProveedorF.aspx" />
     <Content Include="Formularios\Articulos\ABMGruposArticulos.aspx" />
     <Content Include="Formularios\Articulos\ABMGruposComisiones.aspx" />
@@ -375,6 +376,7 @@
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
     <Content Include="Formularios\Clientes\ABMEstadosCRM.aspx" />
+    <Content Include="Formularios\Clientes\ABMSupervisores.aspx" />
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
     <Content Include="Formularios\Clientes\FamiliaF.aspx" />
     <Content Include="Formularios\Clientes\ProspectosF.aspx" />
@@ -1431,6 +1433,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>dsDetalleDespacho.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosMobile.aspx.cs">
+      <DependentUpon>ArticulosMobile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Articulos\ArticulosMobile.aspx.designer.cs">
+      <DependentUpon>ArticulosMobile.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Articulos\ComparativaProveedorF.aspx.cs">
       <DependentUpon>ComparativaProveedorF.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1496,6 +1505,13 @@
     </Compile>
     <Compile Include="Formularios\Clientes\ABMEstadosCRM.aspx.designer.cs">
       <DependentUpon>ABMEstadosCRM.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ABMSupervisores.aspx.cs">
+      <DependentUpon>ABMSupervisores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Clientes\ABMSupervisores.aspx.designer.cs">
+      <DependentUpon>ABMSupervisores.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Clientes\ActividadClientes.aspx.cs">
       <DependentUpon>ActividadClientes.aspx</DependentUpon>
@@ -3453,9 +3469,15 @@
     <EmbeddedResource Include="Formularios\Compras\RetencionPagos.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\EtiquetasR.rdlc" />
     <EmbeddedResource Include="Formularios\Compras\SaldosProvR.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\Cotizacion.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\CuentaCorrienteR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DespachosR.rdlc" />
-    <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedores.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedoresMartinez.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\DescuentosR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetallesVentasR.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedoresSucursalCategoria.rdlc" />
@@ -3470,6 +3492,9 @@
     <EmbeddedResource Include="Formularios\Facturas\PedidosMO.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosNeto.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\PedidosPendientesCliente.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\PedidosxFacturas.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\Reporte_VentasFiltradas.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

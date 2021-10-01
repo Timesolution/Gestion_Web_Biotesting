@@ -1066,59 +1066,81 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 controladorVendedor contVendedores = new controladorVendedor();
-                DataTable dtDetalles = new DataTable();
+                
+                //DataTable dtDetalles = new DataTable();
+                //DataTable dtCobro = new DataTable();
+                DataTable dtnuevo = new DataTable();
+                DataTable dtFinal = new DataTable();
                 if (tipo > 0)
                 {
                     if (tipo == 1)
                     {
-                        dtDetalles = this.controlador.obtenerIngresosBrutosByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
+                        dtFinal = this.controlador.obtenerIngresosBrutosByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                     }
                     else
                     {
-                        dtDetalles = this.controlador.obtenerDetalleVentasPresupuestoByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
+                        dtFinal = this.controlador.obtenerDetalleVentasPresupuestoByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                     }
 
                 }
                 else
                 {
-                    dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
+                    //dtDetalles = this.controlador.obtenerDetalleVentasByFecha(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
+                    //dtCobro = this.controlador.ObtenerCobrosbyCliente(fechaD, fechaH, cliente);
+                    dtnuevo = this.controlador.ventasycobroXvendedor(fechaD, fechaH, suc, this.emp, tipo, cliente, tipofact, this.lista, this.anuladas, this.vendedor, this.formaPago);
                 }
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
                 DataColumn dcSaldo = new DataColumn();
-                dcSaldo.DataType = typeof(string);
+                dcSaldo.DataType = typeof(decimal);
                 dcSaldo.ColumnName = "Saldo";
-                dtDetalles.Columns.Add(dcSaldo);
-                double sueldo = 0;
-                foreach (DataRow dr in dtDetalles.Rows)
+                dtnuevo.Columns.Add(dcSaldo);
+                decimal saldo = 0;
+                decimal saldo2 = 0;
+                
+                if (tipo <= 0)
                 {
-                    sueldo += Convert.ToDouble( dr.ItemArray[12]) + Convert.ToDouble( dr.ItemArray[13]);
-                    dr["Saldo"] = sueldo.ToString();
+                    int clienteanterior=0;
+                    foreach (DataRow dr in dtnuevo.Rows)
+                    {
+                        if (clienteanterior == 0)
+                        {
+                            clienteanterior = Convert.ToInt32(dr["idCliente"]);
+                        }
+                        else if (clienteanterior != Convert.ToInt32(dr["idCliente"]))
+                            saldo = 0;
+
+                        if( !string.IsNullOrEmpty( dr["tipo"].ToString()))
+                        {
+                            saldo += Convert.ToDecimal( dr["neto"])+Convert.ToDecimal(dr["iva"]);
+
+                            dr["Saldo"] = saldo;
+                        }
+                        else
+                        {
+                            dr["tipo"] = "Cobro";
+                            saldo2 = Convert.ToDecimal( dr["neto"]);
+                            saldo += saldo2;
+                            dr["Saldo"] = saldo;
+                        }
+
+                    }
                 }
+                
+                if (cliente == -1)
+                    dtFinal = AgregarFilaSeparadora(dtnuevo);
+                else
+                    dtFinal = dtnuevo;
 
-                Decimal total = 0;
+                Decimal total = saldo;
 
-                //dtDetalles.Columns.Add("Vendedor");
-
-                //if (dtDetalles.Rows.Count > 0)
-                //{
-                //    foreach (DataRow row in dtDetalles.Rows)
-                //    {
-                //        //Vendedor v = contVendedores.obtenerVendedorID(Convert.ToInt32(row["IdVendedor"]));
-                //        //row["Vendedor"] = v.emp.nombre + " " + v.emp.apellido;
-
-                //        if (row["tipo"].ToString().Contains("Credito"))
-                //        {
-                //            row["iva"] = Convert.ToDecimal(row["iva"].ToString()) * -1;
-                //            row["neto"] = Convert.ToDecimal(row["neto"].ToString()) * -1;
-                //            row["pSinIva"] = Convert.ToDecimal(row["pSinIva"].ToString()) * -1;
-                //        }
-                //        //total += Convert.ToDecimal(row["Total"].ToString());
-                //    }
-                //}
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
-                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleVentasVendedores.rdlc");
-                ReportDataSource rds = new ReportDataSource("DetalleFacturas", dtDetalles);
+
+                if( tipo>0)
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleVentasVendedores.rdlc");
+
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("DetalleVentasVendedoresMartinez.rdlc");
+                ReportDataSource rds = new ReportDataSource("DetalleFacturas", dtFinal);
                 ReportDataSource rds2 = new ReportDataSource("DatosFacturas", dtDatos);
 
                 ReportParameter param = new ReportParameter("ParamDesde", fechaD);
@@ -1181,6 +1203,139 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        private DataTable AgregarFilaSeparadora(DataTable dt)
+        {
+            try
+            {
+                DataTable dt2 = ArmarColumnas();
+                
+                int idcliente = 0;
+                decimal saldo=0;
+                decimal total=0;
+                    string razonsocial="";
+                string vendedor = dt.Rows[0]["vendedor"].ToString();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    
+                   
+                    if (idcliente == 0)
+                    {
+                        idcliente = Convert.ToInt32(dr["idCliente"]);
+                        razonsocial = dr["razonSocial"].ToString();
+                    }
+                    
+                    if (idcliente == Convert.ToInt32(dr["idCliente"]))
+                    {
+                        DataRow dr2 = dt2.NewRow();
+                        dr2 = LlenarFilas(dr,dr2);
+                        saldo += Convert.ToDecimal(dr2["Saldo"]);
+                        total += Convert.ToDecimal(dr2.ItemArray[11])+ Convert.ToDecimal(dr2.ItemArray[12]);
+                        dt2.Rows.Add(dr2);
+
+                       
+                    }
+                    else if (idcliente != Convert.ToInt32(dr["idCliente"]))
+                    {
+                        DataRow dr2 = dt2.NewRow();
+                        dr2["Saldo"] = total;
+                        dr2["neto"] = total;
+                        dr2["vendedor"] = vendedor;// vendedor
+                        dr2["razonSocial"] = razonsocial;//razonsocial
+                        dr2["tipo"] = "-- FINAL CLIENTE --";
+                        //dr2["total"] = total;
+                        dt2.Rows.Add(dr2);
+
+                        saldo = 0;
+                        total = 0;
+                        idcliente = Convert.ToInt32(dr["idCliente"]);
+                        razonsocial = dr["razonSocial"].ToString();
+                        dr2 = dr;
+                        total += Convert.ToDecimal(dr2["neto"]) + Convert.ToDecimal(dr2["iva"]);
+                        saldo += Convert.ToDecimal(dr2["Saldo"]);
+                        //dt2.Rows.Add(dr2);
+                        dt2.ImportRow(dr2);
+                    }
+                }
+
+                DataRow dr3 = dt2.NewRow();
+                dr3["Saldo"] = total;
+                dr3["neto"] = total;
+                dr3["vendedor"] = vendedor;// vendedor
+                dr3["razonSocial"] = razonsocial;//razonsocial
+                dr3["tipo"] = "-- FINAL CLIENTE --";
+                //dr2["total"] = total;
+                dt2.Rows.Add(dr3);
+                return dt2;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
+
+        private DataTable ArmarColumnas() 
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("id", typeof(string));
+                dt.Columns.Add("fecha", typeof(DateTime));
+                dt.Columns.Add("provincia", typeof(string));
+                dt.Columns.Add("razonSocial", typeof(string));
+                dt.Columns.Add("tipo", typeof(string));
+                dt.Columns.Add("numero", typeof(string));
+                dt.Columns.Add("pSinIva", typeof(decimal));
+                dt.Columns.Add("codigo", typeof(string));
+                dt.Columns.Add("grupo", typeof(string));
+                dt.Columns.Add("cantidad", typeof(string));
+                dt.Columns.Add("descripcion", typeof(string));
+                dt.Columns.Add("neto", typeof(decimal));
+                dt.Columns.Add("iva", typeof(decimal));
+                dt.Columns.Add("PrecioLista", typeof(decimal));
+                dt.Columns.Add("Vendedor", typeof(string));
+                dt.Columns.Add("Saldo", typeof(decimal));
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private DataRow LlenarFilas(DataRow drViejo,DataRow dr) 
+        {
+            try
+            {
+                dr[0] = drViejo["id"];    //("id", typeof(string));
+                dr[1] = drViejo["fecha"];    //("fecha", typeof(string));
+                dr[2] = drViejo["provincia"];    //("provincia", typeof(string));
+                dr[3] = drViejo["razonSocial"];    //("razonSocial", typeof(string));
+                dr[4] = drViejo["tipo"];    //("tipo", typeof(string));
+                dr[5] = drViejo["numero"];    //("numero", typeof(string));
+                dr[6] = drViejo["pSinIva"];    //("pSinIva", typeof(string));
+                dr[7] = drViejo["codigo"];    //("codigo", typeof(string));
+                dr[8] = drViejo["grupo"];    //("grupo", typeof(string));
+                dr[9] = drViejo["cantidad"];    //("cantidad", typeof(string));
+                dr[10] = drViejo["descripcion"];   //("descripcion", typeof(string));
+                dr[11] = drViejo["neto"];   //("neto", typeof(decimal));
+                if (drViejo["iva"] != DBNull.Value)
+                    dr[12] = drViejo["iva"];   //("iva", typeof(decimal));
+                else
+                    dr[12] = 0;
+                dr[13] = drViejo["PrecioLista"];   //("PrecioLista", typeof(decimal));
+                dr[14] = drViejo["Vendedor"];   //("Vendedor", typeof(string));
+                dr[15] = drViejo["Saldo"];   //("Saldo", typeof(decimal));
+                return dr;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
         private void generarReporte12(string fechaD, string fechaH, int idSuc, int tipo, int cliente)
         {
             try
