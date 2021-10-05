@@ -630,7 +630,7 @@
         <Field Name="tipo_doc">
           <DataField>tipo_doc</DataField>
           <rd:TypeName>System.String</rd:TypeName>
-        </Field>
+        </Field>z
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>dsCobros</rd:DataSetName>

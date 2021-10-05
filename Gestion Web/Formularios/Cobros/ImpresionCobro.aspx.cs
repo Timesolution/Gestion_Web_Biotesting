@@ -551,7 +551,7 @@ namespace Gestion_Web.Formularios.Cobros
 
                 //con el dt traido del controlador no tengo el cliente
                 controladorCuentaCorriente controlador = new controladorCuentaCorriente();
-                DataTable dtCobrosRealizados = controlador.obtenerCobrosRealizadosDT(nuevaFechaD, nuevaFechaH, this.idCliente, this.idPuntoVta, this.idEmpresa, this.idSucursal, this.idTipo, this.idVendedor);
+                DataTable dtCobrosRealizados = controlador.obtenerCobrosRealizadosDT(nuevaFechaD, nuevaFechaH, this.idCliente, this.idPuntoVta, this.idEmpresa, this.idSucursal, this.idTipo);
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("CobrosRealizadosR.rdlc");
 
@@ -598,6 +598,7 @@ namespace Gestion_Web.Formularios.Cobros
             {
                 controladorFactEntity contFactEnt = new controladorFactEntity();
                 controladorFacturacion contFact = new controladorFacturacion();
+                controladorMoneda controladorMoneda = new controladorMoneda();
                 controladorVendedor contVendedor = new controladorVendedor();
                 controladorCuentaCorriente contCtaCte = new controladorCuentaCorriente();
 
@@ -625,6 +626,7 @@ namespace Gestion_Web.Formularios.Cobros
                 dt.Columns.Add("ImporteComision", typeof(decimal));
                 dt.Columns.Add("PorcentajeComision", typeof(decimal));
                 dt.Columns.Add("Cobro");
+                dt.Columns.Add("Moneda");
 
                 foreach (Movimiento_CuentaEnt cob in cobradas)
                 {
@@ -651,6 +653,7 @@ namespace Gestion_Web.Formularios.Cobros
                     row["FechaFc"] = f.fecha.ToString("dd/MM/yyyy");
                     row["FechaCancelacion"] = cobradas.Where(x => x.id_doc == f.id).FirstOrDefault().Movimiento_Cuenta_Cancelaciones.FechaCancelacion.Value.ToString("dd/MM/yyyy");
                     row["TotalFc"] = f.total;
+                    row["Moneda"] = controladorMoneda.obtenerMonedaID(f.ptoV.monedaFacturacion).moneda;
                     //row["Importe"] = f.netoNGrabado;
                     row["Importe"] = f.subTotal;
                     if (f.tipo.tipo.Contains("Credito"))
@@ -729,7 +732,7 @@ namespace Gestion_Web.Formularios.Cobros
                     this.Response.End();
                 }
             }
-            catch
+            catch(Exception ex)
             {
 
             }

@@ -29,22 +29,26 @@
                                                     <li>
                                                         <asp:LinkButton ID="lbtnExportar" runat="server" OnClick="lbtnExportar_Click">Exportar reporte</asp:LinkButton>
                                                     </li>
-                                                    <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cobranzas vendedores</a>
+                                                    <li>
+
+                                                        <asp:LinkButton ID="ltbExportarVendedores" data-toggle="modal" href="#modalReporteVendedor" runat="server" >Cobranzas vendedores</asp:LinkButton>
+                                                    </li>
+                                                    <%--<li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Cobranzas vendedores</a>
                                                         <ul class="dropdown-menu">
-                                                            <li ID="BtnExcelVendedores" runat="server">
+                                                            <li id="BtnExcelVendedores" runat="server">
                                                                 <asp:LinkButton ID="lbtnReporteCobranza" runat="server" OnClick="lbtnReporteCobranza_Click">
                                                                     <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                                                     &nbsp Exportar
                                                                 </asp:LinkButton>
                                                             </li>
-                                                            <li ID="BtnPDFVendedores" runat="server">
+                                                            <li id="BtnPDFVendedores" runat="server">
                                                                 <asp:LinkButton ID="lbtnReporteCobranzaPDF" runat="server" OnClick="lbtnReporteCobranzaPDF_Click">
                                                                     <i  class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                                                     &nbsp Imprimir
                                                                 </asp:LinkButton>
                                                             </li>
                                                         </ul>
-                                                    </li>
+                                                    </li>--%>
 
                                                     <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Detalle Cobros</a>
                                                         <ul class="dropdown-menu">
@@ -137,10 +141,11 @@
                             <thead>
                                 <tr>
                                     <th style="text-align: left; width: 10%;">Fecha</th>
-                                    <th style="text-align: left; width: 25%;">Numero</th>
+                                    <th style="text-align: left; width: 20%;">Numero</th>
                                     <th style="text-align: left; width: 20%;">Cliente</th>
                                     <th style="text-align: right; width: 10%;">Importe</th>
-                                    <th style="text-align: left; width: 25%;">Comentarios</th>
+                                    <th style="text-align: right; width: 10%;">Moneda</th>
+                                    <th style="text-align: left; width: 20%;">Comentarios</th>
                                     <th style="text-align: left; width: 10%;"></th>
 
                                 </tr>
@@ -291,6 +296,7 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListPuntoVta" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
                                     <label class="col-md-4">Tipo</label>
                                     <div class="col-md-6">
@@ -304,13 +310,6 @@
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListTipo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-4">Vendedores</label>
-                                    <div class="col-md-6">
-                                        <asp:DropDownList ID="DropListVendedores" runat="server" class="form-control"></asp:DropDownList>
-                                        <!-- /input-group -->
-                                    </div>
-                                </div>
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -321,6 +320,145 @@
 
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="modalReporteVendedor" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Busqueda</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Desde</label>
+                                    <div class="col-md-4">
+
+                                        <asp:TextBox ID="txtFechaDesdeVendedores" runat="server" class="form-control"></asp:TextBox>
+
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesdeVendedores" ValidationGroup="VendedoresGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Hasta</label>
+                                    <div class="col-md-4">
+                                        <asp:TextBox ID="txtFechaHastaVendedores" runat="server" class="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHastaVendedores" ValidationGroup="VendedoresGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                    </div>
+                                    <!-- /input-group -->
+
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Buscar Cliente</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtCodClienteVendedores" class="form-control" runat="server"></asp:TextBox>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <asp:LinkButton ID="btnBuscarCodClienteVendedores" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCodClienteVendedores_Click" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Cliente</label>
+                                    <div class="col-md-6">
+
+                                        <asp:DropDownList ID="DropListClientesVendedores" runat="server" class="form-control"></asp:DropDownList>
+
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListClientesVendedores" InitialValue="-1" ValidationGroup="VendedoresGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Empresa</label>
+                                    <div class="col-md-6">
+
+                                        <asp:DropDownList ID="DropListEmpresaVendedores" runat="server" class="form-control" OnSelectedIndexChanged="DropListEmpresaVendedores_SelectedIndexChanged" AutoPostBack="true"></asp:DropDownList>
+
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator10" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListEmpresaVendedores" InitialValue="-1" ValidationGroup="VendedoresGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                    <!-- /input-group -->
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Sucursal</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListSucursalVendedores" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListSucursalVendedores_SelectedIndexChanged"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator12" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursalVendedores" InitialValue="-1" ValidationGroup="VendedoresGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Punto de Venta</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListPuntoVentaVendedores" runat="server" class="form-control"></asp:DropDownList>
+
+                                        <!-- /input-group -->
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator13" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListPuntoVentaVendedores" InitialValue="-1" ValidationGroup="VendedoresGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Vendedores</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="DropListVendedores" runat="server" class="form-control"></asp:DropDownList>
+                                        <!-- /input-group -->
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Tipo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListTipoVendedores" runat="server" class="form-control">
+                                                <asp:ListItem Value="0">Ambos</asp:ListItem>
+                                                <asp:ListItem Value="1">FC</asp:ListItem>
+                                                <asp:ListItem Value="2">PRP</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator14" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListTipoVendedores" InitialValue="-1" ValidationGroup="VendedoresGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group">
+                                        <label class="col-md-4">Generar</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListGenerar" runat="server" class="form-control">
+                                                <asp:ListItem Value="1">PDF</asp:ListItem>
+                                                <asp:ListItem Value="2">Excel</asp:ListItem>
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnGenerarReporte" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnGenerarReporte_Click" ValidationGroup="VendedoresGroup" />
                     </div>
                 </div>
 
@@ -374,6 +512,10 @@
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            $("#<%= txtFechaDesdeVendedores.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            $("#<%= txtFechaHastaVendedores.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
     </script>
 
@@ -384,6 +526,13 @@
 
         $(function () {
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+        $(function () {
+            $("#<%= txtFechaDesdeVendedores.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(function () {
+            $("#<%= txtFechaHastaVendedores.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         });
     </script>
 

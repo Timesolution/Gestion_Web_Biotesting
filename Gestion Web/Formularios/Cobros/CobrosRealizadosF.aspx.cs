@@ -47,7 +47,7 @@ namespace Gestion_Web.Formularios.Cobros
             {
                 if (TeamHermanos == 1)
                 {
-                    BtnExcelVendedores.Visible = false;
+                    ltbExportarVendedores.Visible = false;
                 }
                 this.VerificarLogin();
                 this.idCliente = Convert.ToInt32(Request.QueryString["cliente"]);
@@ -75,18 +75,23 @@ namespace Gestion_Web.Formularios.Cobros
                         //this.puntoVenta = 1;
                     }
                     this.cargarClientes();
-                    this.cargarVendedores();
                     this.DropListClientes.SelectedValue = this.idCliente.ToString();
-                    this.DropListVendedores.SelectedValue = this.vendedor.ToString();
                     this.cargarEmpresas();
+                    this.cargarVendedores();
                     this.DropListEmpresa.SelectedValue = this.idEmpresa.ToString();
+                    this.DropListEmpresaVendedores.SelectedValue = this.idEmpresa.ToString();
                     this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
-                    this.DropListSucursal.SelectedValue = this.idSucursal.ToString();
+                    this.cargarSucursalModalVendedores(Convert.ToInt32(this.DropListEmpresaVendedores.SelectedValue));
+                    this.DropListSucursalVendedores.SelectedValue = this.idSucursal.ToString();
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
-                    this.DropListPuntoVta.SelectedValue = this.puntoVenta.ToString();
+                    this.cargarPuntoVtaModalVendedores(Convert.ToInt32(this.DropListSucursalVendedores.SelectedValue));
+                    this.DropListPuntoVentaVendedores.SelectedValue = this.puntoVenta.ToString();
                     this.DropListTipo.SelectedValue = this.idTipo.ToString();
+                    this.DropListTipoVendedores.SelectedValue = this.idTipo.ToString();
                     txtFechaDesde.Text = fechaD;
+                    txtFechaDesdeVendedores.Text = fechaD;
                     txtFechaHasta.Text = fechaH;
+                    txtFechaHastaVendedores.Text = fechaH;
                 }
                 //if (this.idCliente > -1 && filtro == 1)
                 //{
@@ -205,6 +210,13 @@ namespace Gestion_Web.Formularios.Cobros
 
                 this.DropListClientes.DataBind();
 
+
+                this.DropListClientesVendedores.DataSource = dt;
+                this.DropListClientesVendedores.DataValueField = "id";
+                this.DropListClientesVendedores.DataTextField = "alias";
+
+                this.DropListClientesVendedores.DataBind();
+
             }
             catch (Exception ex)
             {
@@ -228,7 +240,7 @@ namespace Gestion_Web.Formularios.Cobros
                     this.fechaH = this.txtFechaHasta.Text;
                     //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                     //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
-                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
+                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
 
@@ -250,7 +262,7 @@ namespace Gestion_Web.Formularios.Cobros
                 }
                 else
                 {
-                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo, this.vendedor);
+                    DataTable dtMovimiento = this.contrCC.Get_CobrosRealizadosDT(fechaD, fechaH, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, idTipo);
                     phCobrosRealizados.Controls.Clear();
                     decimal saldo = 0;
 
@@ -351,7 +363,7 @@ namespace Gestion_Web.Formularios.Cobros
                 infXML.Cliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
                 infXML.PuntoVenta = Convert.ToInt32(this.DropListPuntoVta.SelectedValue);
                 infXML.Tipo = Convert.ToInt32(this.DropListTipo.SelectedValue);
-                infXML.Vendedor = Convert.ToInt32(this.DropListVendedores.SelectedValue);
+                infXML.Vendedor = 0;
             }
             catch (Exception ex)
             {
@@ -440,6 +452,7 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
+
         public void cargarVendedores()
         {
             try
@@ -467,6 +480,7 @@ namespace Gestion_Web.Formularios.Cobros
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando vendedores. " + ex.Message));
             }
         }
+
         public void cargarEmpresas()
         {
             try
@@ -486,6 +500,13 @@ namespace Gestion_Web.Formularios.Cobros
                 this.DropListEmpresa.DataTextField = "Razon Social";
 
                 this.DropListEmpresa.DataBind();
+
+
+                this.DropListEmpresaVendedores.DataSource = dt;
+                this.DropListEmpresaVendedores.DataValueField = "Id";
+                this.DropListEmpresaVendedores.DataTextField = "Razon Social";
+
+                this.DropListEmpresaVendedores.DataBind();
 
             }
             catch (Exception ex)
@@ -517,6 +538,39 @@ namespace Gestion_Web.Formularios.Cobros
 
 
 
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        public void cargarSucursalModalVendedores(int emp)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursalesDT(emp);
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+
+
+
+                this.DropListSucursalVendedores.DataSource = dt;
+                this.DropListSucursalVendedores.DataValueField = "Id";
+                this.DropListSucursalVendedores.DataTextField = "nombre";
+
+                this.DropListSucursalVendedores.DataBind();
+
+
+
+
             }
             catch (Exception ex)
             {
@@ -524,33 +578,84 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
+
         public void cargarPuntoVta(int sucu)
         {
             try
             {
+
+                this.DropListPuntoVta.Items.Clear();
                 controladorSucursal contSucu = new controladorSucursal();
                 DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
 
-                //agrego opcion seleccione
-                DataRow dr = dt.NewRow();
-                dr["NombreFantasia"] = "Seleccione...";
-                dr["Id"] = -1;
-                dt.Rows.InsertAt(dr, 0);
-                //agrego opcion todos
-                DataRow dr2 = dt.NewRow();
-                dr2["NombreFantasia"] = "Todos";
-                dr2["Id"] = 0;
-                dt.Rows.InsertAt(dr2, 1);
+                ListItem item = new ListItem();
+                item.Value = "-1";
+                item.Text = "Seleccione";
+                this.DropListPuntoVta.Items.Add(item);
 
-                this.DropListPuntoVta.DataSource = dt;
-                this.DropListPuntoVta.DataValueField = "Id";
-                this.DropListPuntoVta.DataTextField = "NombreFantasia";
+                item = new ListItem();
+                item.Value = "0";
+                item.Text = "Todos";
+                this.DropListPuntoVta.Items.Add(item);
 
-                this.DropListPuntoVta.DataBind();
+                foreach (DataRow row in dt.Rows)
+                {
+                    item = new ListItem();
+                    item.Value = row["id"].ToString();
+                    item.Text = row["NombreFantasia"].ToString() + " (" + row["moneda"].ToString() + ")";
+                    this.DropListPuntoVta.Items.Add(item);
+                }
+
+            
+
+
 
                 if (dt.Rows.Count == 3)
                 {
                     this.DropListPuntoVta.SelectedIndex = 2;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando puntos de venta. " + ex.Message));
+            }
+        }
+
+        public void cargarPuntoVtaModalVendedores(int sucu)
+        {
+            try
+            {
+
+                this.DropListPuntoVentaVendedores.Items.Clear();
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerPuntoVentaDT(sucu);
+
+                ListItem item = new ListItem();
+                item.Value = "-1";
+                item.Text = "Seleccione";
+                this.DropListPuntoVentaVendedores.Items.Add(item);
+
+                item = new ListItem();
+                item.Value = "0";
+                item.Text = "Todos";
+                this.DropListPuntoVentaVendedores.Items.Add(item);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    item = new ListItem();
+                    item.Value = row["id"].ToString();
+                    item.Text = row["NombreFantasia"].ToString() + " (" + row["moneda"].ToString() + ")";
+                    this.DropListPuntoVentaVendedores.Items.Add(item);
+                }
+
+
+
+
+
+                if (dt.Rows.Count == 3)
+                {
+                    this.DropListPuntoVentaVendedores.SelectedIndex = 2;
                 }
 
             }
@@ -597,6 +702,13 @@ namespace Gestion_Web.Formularios.Cobros
                     celHaber.VerticalAlign = VerticalAlign.Middle;
                     celHaber.HorizontalAlign = HorizontalAlign.Right;
                     tr.Cells.Add(celHaber);
+
+
+                    TableCell celMoneda = new TableCell();
+                    celMoneda.Text = row["Moneda"].ToString();
+                    celMoneda.VerticalAlign = VerticalAlign.Middle;
+                    celMoneda.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celMoneda);
 
                     TableCell celComentarios = new TableCell();
                     celComentarios.Text = row["Observaciones"].ToString();
@@ -645,7 +757,7 @@ namespace Gestion_Web.Formularios.Cobros
         {
             try
             {
-                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&Fechadesde=" + this.fechaD + "&FechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&vend=" + DropListVendedores.SelectedValue);
+                Response.Redirect("CobrosRealizadosF.aspx?filtro=1&Fechadesde=" + this.fechaD + "&FechaHasta=" + this.fechaH + "&cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue);
                 //cargarMovimientos();
             }
             catch (Exception ex)
@@ -664,6 +776,17 @@ namespace Gestion_Web.Formularios.Cobros
         {
             this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
         }
+
+        protected void DropListEmpresaVendedores_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.cargarSucursalModalVendedores(Convert.ToInt32(this.DropListEmpresaVendedores.SelectedValue));
+        }
+
+        protected void DropListSucursalVendedores_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.cargarPuntoVtaModalVendedores(Convert.ToInt32(this.DropListSucursalVendedores.SelectedValue));
+        }
+
 
         protected void DropListPuntoVta_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -831,12 +954,12 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
-        protected void lbtnReporteCobranza_Click(object sender, EventArgs e)
+        private void lbtnReporteCobranza_Click()
         {
             try
             {
 
-                Response.Redirect("ImpresionCobro.aspx?valor=7&ex=1&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor);
+                Response.Redirect("ImpresionCobro.aspx?valor=7&ex=1&fd=" + txtFechaDesdeVendedores.Text + "&fh=" + txtFechaHastaVendedores.Text + "&cli=" + DropListClientesVendedores.SelectedValue + "&suc=" + DropListSucursalVendedores.SelectedValue + "&pv=" + DropListPuntoVentaVendedores.SelectedValue + "&e=" + DropListEmpresaVendedores.SelectedValue + "&t=" + DropListTipoVendedores.SelectedValue + "&ven=" + DropListVendedores.SelectedValue);
 
             }
             catch
@@ -890,7 +1013,7 @@ namespace Gestion_Web.Formularios.Cobros
 
         }
 
-        protected void lbtnReporteCobranzaPDF_Click(object sender, EventArgs e)
+        private void lbtnReporteCobranzaPDF_Click()
         {
             try
             {
@@ -901,7 +1024,7 @@ namespace Gestion_Web.Formularios.Cobros
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "','_blank');", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + txtFechaDesdeVendedores.Text + "&fh=" + txtFechaHastaVendedores.Text + "&cli=" + DropListClientesVendedores.SelectedValue + "&suc=" + DropListSucursalVendedores.SelectedValue + "&pv=" + DropListPuntoVentaVendedores.SelectedValue + "&e=" + DropListEmpresaVendedores.SelectedValue + "&t=" + DropListTipoVendedores.SelectedValue + "&ven=" + DropListVendedores.SelectedValue + "','_blank');", true);
                 }
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('ImpresionCobro.aspx?valor=7&fd=" + this.fechaD + "&fh=" + this.fechaH + "&cli=" + this.idCliente + "&suc=" + this.idSucursal + "&pv=" + this.puntoVenta + "&e=" + this.idEmpresa + "&t=" + this.idTipo + "&ven=" + this.vendedor + "', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
             }
@@ -967,5 +1090,37 @@ namespace Gestion_Web.Formularios.Cobros
             }
         }
 
+        protected void btnGenerarReporte_Click(object sender, EventArgs e)
+        {
+            if (DropListGenerar.SelectedValue == "1")
+                lbtnReporteCobranzaPDF_Click();
+            else
+                lbtnReporteCobranza_Click();
+        }
+
+        protected void btnBuscarCodClienteVendedores_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dtClientes = this.contrCliente.obtenerClientesAliasDT(this.txtCodCliente.Text);
+
+                //cargo la lista
+                this.DropListClientesVendedores.DataSource = dtClientes;
+                this.DropListClientesVendedores.DataValueField = "id";
+                this.DropListClientesVendedores.DataTextField = "alias";
+                this.DropListClientesVendedores.DataBind();
+                //this.cargarClientesTable(cliente);
+
+                //this.ListRazonSocial.DataSource = dtClientes;
+                //this.ListRazonSocial.DataValueField = "id";
+                //this.ListRazonSocial.DataTextField = "razonSocial";
+
+                //this.ListRazonSocial.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Error Buscando Cliente" + ex.Message + "\", {type: \"error\"});", true);
+            }
+        }
     }
 }
