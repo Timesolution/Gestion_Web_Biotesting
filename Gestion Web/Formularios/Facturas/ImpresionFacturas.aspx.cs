@@ -191,7 +191,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                DataTable dtDetalles = this.controlador.obtenerFacturasRangoTipoDTLista(fechaD, fechaH, suc, tipo, cliente, tipofact, this.lista, this.anuladas, this.emp, this.vendedor, this.formaPago);
+                DataTable dtDetalles = this.controlador.obtenerFacturasRangoTipoDTLista(fechaD, fechaH, suc, tipo, cliente, tipofact, this.lista, this.anuladas, this.emp, this.vendedor, this.formaPago,0);
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
                 DataTable dtFechas = this.controlador.obtenerFechasFactura(fechaD, fechaH);
 
@@ -833,7 +833,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorSucursal contSuc = new controladorSucursal();
                 Sucursal sucursal = contSuc.obtenerSucursalID(suc);
 
-                DataTable dtDetalles = controlador.obtenerFacturasRangoTipoDTLista(fechaD, fechaH, suc, tipo, cliente, tipofact, listaP, this.anuladas, this.emp, 0, this.formaPago);
+                DataTable dtDetalles = controlador.obtenerFacturasRangoTipoDTLista(fechaD, fechaH, suc, tipo, cliente, tipofact, listaP, this.anuladas, this.emp, 0, this.formaPago,0);
                 dtDetalles.Columns.Add("Lista");
 
                 Decimal total = 0;
@@ -1423,7 +1423,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                DataTable dtDetalles = this.controlador.obtenerFacturasRangoTipoDTLista(fechaD, fechaH, suc, tipo, cliente, tipofact, this.lista, this.anuladas, this.emp, this.vendedor, this.formaPago);
+                DataTable dtDetalles = this.controlador.obtenerFacturasRangoTipoDTLista(fechaD, fechaH, suc, tipo, cliente, tipofact, this.lista, this.anuladas, this.emp, this.vendedor, this.formaPago,0);
                 DataTable dtDatos = this.controlador.obtenerTotalFacturasRango(fechaD, fechaH, suc, tipo, this.emp);
                 DataTable dtFechas = this.controlador.obtenerFechasFactura(fechaD, fechaH);
 

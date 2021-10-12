@@ -522,6 +522,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label class="col-md-4">Pto. Venta</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListPtoVenta" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator33" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListPtoVenta" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label class="col-md-4">Cod Cliente</label>
                                         <div class="col-md-6">
                                             <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
