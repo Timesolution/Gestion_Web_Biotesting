@@ -22,6 +22,7 @@ using Gestion_Api.Modelo.Enums;
 using System.Diagnostics;
 using Task_Api.Entitys;
 using Gestion_Api.Controladores.ControladoresEntity;
+using System.Configuration;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -896,7 +897,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtFacturas = controlador.obtenerFacturasRangoTipoDTLista(txtFechaDesde.Text, txtFechaHasta.Text, Convert.ToInt32(DropListSucursal.SelectedValue), Convert.ToInt32(DropListTipo.SelectedValue), Convert.ToInt32(DropListClientes.SelectedValue), Convert.ToInt32(DropListDocumento.SelectedValue), Convert.ToInt32(DropListListas.SelectedValue), this.anuladas, Convert.ToInt32(DropListEmpresa.SelectedValue), Convert.ToInt32(DropListVendedor.SelectedValue), Convert.ToInt32(DropListFormasPago.SelectedValue),Convert.ToInt32(DropListPtoVenta.SelectedValue), Convert.ToInt32(DropListTipoCliente.SelectedValue), PRPFacturados);
                 decimal saldo = 0;
 
-                if (dtFacturas != null && dtFacturas.Rows.Count <= 4000)
+                if ((dtFacturas != null && dtFacturas.Rows.Count <= 4000) || filtro == 0)
                 {
                     foreach (DataRow row in dtFacturas.Rows)
                     {
@@ -1373,9 +1374,10 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (!String.IsNullOrEmpty(txtFechaDesde.Text) && (!String.IsNullOrEmpty(txtFechaHasta.Text)))
                 {
+                    filtro = Convert.ToInt32(ConfigurationManager.AppSettings["ReporteVentas"]);
                     if (DropListSucursal.SelectedValue != "-1")
                     {
-                        Response.Redirect("FacturasF.aspx?filtro=1&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue +"&PtoVta="+DropListPtoVenta.SelectedValue +"&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&tc=" + DropListTipoCliente.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
+                        Response.Redirect("FacturasF.aspx?filtro="+filtro+"&fechadesde=" + txtFechaDesde.Text + "&fechaHasta=" + txtFechaHasta.Text + "&Sucursal=" + DropListSucursal.SelectedValue +"&PtoVta="+DropListPtoVenta.SelectedValue +"&Emp=" + DropListEmpresa.SelectedValue + "&tipo=" + DropListTipo.SelectedValue + "&doc=" + DropListDocumento.SelectedValue + "&cl=" + DropListClientes.SelectedValue + "&tc=" + DropListTipoCliente.SelectedValue + "&ls=" + DropListListas.SelectedValue + "&vend=" + Convert.ToInt32(this.DropListVendedor.SelectedValue) + "&e=" + Convert.ToInt32(this.chkAnuladas.Checked) + "&fp=" + Convert.ToInt32(this.DropListFormasPago.SelectedValue));
                     }
                     else
                     {
