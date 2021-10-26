@@ -185,7 +185,11 @@ namespace Gestion_Web.Formularios.Reportes
                         hpDetalles.ID = "btnSelec_" + ip.Id.ToString();
                         hpDetalles.Text = "<span class='shortcut-icon icon-search'></span>";
                         hpDetalles.Font.Size = 12;
-                        hpDetalles.NavigateUrl = "/Informes/" + ip.Id + "/" + ip.NombreInforme;
+                        if (ip.Informe != 9)
+                            hpDetalles.NavigateUrl = "/Informes/" + ip.Id + "/" + ip.NombreInforme;
+                        else
+                            hpDetalles.NavigateUrl = "/Informes/txt/" + ip.Id + "/" + ip.NombreInforme;
+
                         //btnDetalles.Click += new EventHandler(this.descargarArchivos);
 
                         if (ip.Informe1.Id == 1)
