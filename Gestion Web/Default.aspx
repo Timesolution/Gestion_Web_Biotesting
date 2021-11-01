@@ -274,9 +274,14 @@
                                         <span class="shortcut-label">Pedidos</span>
                                     </a>
 
-                                    <asp:LinkButton ID="btnHacerPedido" runat="server" CssClass="shortcut" href="Formularios/Facturas/ABMPedidos.aspx">
+                                    <asp:LinkButton ID="btnHacerPedido" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Facturas/ABMPedidos.aspx">
                                         <i class="shortcut-icon icon-plus"></i>
                                         <span class="shortcut-label">Hacer Pedido</span>
+                                    </asp:LinkButton>
+
+                                      <asp:LinkButton ID="btnRecepcionMercaderia" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Facturas/FacturasMercaderiasF.aspx">
+                                        <i class="shortcut-icon icon-truck"></i>
+                                        <span class="shortcut-label">Recepcion</span>
                                     </asp:LinkButton>
                                     <%--<a href="Formularios/Facturas/ABMPedidos.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-plus"></i>

@@ -1826,6 +1826,8 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
+                Gestion_Api.Modelo.Log.EscribirSQL(1, "ERROR", "Error generando Factura desde enviar factura mail" + ex.Message);
+
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error enviando factura por mail. " + ex.Message));
             }
         }
@@ -2865,6 +2867,7 @@ namespace Gestion_Web.Formularios.Facturas
                     ReportDataSource rds3 = new ReportDataSource("dtImagen", dtImagen);
                     ReportDataSource rds4 = new ReportDataSource("DetalleComentario", dtComentarios);
                     ReportDataSource rds5 = new ReportDataSource("NumeroRemito", dtNroRemito);
+                    ReportDataSource rds33 = new ReportDataSource("dtCodigoQr", dtNroRemito);
 
                     ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
                     ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
@@ -2920,6 +2923,8 @@ namespace Gestion_Web.Formularios.Facturas
                     this.ReportViewer1.LocalReport.DataSources.Add(rds3);
                     this.ReportViewer1.LocalReport.DataSources.Add(rds4);
                     this.ReportViewer1.LocalReport.DataSources.Add(rds5);
+                    this.ReportViewer1.LocalReport.DataSources.Add(rds33);
+
                     this.ReportViewer1.LocalReport.SetParameters(param);
                     this.ReportViewer1.LocalReport.SetParameters(param2);
                     this.ReportViewer1.LocalReport.SetParameters(param3);

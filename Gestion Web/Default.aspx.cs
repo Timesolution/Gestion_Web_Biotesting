@@ -172,6 +172,14 @@ namespace Gestion_Web
                                 this.lbtnAlertaPedidos.Attributes.Add("style", "display:none;");
                             }
                         }
+                        if (WebConfigurationManager.AppSettings["EsDonus"] == "1")
+                        {
+                            btnRecepcionMercaderia.Visible = true;
+                        }
+                        else
+                        {
+                            btnHacerPedido.Visible = true;
+                        }
                     }
 
                     string nombreUser = Session["Login_UserNafta"] as string;

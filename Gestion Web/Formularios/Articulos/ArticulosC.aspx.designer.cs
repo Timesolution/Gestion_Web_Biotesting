@@ -15,33 +15,6 @@ namespace Gestion_Web.Formularios.Articulos
     {
 
         /// <summary>
-        /// lbBuscar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbBuscar;
-
-        /// <summary>
-        /// txtBusqueda control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
-
-        /// <summary>
-        /// LitFiltro control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal LitFiltro;
-
-        /// <summary>
         /// PlaceHolder1 control.
         /// </summary>
         /// <remarks>
@@ -58,6 +31,24 @@ namespace Gestion_Web.Formularios.Articulos
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phBotonesGrupos;
+
+        /// <summary>
+        /// PlaceHolder2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolder2;
+
+        /// <summary>
+        /// phBotonesSubGrupos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phBotonesSubGrupos;
 
         /// <summary>
         /// phArticulos control.
@@ -78,6 +69,24 @@ namespace Gestion_Web.Formularios.Articulos
         protected global::System.Web.UI.WebControls.PlaceHolder phCarro;
 
         /// <summary>
+        /// phArticulosCarrito control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phArticulosCarrito;
+
+        /// <summary>
+        /// phCarroCargado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCarroCargado;
+
+        /// <summary>
         /// lbtnGenerarPedido control.
         /// </summary>
         /// <remarks>
@@ -94,15 +103,6 @@ namespace Gestion_Web.Formularios.Articulos
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbtnGenerarPedidoBorrador;
-
-        /// <summary>
-        /// lbtnVerPedido control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnVerPedido;
 
         /// <summary>
         /// lbtnContinuarPedido control.
@@ -193,6 +193,33 @@ namespace Gestion_Web.Formularios.Articulos
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnFiltrar;
+
+        /// <summary>
+        /// UpdatePanel2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel2;
+
+        /// <summary>
+        /// txtBusqueda control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBusqueda;
+
+        /// <summary>
+        /// btnBuscar control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnBuscar;
 
         /// <summary>
         /// UpdatePanel1 control.
