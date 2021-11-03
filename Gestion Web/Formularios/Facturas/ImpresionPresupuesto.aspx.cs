@@ -702,7 +702,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (tieneSistemaEstetica == 1)
                 {
-                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Referido:  " + dtDetalle.Rows[0]["ZonaDescripcion"].ToString() + ".";
+                    try
+                    {
+                        dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Referido:  " + dtDetalle.Rows[0]["ZonaDescripcion"].ToString() + ".";
+                    }
+                    catch (Exception)
+                    {
+                    }
                 }
 
                 //obtengo id empresa para buscar el logo correspondiente
