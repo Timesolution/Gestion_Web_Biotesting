@@ -8,6 +8,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -34,8 +36,9 @@ namespace Gestion_Web.Formularios.Herramientas
                 {
                     this.cargarConfiguracion();
                     this.cargarEstados();
-                    this.CargarSucursalesParaGarantiaYServiceOficial();
+                    this.CargarSucursales();
                     this.CargarProveedores();
+                    this.CargarEmpresas();
 
                     this.CargarPuntosCobro();
 
@@ -1110,11 +1113,21 @@ namespace Gestion_Web.Formularios.Herramientas
             }
         }
 
-        public void CargarSucursalesParaGarantiaYServiceOficial()
+        public void CargarSucursales()
         {
             try
             {
                 DataTable dt = contrSucu.obtenerSucursales();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+  
+
+                this.ListSucursalMailEstetica.DataBind();
 
                 this.DropListSucGarantia.DataSource = dt;
                 this.DropListSucGarantia.DataValueField = "id";
@@ -1130,11 +1143,44 @@ namespace Gestion_Web.Formularios.Herramientas
             }
             catch (Exception ex)
             {
-                Log.EscribirSQL(1, "Error", "Error al cargar sucursales para garantia y service oficial " + ex.Message);
+                Log.EscribirSQL(1, "Error", "Error al cargar sucursales PanelControl " + ex.Message);
             }
         }
 
-        public void CargarProveedores()
+        public void CargarEmpresas()
+        {
+            try
+            {
+                ControladorEmpresa contEmpresa = new ControladorEmpresa();
+                DataTable dt = contEmpresa.obtenerEmpresa();
+
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["Razon Social"] = "Seleccione...";
+                dr["Id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                this.ListEmpresaMailGestion.DataSource = dt;
+                this.ListEmpresaMailGestion.DataValueField = "id";
+                this.ListEmpresaMailGestion.DataTextField = "Razon Social";
+
+                this.ListEmpresaMailGestion.DataBind();
+
+                this.ListEmpresaMailEstetica.DataSource = dt;
+                this.ListEmpresaMailEstetica.DataValueField = "id";
+                this.ListEmpresaMailEstetica.DataTextField = "Razon Social";
+
+                this.ListEmpresaMailEstetica.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Log.EscribirSQL(1, "Error", "Error al cargar empresas en PanelControl " + ex.Message);
+
+            }
+        }
+
+            public void CargarProveedores()
         {
             try
             {
@@ -1722,5 +1768,144 @@ namespace Gestion_Web.Formularios.Herramientas
             }
 
         }
+
+        protected void btnGenerarDatosMailGestion_Click(object sender, EventArgs e)
+        {
+            if (hiddenMailGestion.Value == "")
+                generarMail(Convert.ToInt32(ListEmpresaMailGestion.SelectedValue), Convert.ToInt32(ListSucursalMailGestion.SelectedValue), txtMailGestion.Text, txtPasswordMailGestion.Text, txtSMTPMailGestion.Text, Convert.ToInt32(txtPuertoMailGestion.Text), Convert.ToInt32(ListSSLMailGestion.SelectedValue), 0);
+            else
+                modificarMail(Convert.ToInt32(hiddenMailGestion.Value),Convert.ToInt32(ListEmpresaMailGestion.SelectedValue), Convert.ToInt32(ListSucursalMailGestion.SelectedValue), txtMailGestion.Text, txtPasswordMailGestion.Text, txtSMTPMailGestion.Text, Convert.ToInt32(txtPuertoMailGestion.Text), Convert.ToInt32(ListSSLMailGestion.SelectedValue), 0);
+
+        }
+
+     
+
+        protected void btnGenerarDatosMailEstetica_Click(object sender, EventArgs e)
+        {
+            if(hiddenMailEstetica.Value == "")
+            generarMail(Convert.ToInt32(ListEmpresaMailEstetica.SelectedValue), Convert.ToInt32(ListSucursalMailEstetica.SelectedValue),txtMailEstetica.Text,txtPasswordMailEstetica.Text,txtSMPTEstetica.Text,Convert.ToInt32(txtPuertoMailEstetica.Text),Convert.ToInt32(ListSSLMailEstetica.SelectedValue),1);
+            else
+                modificarMail(Convert.ToInt32(hiddenMailEstetica.Value), Convert.ToInt32(ListEmpresaMailGestion.SelectedValue), Convert.ToInt32(ListSucursalMailGestion.SelectedValue), txtMailGestion.Text, txtPasswordMailGestion.Text, txtSMTPMailGestion.Text, Convert.ToInt32(txtPuertoMailGestion.Text), Convert.ToInt32(ListSSLMailGestion.SelectedValue), 0);
+
+        }
+        //0 es gestion 1 es estetica
+        private void generarMail(int empresa,int sucursal,string mail,string password,string smtp,int port,int ssl,int sistema)
+        {
+            ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
+            try
+            {
+              int i = controladorEmpresa.AgregarDatosMailEmpresaByIdEmpresaSucursal(empresa, sucursal, mail, password, smtp, port, ssl, sistema);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        private void modificarMail(int id, int empresa, int sucursal, string mail, string password, string smtp, int port, int ssl, int sistema)
+        {
+            ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
+            try
+            {
+                int i = controladorEmpresa.ModificarDatosMailEmpresaByIdEmpresaSucursal(id,empresa, sucursal, mail, password, smtp, port, ssl,sistema);
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void ListEmpresaMailGestion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idEmpresa = Convert.ToInt32(this.ListEmpresaMailGestion.SelectedValue);
+            this.cargarSucursalGestionByEmpresa(idEmpresa);
+        }
+
+        protected void ListEmpresaMailEstetica_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idEmpresa = Convert.ToInt32(this.ListEmpresaMailEstetica.SelectedValue);
+            this.cargarSucursalEsteticaByEmpresa(idEmpresa);
+        }
+        public void cargarSucursalGestionByEmpresa(int idEmpresa)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursalesDT(idEmpresa);
+
+                // agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+
+
+                this.ListSucursalMailGestion.DataSource = dt;
+                this.ListSucursalMailGestion.DataValueField = "Id";
+                this.ListSucursalMailGestion.DataTextField = "nombre";
+                this.ListSucursalMailGestion.DataBind();
+
+    
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+        public void cargarSucursalEsteticaByEmpresa(int idEmpresa)
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursalesDT(idEmpresa);
+
+                // agrego todos
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+
+
+                this.ListSucursalMailEstetica.DataSource = dt;
+                this.ListSucursalMailEstetica.DataValueField = "Id";
+                this.ListSucursalMailEstetica.DataTextField = "nombre";
+                this.ListSucursalMailEstetica.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando sucursales. " + ex.Message));
+            }
+        }
+
+        [WebMethod]
+        public static string ObtenerDatosMailEmpresaSucursal(string datos)
+        {
+            int empresa = Convert.ToInt32(datos.Split(',')[0]);
+            int sucursal = Convert.ToInt32(datos.Split(',')[1]);
+            int sistema = Convert.ToInt32(datos.Split(',')[2]);
+            ControladorEmpresa controladorEmpresa = new ControladorEmpresa();
+            DataTable dt = controladorEmpresa.obtenerDatosMailByEmpresaSucursal(sucursal,sistema);
+            if (dt.Rows.Count > 0)
+            {
+                datos = dt.Rows[0][1].ToString() + "," + dt.Rows[0][3].ToString() + "," + dt.Rows[0][4].ToString() + "," + dt.Rows[0][5].ToString() + "," + dt.Rows[0][6].ToString() + "," + dt.Rows[0][7].ToString() + dt.Rows[0][8].ToString() + "," + dt.Rows[0][9].ToString();
+
+            }
+            else
+            {
+                datos = "null";
+            }
+
+            
+            JavaScriptSerializer javaScript = new JavaScriptSerializer();
+            javaScript.MaxJsonLength = 5000000;
+            string resultadoJSON = javaScript.Serialize(datos);
+            return resultadoJSON;
+        }
+
+      
     }
 }

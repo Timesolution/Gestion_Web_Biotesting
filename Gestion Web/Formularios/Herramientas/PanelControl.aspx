@@ -626,7 +626,7 @@
                                                 <asp:LinkButton ID="lbtnFacturarMultiplesVeces" runat="server" OnClick="lbtnFacturarMultiplesVeces_Click" />
                                             </div>
                                         </div>
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Generar Pedido Stock Faltante:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnGenerarPedidoStockFaltante" runat="server" OnClick="lbtnGenerarPedidoStockFaltante_Click" />
@@ -638,22 +638,34 @@
                                                 <asp:LinkButton ID="lbtnSumaPuntosCobro" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalSumaPuntosCobro" class="btn btn-success" />
                                             </div>
                                         </div>
-                                          <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Enviar mail al realizar pedido:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnEnviarMailPedido" runat="server" OnClick="lbtnEnviarMailPedido_Click" />
                                             </div>
                                         </div>
-                                          <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Enviar mail al realizar factura:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnEnviarMailFactura" runat="server" OnClick="lbtnEnviarMailFactura_Click" />
                                             </div>
                                         </div>
-                                          <div class="form-group">
+                                        <div class="form-group">
                                             <label for="validateSelect" class="col-md-10">Facturar mas de una vez un remito:</label>
                                             <div class="col-md-2">
                                                 <asp:LinkButton ID="lbtnFacturarMultiplesVecesRemito" runat="server" OnClick="lbtnFacturarMultiplesVecesRemito_Click" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Mail Gestion:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="LinkButton1" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalMailGestion" class="btn btn-success" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-10">Mail Estetica:</label>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="LinkButton2" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalMailEstetica" class="btn btn-success" />
                                             </div>
                                         </div>
                                     </ContentTemplate>
@@ -775,37 +787,37 @@
                                         <label class="col-md-8">Porcentaje Tarjeta</label>
                                         <div class="input-group">
                                             <asp:TextBox ID="txtPorcentajeTarjeta" runat="server" class="form-control" TextMode="Number" />
-                                        <span class="input-group-addon">%</span>
+                                            <span class="input-group-addon">%</span>
 
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Efectivo</label>
                                         <div class="input-group">
-                                             <asp:TextBox ID="txtPorcentajeEfectivo" runat="server" class="form-control" TextMode="Number"  />
-                                        <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPorcentajeEfectivo" runat="server" class="form-control" TextMode="Number" />
+                                            <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Transferencias</label>
                                         <div class="input-group">
-                                            <asp:TextBox ID="txtPorcentajeTransferencia" runat="server" class="form-control" TextMode="Number"  />
-                                        <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPorcentajeTransferencia" runat="server" class="form-control" TextMode="Number" />
+                                            <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Porcentaje Cheques</label>
                                         <div class="input-group">
-                                            <asp:TextBox ID="txtPorcentajeCheques" runat="server" class="form-control" TextMode="Number"  />
-                                        <span class="input-group-addon">%</span>
+                                            <asp:TextBox ID="txtPorcentajeCheques" runat="server" class="form-control" TextMode="Number" />
+                                            <span class="input-group-addon">%</span>
                                         </div>
                                     </div>
 
                                     <div class="form-group" style="margin-bottom: 15px;">
                                         <label class="col-md-8">Redimir Puntos 1 PTO = </label>
                                         <div class="input-group">
-                                            <asp:TextBox ID="txtPesosPuntos" runat="server" class="form-control" TextMode="Number"  />
-                                        <span class="input-group-addon">$</span>
+                                            <asp:TextBox ID="txtPesosPuntos" runat="server" class="form-control" TextMode="Number" />
+                                            <span class="input-group-addon">$</span>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -923,6 +935,151 @@
     </div>
 
 
+    <div id="modalMailGestion" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 75%;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Mail Gestion</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel runat="server" UpdateMode="Always" ID="UpdatePanel4">
+                            <ContentTemplate>
+                                <fieldset>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Empresa</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:DropDownList OnSelectedIndexChanged="ListEmpresaMailGestion_SelectedIndexChanged" AutoPostBack="true" class="form-control" runat="server" ID="ListEmpresaMailGestion"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:DropDownList runat="server" class="form-control" ID="ListSucursalMailGestion" onchange="actualizarDatosMailGestion()">
+                                                <asp:ListItem Text="Seleccione" />
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Mail</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtMailGestion"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Password</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtPasswordMailGestion"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">SMTP</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtSMTPMailGestion"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Puerto</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtPuertoMailGestion"/>
+                                        </div>
+                                    </div>
+                                     <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">SSL</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:DropDownList ID="ListSSLMailGestion" class="form-control" runat="server">
+                                                <asp:ListItem Value="0" Text="Si" />
+                                                <asp:ListItem Value="1" Text="No" />
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnGenerarDatosMailGestion" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnGenerarDatosMailGestion_Click" />
+                        <asp:HiddenField runat="server"  id="hiddenMailGestion" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modalMailEstetica" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 75%;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Mail Gestion</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel runat="server" UpdateMode="Always" ID="UpdatePanel5">
+                            <ContentTemplate>
+                                <fieldset>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Empresa</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:DropDownList runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListEmpresaMailEstetica_SelectedIndexChanged" ID="ListEmpresaMailEstetica"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:DropDownList runat="server" class="form-control" onchange="actualizarDatosMailEstetica()" ID="ListSucursalMailEstetica">
+                                                <asp:ListItem Text="Seleccione" />
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Mail</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtMailEstetica"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Password</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtPasswordMailEstetica"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">SMTP</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtSMPTEstetica"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">Puerto</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:TextBox runat="server" class="form-control" id="txtPuertoMailEstetica"/>
+                                        </div>
+                                    </div>
+                                     <div class="form-group" style="margin-bottom: 15px;">
+                                        <label class="col-md-4">SSL</label>
+                                        <div class="input-group col-md-8">
+                                            <asp:DropDownList ID="ListSSLMailEstetica" class="form-control" runat="server">
+                                                <asp:ListItem Value="0" Text="Si" />
+                                                <asp:ListItem Value="1" Text="No" />
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                    </div>
+                      <div class="modal-footer">
+                        <asp:LinkButton ID="btnGenerarDatosMailEstetica" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnGenerarDatosMailEstetica_Click" />
+                        <asp:HiddenField runat="server"  id="hiddenMailEstetica" />                    
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
@@ -977,6 +1134,72 @@
                 else { return false; }
             }
             return true;
+        }
+    </script>
+
+    <script>
+        function actualizarDatosMailGestion() {
+            var empresa = MainContent_ListEmpresaMailGestion.value;
+            var sucursal = MainContent_ListSucursalMailGestion.value.replace(',', '');
+            var sistema = 0;
+            var datos = empresa + ',' + sucursal + ',' + sistema;
+            $.ajax({
+                method: "POST",
+                url: "PanelControl.aspx/ObtenerDatosMailEmpresaSucursal",
+                data: '{datos: "' + datos + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    //$.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: cargarDatosMailGestion
+            });
+        }
+        function cargarDatosMailGestion(response) {
+            var data = response.d;
+            var obj = JSON.parse(data);
+            if (obj != "null") {
+                MainContent_txtMailGestion.value = obj.split(',')[1];
+                MainContent_txtPasswordMailGestion.value = obj.split(',')[2];
+                MainContent_txtSMTPMailGestion.value = obj.split(',')[3];
+                MainContent_txtPuertoMailGestion.value = obj.split(',')[4];
+                MainContent_ListSSLMailGestion.value = obj.split(',')[6];
+                MainContent_hiddenMailGestion.value = obj.split(',')[0];
+            }
+        }
+
+        function actualizarDatosMailEstetica() {
+            var empresa = MainContent_ListEmpresaMailEstetica.value;
+            var sucursal = MainContent_ListSucursalMailEstetica.value.replace(',', '');
+            var sistema = 1; 
+            var datos = empresa + ',' + sucursal + ',' + sistema;
+            $.ajax({
+                method: "POST",
+                url: "PanelControl.aspx/ObtenerDatosMailEmpresaSucursal",
+                data: '{datos: "' + datos + '" }',
+                contentType: "application/json",
+                dataType: 'json',
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                    //$.msgbox("No se pudo cargar la tabla", { type: "error" });
+                },
+                success: cargarLabelDatosMailEstetica
+            });
+        }
+        function cargarLabelDatosMailEstetica(response) {
+            var data = response.d;
+            var obj = JSON.parse(data);
+            if (obj != "null") {
+                MainContent_txtMailEstetica.value = obj.split(',')[1];
+                MainContent_txtPasswordMailEstetica.value = obj.split(',')[2];
+                MainContent_txtSMPTEstetica.value = obj.split(',')[3];
+                MainContent_txtPuertoMailEstetica.value = obj.split(',')[4];
+                MainContent_ListSSLMailEstetica.value = obj.split(',')[6];
+                MainContent_hiddenMailEstetica.value = obj.split(',')[0];
+
+            }
+
         }
     </script>
 

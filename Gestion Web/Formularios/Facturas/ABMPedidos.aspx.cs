@@ -2547,7 +2547,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Attachment adjunto = new Attachment(path);
 
                 Log.EscribirSQL(1, "INFO", "llego al final GenerarImpresionPDF()");
-                int i = contFunciones.enviarMailPedido(adjunto, destinatarios, razonSoc, Convert.ToInt32(idEmpresa));
+                int i = contFunciones.enviarMailPedido(adjunto, destinatarios, razonSoc, Convert.ToInt32(idEmpresa),suc);
                 if (i > 0)
                 {
                     adjunto.Dispose();
