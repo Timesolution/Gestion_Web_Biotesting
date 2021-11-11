@@ -199,7 +199,7 @@ namespace Gestion_Web.Formularios.Reportes
                             hpDetalles.NavigateUrl += ".pdf";
                             hpDetalles.Attributes.Add("download", "");
                         }
-                        if (ip.Informe1.Id == 9 || ip.Informe1.Id == 10)
+                        if (ip.Informe1.Id == 9 || ip.Informe1.Id == 10 || ip.Informe1.Id == 14 || ip.Informe1.Id == 15)
                         {
                             hpDetalles.Attributes.Add("download", "");
                             hpDetalles.NavigateUrl += ".txt";
