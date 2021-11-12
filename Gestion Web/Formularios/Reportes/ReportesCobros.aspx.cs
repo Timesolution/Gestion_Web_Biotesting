@@ -802,5 +802,18 @@ namespace Gestion_Web.Formularios.Reportes
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Disculpe, ha ocurrido un error inesperado. Por favor contacte al area de soporte via WhatsApp: +54 9 11 3782-0435 para informarnos sobre este error."));
             }
         }
+
+        protected void lbtnImprimirNuevo_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Response.Redirect("/Formularios/Cobros/ImpresionCobro.aspx?Cobro=" + 0 + "&valor=12&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&ex=1");
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('/Formularios/Cobros/ImpresionCobro.aspx?Cobro=" + 0 + "&valor=12&fd=" + txtFechaDesde.Text + "&fh=" + txtFechaHasta.Text + "&ex=1', 'fullscreen', 'top=0,left=0,width='+(screen.availWidth)+',height ='+(screen.availHeight)+',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0');", true);
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error imprimiendo reporte" + ex.Message));
+            }
+        }
     }
 }

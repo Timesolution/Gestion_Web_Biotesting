@@ -770,8 +770,17 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 var conExpreso = new ControladorExpreso();
                 List<TiposEntrega> listaEntregas = conExpreso.obtenerTiposEntrega();
-                listaEntregas.Insert(0, (new TiposEntrega { Id = -1, Descripcion = "Seleccione..." }));
+                if(listaEntregas != null)
+                {
 
+                listaEntregas.Insert(0, (new TiposEntrega { Id = -1, Descripcion = "Seleccione..." }));
+                }
+                else
+                {
+                    listaEntregas = new List<TiposEntrega>();
+                    listaEntregas.Insert(0, (new TiposEntrega { Id = -1, Descripcion = "Seleccione..." }));
+                }
+               
                 this.ListTipoEntrega.DataSource = listaEntregas;
                 this.ListTipoEntrega.DataValueField = "Id";
                 this.ListTipoEntrega.DataTextField = "Descripcion";
@@ -941,14 +950,22 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 controladorFactEntity contFcEnt = new controladorFactEntity();
                 List<Gestion_Api.Entitys.Formas_Venta> formas = contFcEnt.obtenerFormasVenta();
-                formas = formas.OrderBy(x => x.Nombre).ToList();
-
+                if (formas != null)
+                {
+                    formas = formas.OrderBy(x => x.Nombre).ToList();
+                    formas.Insert(0, (new Formas_Venta { Id = -1, Nombre = "NO" }));
+                }
+                else
+                {
+                    formas = new List<Gestion_Api.Entitys.Formas_Venta>();
+                    formas.Insert(0, (new Formas_Venta {Id=-1,Nombre="NO" }));
+                }
+                
                 this.ListFormaVenta.DataSource = formas;
                 this.ListFormaVenta.DataValueField = "Id";
                 this.ListFormaVenta.DataTextField = "Nombre";
                 this.ListFormaVenta.DataBind();
 
-                this.ListFormaVenta.Items.Insert(0, new ListItem("NO", "-1"));
             }
             catch
             {
@@ -2953,7 +2970,15 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 List<Zona> listaZonas = contZona.obtenerZona();
-                listaZonas.Insert(0, (new Zona { id = -1, nombre = "Seleccione..." }));
+                if(listaZonas != null)
+                {
+                    listaZonas.Insert(0, (new Zona { id = -1, nombre = "Seleccione..." }));
+                }
+                else
+                {
+                    listaZonas = new List<Zona>();
+                    listaZonas.Insert(0, (new Zona { id = -1, nombre = "Seleccione..." }));
+                }
 
                 this.DropListZonaEntrega.DataSource = listaZonas;
                 this.DropListZonaEntrega.DataValueField = "id";

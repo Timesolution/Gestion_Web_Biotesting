@@ -50,6 +50,9 @@
                                                         <asp:LinkButton ID="lbtnImprimir" OnClick="btnImprimir_Click" runat="server" ForeColor="Purple">Reporte impagas clientes</asp:LinkButton>
                                                     </li>
                                                     <li>
+                                                        <asp:LinkButton ID="lbtnImprimirNuevo" OnClick="lbtnImprimirNuevo_Click" runat="server" ForeColor="Purple">Reporte impagas clientes (PRP y FC)</asp:LinkButton>
+                                                    </li>
+                                                    <li>
                                                         <asp:LinkButton ID="lbtnImprimirDetalle" OnClick="lbtnImprimirDetalle_Click" runat="server" ForeColor="Purple">Reporte impagas detallado</asp:LinkButton>
                                                     </li>
                                                     <li>
