@@ -26,3 +26,8 @@ input[type="password"] {
         padding: 0;
     }
 }
+
+.sticky {
+    position: sticky;
+    top: 7%;
+}

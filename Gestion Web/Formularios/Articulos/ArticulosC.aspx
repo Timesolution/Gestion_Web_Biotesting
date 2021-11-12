@@ -3,235 +3,286 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="col-md-12 col-xs-12">
-        <div class="widget stacked">
-            <div class="stat">
-                <h5><i class="icon-map-marker"></i>Articulos</h5>
-            </div>
-            <div class="widget-header">
-                <i class="icon-wrench"></i>
-                <h3>Herramientas</h3>
-            </div>
-            <!-- /widget-header -->
 
-            <div class="widget-content">
-                <table style="width: 100%">
-                    <tr>
-                        <td style="width: 30%">
-                            <div class="col-md-12">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" OnClick="btnBuscar_Click">
-                                                    <i class="shortcut-icon icon-search"></i></asp:LinkButton>
-                                    </span>
-                                    <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Articulo"></asp:TextBox>
-                                </div>
+        <div class="row" style="margin-left: 0 !important">
+            <div class="col-md-6 col-xs-6">
+                <asp:PlaceHolder ID="PlaceHolder1" runat="server" Visible="true">
+                    <div class="widget stacked">
+                        <div class="widget-header">
+                            <i class="icon-wrench"></i>
+                            <h3>Grupos</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="btn-toolbar">
+                                <asp:PlaceHolder ID="phBotonesGrupos" runat="server"></asp:PlaceHolder>
                             </div>
-                        </td>
-                        <td style="width: 40%">
-                            <asp:Literal ID="LitFiltro" runat="server"></asp:Literal>
-                        </td>
-                        <td style="width: 2%">
-                            <div class="btn-group" style="height: 100%">
-                                <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Filtrar Articulos" href="#modalBusqueda" style="width: 100%">
-                                    <i class="shortcut-icon icon-filter"></i>
-                                </a>
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
+            </div>
+
+            <div class="col-md-6 col-xs-6">
+                <asp:PlaceHolder ID="PlaceHolder2" runat="server" Visible="true">
+                    <div class="widget stacked">
+                        <div class="widget-header">
+                            <i class="icon-wrench"></i>
+                            <h3>Subgrupos</h3>
+                        </div>
+                        <div class="widget-content">
+                            <div class="btn-toolbar">
+                                <asp:PlaceHolder ID="phBotonesSubGrupos" runat="server"></asp:PlaceHolder>
                             </div>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </asp:PlaceHolder>
             </div>
         </div>
 
-        <asp:PlaceHolder ID="PlaceHolder1" runat="server" Visible="true">
-            <div class="col-md-12 col-xs-12">
-                <div class="widget stacked">
-                    <div class="widget-header">
-                        <i class="icon-wrench"></i>
-                        <h3>Lineas</h3>
+
+        <div class="row">
+            <div style="padding-left: 2%" class="col-md-8 col-xs-8">
+                <div class="widget stacked widget-table action-table">
+                    <div class="widget-header" style="padding-bottom: 6%; padding-right: 1%">
+                        <i class="icon-bookmark"></i>
+                        <h3>Articulos</h3>
+                        <%--  <asp:LinkButton ID="lbBuscar" runat="server" Text="Buscar" class="btn btn-primary" Style="float: right; margin: 1% 1% 0% 1%" OnClick="btnBuscar_Click">
+                                                    <i class="shortcut-icon icon-search"></i></asp:LinkButton>--%>
+
+                        <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Filtrar Articulos" href="#modalBusqueda" style="float: right; margin: 1% 1% 0% 1%">
+                            <i style="margin-right: 0px;color:white;margin-left: 0px" class="shortcut-icon icon-filter"></i>
+                        </a>
+                        <a class="btn btn-primary ui-tooltip" data-toggle="modal" title data-original-title="Buscar Articulos" href="#modalBusqueda2" style="float: right; margin: 1% 1% 0% 1%">
+                            <i style="margin-right: 0px;color:white;  margin-left: 0px" class="shortcut-icon icon-search"></i>
+                        </a>
                     </div>
                     <div class="widget-content">
-                        <div class="btn-toolbar">
-                            <asp:PlaceHolder ID="phBotonesGrupos" runat="server"></asp:PlaceHolder>
+
+
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 10%"></th>
+                                            <th style="width: 10%">Codigo</th>
+                                            <th style="width: 30%">Descripcion</th>
+                                            <th style="width: 5%">P.Venta</th>
+                                            <th style="width: 15%">Cantidad</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phArticulos" runat="server"></asp:PlaceHolder>
+                                        <asp:PlaceHolder ID="phCarro" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </asp:PlaceHolder>
+            <div class="col-md-4 col-xs-4 sticky" style="position: sticky;
+    top: 7%;">
+                <div class="widget stacked widget-table action-table">
+                    <div class="widget-header" style="padding-bottom: 12%">
+                        <i class="icon-shopping-cart"></i>
+                        <h3>Carrito</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 5%"></th>
+                                            <th style="width: 10%">Codigo</th>
+                                            <th style="width: 5%">P.Venta</th>
+                                            <th style="width: 20%">Cantidad</th>
 
-        <div class="col-md-12 col-xs-12">
-            <div class="widget stacked widget-table action-table">
-
-                <div class="widget-header">
-                    <i class="icon-bookmark"></i>
-                    <h3>Articulos</h3>
-                </div>
-                <div class="widget-content">
-                    <div class="panel-body">
-
-                        <%--<div class="col-md-12 col-xs-12">--%>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 10%"></th>
-                                        <th style="width: 10%">Codigo</th>
-                                        <th style="width: 30%">Descripcion</th>
-                                        <th style="width: 10%">Marca</th>
-                                        <th style="width: 10%">Linea</th>
-                                        <th style="width: 10%">Rubro</th>
-                                        <th style="width: 5%">P.Venta</th>
-                                        <th style="width: 15%">Cantidad</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <asp:PlaceHolder ID="phArticulos" runat="server"></asp:PlaceHolder>
-                                    <asp:PlaceHolder ID="phCarro" runat="server"></asp:PlaceHolder>
-                                </tbody>
-                            </table>
-                        </div>
-                        <asp:LinkButton ID="lbtnGenerarPedido" Text="Generar pedido" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedido_Click" />
-                        <asp:LinkButton ID="lbtnGenerarPedidoBorrador" Text="Generar pedido borrador" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedidoBorrador_Click" />
-                        <asp:LinkButton ID="lbtnVerPedido" Text="Ver pedido" runat="server" class="btn btn-default" OnClick="lbtnVerPedido_Click" />
-                        <asp:LinkButton ID="lbtnContinuarPedido" Text="Continuar pedido" runat="server" class="btn btn-default" OnClick="lbtnContinuarPedido_Click" Visible="false" />
-                        <div class="btn-group" style="height: 100%">
-                            <a class="btn btn-default" data-toggle="modal" data-original-title="Comentarios" href="#modalAgregarComentariosAlPedido" style="width: 100%">Comentarios</a>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <asp:PlaceHolder ID="phArticulosCarrito" runat="server"></asp:PlaceHolder>
+                                        <asp:PlaceHolder ID="phCarroCargado" runat="server"></asp:PlaceHolder>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <asp:LinkButton ID="lbtnGenerarPedido" Text="Generar pedido" runat="server" class="btn btn-success" Style="font-size: 0.9em; margin-top: 20%" OnClick="lbtnGenerarPedido_Click" />
+                            <asp:LinkButton ID="lbtnGenerarPedidoBorrador" Text="Generar pedido borrador" runat="server" Style="font-size: 0.9em; margin-top: 20%" class="btn btn-success" OnClick="lbtnGenerarPedidoBorrador_Click" />
+                            <%--<asp:LinkButton ID="lbtnVerPedido" Text="Ver pedido" runat="server" class="btn btn-default" OnClick="lbtnVerPedido_Click" />--%>
+                            <asp:LinkButton ID="lbtnContinuarPedido" Text="Continuar pedido" runat="server" class="btn btn-default" OnClick="lbtnContinuarPedido_Click" Visible="false" />
+                            <a class="btn btn-default" data-toggle="modal" data-original-title="Observaciones" href="#modalAgregarComentariosAlPedido" style="font-size: 0.9em; margin-top: 20%">Observaciones</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirmacion de pedido</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
-                                <div class="col-md-2">
-                                    <h1>
-                                        <i class="icon-warning-sign" style="color: orange"></i>
-                                    </h1>
-                                </div>
-                                <div class="col-md-7">
-                                    <h5>
-                                        <asp:Label runat="server" ID="lblMensaje" Text="Confirmar pedido" Style="text-align: center"></asp:Label>
-                                    </h5>
-                                </div>
+    </div>
 
-                                <div class="col-md-3">
-                                    <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
-                                </div>
+    <div id="modalConfirmacion" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de pedido</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
+                            <div class="col-md-2">
+                                <h1>
+                                    <i class="icon-warning-sign" style="color: orange"></i>
+                                </h1>
+                            </div>
+                            <div class="col-md-7">
+                                <h5>
+                                    <asp:Label runat="server" ID="lblMensaje" Text="Confirmar pedido" Style="text-align: center"></asp:Label>
+                                </h5>
                             </div>
 
+                            <div class="col-md-3">
+                                <asp:TextBox runat="server" ID="txtMovimiento" Text="0" Style="display: none"></asp:TextBox>
+                            </div>
                         </div>
 
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                        </div>
                     </div>
 
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+                    </div>
                 </div>
+
             </div>
         </div>
-        <%--Fin modalGrupo--%>
+    </div>
+    <%--Fin modalGrupo--%>
 
-        <div id="modalPedidoBorrador" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Confirmacion de pedido</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <div class="form-group">
+    <div id="modalPedidoBorrador" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Confirmacion de pedido</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="form-group">
 
-                                <asp:Label runat="server" ID="LabelCliente" Text="Cliente"></asp:Label>
+                            <asp:Label runat="server" ID="LabelCliente" Text="Cliente"></asp:Label>
 
-                                <asp:DropDownList runat="server" ID="ListClientes" class="form-control"></asp:DropDownList>
-                            </div>
-
+                            <asp:DropDownList runat="server" ID="ListClientes" class="form-control"></asp:DropDownList>
                         </div>
 
-                        
-                        <div class="modal-footer">
+                    </div>
+
+
+                    <div class="modal-footer">
                         <asp:LinkButton ID="lbtnGenerarPedidoModalBorrador" Text="Generar pedido" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedidoModalBorrador_Click" />
-                            <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
-
                 </div>
+
             </div>
         </div>
-        <%--Fin modalGrupo--%>
+    </div>
+    <%--Fin modalGrupo--%>
 
-        <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
+    <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">Filtrar Articulos</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div role="form" class="form-horizontal col-md-12">
-                            <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
-                                <ContentTemplate>
-                                    <div class="form-group">
-                                        <label class="col-md-4">Linea</label>
-                                        <div class="col-md-6">
-                                            <asp:DropDownList ID="ListGrupo" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListGrupo_SelectedIndexChanged"></asp:DropDownList>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4">Rubro</label>
-                                        <div class="col-md-6">
-                                            <asp:DropDownList ID="ListSubGrupo" runat="server" class="form-control"></asp:DropDownList>
-                                        </div>
-                                    </div>
-                                </ContentTemplate>
-                                <Triggers>
-                                </Triggers>
-                            </asp:UpdatePanel>
-                        </div>
-                        <div class="modal-footer">
-                            <asp:LinkButton ID="btnFiltrar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnFiltrar_Click" />
-                        </div>
-                    </div>
-
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Filtrar Articulos</h4>
                 </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Linea</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListGrupo" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListGrupo_SelectedIndexChanged"></asp:DropDownList>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4">Rubro</label>
+                                    <div class="col-md-6">
+                                        <asp:DropDownList ID="ListSubGrupo" runat="server" class="form-control"></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnFiltrar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnFiltrar_Click" />
+                    </div>
+                </div>
+
             </div>
         </div>
+    </div>
+    <div id="modalBusqueda2" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-        <div id="modalAgregarComentariosAlPedido" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Comentarios</h4>
-                    </div>
-                    <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
-                        <ContentTemplate>
-                            <div class="modal-body">
-                                <div role="form" class="form-horizontal col-md-12">
-
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <asp:TextBox runat="server" ID="txtComentarios" class="form-control" TextMode="MultiLine" Rows="5" cols="20"></asp:TextBox>
-                                        </div>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Buscar Articulos</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <asp:UpdatePanel ID="UpdatePanel2" UpdateMode="Always" runat="server">
+                            <ContentTemplate>
+                                <div class="form-group">
+                                    <label class="col-md-4">Articulo</label>
+                                    <div class="col-md-6">
+                                        <asp:TextBox ID="txtBusqueda" runat="server" class="form-control" placeholder="Buscar Articulo"></asp:TextBox>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <asp:LinkButton ID="lbtnGuardarComentarios" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnGuardarComentarios_Click" />
-                                </div>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
+
+                            </ContentTemplate>
+                            <Triggers>
+                            </Triggers>
+                        </asp:UpdatePanel>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="btnBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" />
+                    </div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="modalAgregarComentariosAlPedido" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Comentarios</h4>
+                </div>
+                <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
+                    <ContentTemplate>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <asp:TextBox runat="server" ID="txtComentarios" class="form-control" TextMode="MultiLine" Rows="5" cols="20"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <asp:LinkButton ID="lbtnGuardarComentarios" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnGuardarComentarios_Click" />
+                            </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
             </div>
         </div>
     </div>
@@ -287,11 +338,11 @@
 
     </script>
 
-       <script>
-           function showModalPedidoBorrador() {
-               $("#modalPedidoBorrador").modal('show');
-           }
-       </script>
+    <script>
+        function showModalPedidoBorrador() {
+            $("#modalPedidoBorrador").modal('show');
+        }
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -301,10 +352,12 @@
                 "bInfo": false,
                 "bAutoWidth": false,
                 "bStateSave": true,
-                "columnDefs": [
-                    { type: 'date-eu', targets: 5 }
-                ]
+                "pageLength": 50
+                //"columnDefs": [
+                //    { type: 'date-eu', targets: 5 }
+                //]
             });
+           
         });
     </script>
 
