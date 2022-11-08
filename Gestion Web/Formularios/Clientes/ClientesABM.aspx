@@ -21,7 +21,7 @@
                             <ul id="myTab" class="nav nav-tabs">
                                 <li class="active"><a href="#home" data-toggle="tab">Datos</a></li>
                                 <li><a href="#profile" data-toggle="tab">Direccion</a></li>
-                                <li><a href="#Contacto" data-toggle="tab">Contacto</a></li>
+                                <li><a href="#Contacto" id="linkContacto" runat="server" data-toggle="tab">Contacto</a></li>
                                 <li><a href="#Expreso" id="linkSucursales" runat="server" visible="false" data-toggle="tab">Cliente interno</a></li>
                                 <li><a href="#Expreso2" id="linkExpreso" runat="server" visible="false" data-toggle="tab">Expreso</a></li>
                                 <li><a href="#Entregas" id="linkEntregas" runat="server" visible="false" data-toggle="tab">Entregas</a></li>
@@ -72,7 +72,7 @@
 
 
                                                     <div class="form-group">
-                                                        <label for="name" class="col-md-4">Alias</label>
+                                                        <label for="name" class="col-md-4">Nombre y Apellido</label>
 
                                                         <div class="col-md-4">
 
@@ -126,7 +126,7 @@
                                                         </div>
                                                     </asp:Panel>
                                                     <div class="form-group">
-                                                        <label id="lbCUITDNI" runat="server" for="name" class="col-md-4">Cuit</label>
+                                                        <label id="lbCUITDNI" runat="server" for="name" class="col-md-4">Cuit-Cuil</label>
 
                                                         <div class="col-md-4">
 
@@ -231,7 +231,7 @@
                                                         <div class="form-group">
 
                                                             <div class="col-md-4">
-                                                                <asp:Label runat="server" ID="lblVendedor" Text="Vendedor" Font-Bold="true"></asp:Label>
+                                                                <asp:Label runat="server" ID="lblVendedor" Text="Coordinador" Font-Bold="true"></asp:Label>
                                                             </div>
 
                                                             <div class="col-md-4">
@@ -287,7 +287,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
-                                                            <label class="col-md-4">Mail envio FC: </label>
+                                                            <label class="col-md-4">Mail: </label>
                                                             <div class="col-md-4">
                                                                 <div class="input-group">
                                                                     <span class="input-group-addon">@</span>
@@ -357,7 +357,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group">
+                                                    <div class="form-group" id="DivDescuentoPorCantidad" runat="server">
                                                         <asp:Label for="validateSelect" runat="server" ID="LabelDescuentoPorCantidad" Visible="false" class="col-md-4">Aplica Descuento por Cantidad</asp:Label>
                                                         <div class="col-md-4">
                                                             <asp:DropDownList ID="ListDescuentoPorCantidad" runat="server" Visible="false" class="form-control">
@@ -386,7 +386,7 @@
                                     </asp:UpdatePanel>
                                     <div class="col-md-8">
                                         <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="ClienteGroup" />
-                                        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="~/Formularios/Clientes/Clientesaspx.aspx" />
+                                        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" OnClick="btnCancelar_Click"  />
                                     </div>
                                 </div>
 

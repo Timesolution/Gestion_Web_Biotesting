@@ -271,7 +271,7 @@
                                 <div class="shortcuts">
                                     <a href="Formularios/Articulos/ArticulosC.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-bookmark"></i>
-                                        <span class="shortcut-label">Pedidos</span>
+                                        <span class="shortcut-label">Crear Pedidos</span>
                                     </a>
 
                                     <asp:LinkButton ID="btnHacerPedido" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Facturas/ABMPedidos.aspx">
@@ -287,7 +287,9 @@
                                         <i class="shortcut-icon icon-plus"></i>
                                         <span class="shortcut-label">Hacer Pedido</span>
                                     </a>--%>
-
+                                    <%--<asp:LinkButton ID="btnPedidos" runat="server"CssClass="shortcut" OnClick="btnPedidos_Click">
+                                       
+                                    </asp:LinkButton>--%>
                                     <a href="Formularios/Facturas/PedidosP.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-shopping-cart"></i>
                                         <span class="shortcut-label">Listado Pedidos</span>
@@ -296,9 +298,22 @@
                                         <i class="shortcut-icon icon-th-list"></i>
                                         <span class="shortcut-label">Cuenta Corriente</span>
                                     </asp:LinkButton>
+                                   
+                                     <asp:LinkButton ID="LinkButton1" runat="server" Visible="false" CssClass="shortcut" href="#modalBusqueda" data-toggle="modal">
+                                        <i class="shortcut-icon icon-list-alt "></i>
+                                        <span class="shortcut-label">Reportes Art</span>
+                                    </asp:LinkButton>
                                     <asp:LinkButton ID="btnCliente2" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Clientes/ClientesABM.aspx?accion=1">
                                         <i class="shortcut-icon icon-group"></i>
-                                        <span class="shortcut-label">Clientes</span>
+                                        <span class="shortcut-label">Mi Equipo</span>
+                                    </asp:LinkButton>
+                                    <asp:LinkButton ID="btnUsuario" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Seguridad/UsuariosF.aspx">
+                                        <i class="shortcut-icon icon-user"></i>
+                                        <span class="shortcut-label">Crear Usuario</span>
+                                    </asp:LinkButton>
+                                       <asp:LinkButton ID="LinkButton2" runat="server" Visible="false" CssClass="shortcut" href="Formularios/Reportes/InformesN.aspx">
+                                        <i class="shortcut-icon icon-list-alt "></i>
+                                        <span class="shortcut-label">Reportes</span>
                                     </asp:LinkButton>
                                    <%-- <a href="Formularios/Facturas/CuentaCorrienteF.aspx" class="shortcut">
                                         <i class="shortcut-icon icon-th-list"></i>
@@ -383,6 +398,147 @@
 
             <a class="btn btn-info" data-toggle="modal" id="abreDenegado" href="#modalDenegado" style="display: none">Agregar Tipo Cliente</a>
 
+        </div>
+
+         <div id="modalBusqueda" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Busqueda</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div role="form" class="form-horizontal col-md-12">
+                            <asp:UpdatePanel ID="UpdatePanel4" UpdateMode="Always" runat="server">
+                                <ContentTemplate>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Desde</label>
+                                        <div class="col-md-4">
+
+                                            <asp:TextBox ID="txtFechaDesde" runat="server" class="form-control"></asp:TextBox>
+
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaDesde" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Hasta</label>
+                                        <div class="col-md-4">
+                                            <asp:TextBox ID="txtFechaHasta" runat="server" class="form-control"></asp:TextBox>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                        <!-- /input-group -->
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Sucursal</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListSucursal" disabled runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Proveedor</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListProveedores" disabled runat="server" class="form-control" AutoPostBack="true" ></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator9" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListProveedores" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Grupo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListGrupo"  disabled runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="DropListGrupo_SelectedIndexChanged"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListGrupo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">SubGrupo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListSubGrupo" disabled runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSubGrupo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Articulo</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtDescArticulo" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Articulo</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListArticulos" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListArticulos" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:TextBox ID="txtDescCliente" class="form-control" runat="server"></asp:TextBox>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <asp:LinkButton ID="btnBuscarCliente" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCliente_Click" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Cliente</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListClientes" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4">Vendedor</label>
+                                        <div class="col-md-6">
+                                            <asp:DropDownList ID="DropListVendedores" runat="server" class="form-control"></asp:DropDownList>
+                                            <!-- /input-group -->
+                                        </div>
+                                        <div class="col-md-2">
+                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator8" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListVendedores" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                        </div>
+                                    </div>
+                                </ContentTemplate>
+                                <Triggers>
+                                </Triggers>
+                            </asp:UpdatePanel>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="lbtnReporte" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnReporte_Click" ValidationGroup="BusquedaGroup" />
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <div id="modalCRM" class="modal fade" tabindex="-1" role="dialog">
@@ -500,6 +656,16 @@
             function modalCRM() {
                 $('#modalCRM').modal('show');
             }
+        </script>
+        <script>
+
+            $(function () {
+                $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
+
+        $(function () {
+            $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+        });
         </script>
 
     </div>

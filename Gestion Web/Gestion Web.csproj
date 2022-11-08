@@ -58,7 +58,7 @@
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\GestionAPI\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+      <HintPath>..\..\Gestion_Api _Biotesting\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -382,6 +382,7 @@
     <Content Include="Formularios\Clientes\ProspectosF.aspx" />
     <Content Include="Formularios\Clientes\ProspectosABM.aspx" />
     <Content Include="Formularios\Clientes\ImportarClientes.aspx" />
+    <Content Include="Formularios\Facturas\ConsolidarP3.aspx" />
     <Content Include="Formularios\Facturas\ConsolidarP.aspx" />
     <Content Include="Formularios\Facturas\ComisionesF.aspx" />
     <Content Include="Formularios\Facturas\CRM.aspx" />
@@ -509,6 +510,7 @@
     <Content Include="Formularios\Reportes\AlertasAPP\AlertasAPP.aspx" />
     <Content Include="Formularios\Reportes\AlertasAPP\ImpresionAlertas.aspx" />
     <Content Include="Formularios\Reportes\BalanceF.aspx" />
+    <Content Include="Formularios\Reportes\InformesN.aspx" />
     <Content Include="Formularios\Reportes\PedidoDetallesF.aspx" />
     <Content Include="Formularios\Reportes\ImpresionRentabilidadD.aspx" />
     <Content Include="Formularios\Reportes\ImpresionReporte.aspx" />
@@ -1548,6 +1550,13 @@
     <Compile Include="Formularios\Clientes\ImportarClientes.aspx.designer.cs">
       <DependentUpon>ImportarClientes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Formularios\Facturas\ConsolidarP3.aspx.cs">
+      <DependentUpon>ConsolidarP3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Facturas\ConsolidarP3.aspx.designer.cs">
+      <DependentUpon>ConsolidarP3.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Facturas\ConsolidarP.aspx.cs">
       <DependentUpon>ConsolidarP.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2207,6 +2216,13 @@
     </Compile>
     <Compile Include="Formularios\Reportes\AlertasAPP\ImpresionAlertas.aspx.designer.cs">
       <DependentUpon>ImpresionAlertas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Reportes\InformesN.aspx.cs">
+      <DependentUpon>InformesN.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Reportes\InformesN.aspx.designer.cs">
+      <DependentUpon>InformesN.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Reportes\PedidoDetallesF.aspx.cs">
       <DependentUpon>PedidoDetallesF.aspx</DependentUpon>
@@ -3483,6 +3499,9 @@
     <EmbeddedResource Include="Formularios\Facturas\DetalleVentasVendedoresSucursalCategoria.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\InformeComisiones.rdlc" />
     <EmbeddedResource Include="Formularios\Facturas\InformeRemitos.rdlc" />
+    <EmbeddedResource Include="Formularios\Facturas\PedidosCash.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Facturas\Pedidos.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

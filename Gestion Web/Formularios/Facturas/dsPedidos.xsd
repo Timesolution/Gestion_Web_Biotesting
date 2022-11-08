@@ -46,6 +46,7 @@
               <xs:element name="Stock" msprop:Generator_ColumnVarNameInTable="columnStock" msprop:Generator_ColumnPropNameInRow="Stock" msprop:Generator_ColumnPropNameInTable="StockColumn" msprop:Generator_UserColumnName="Stock" type="xs:string" minOccurs="0" />
               <xs:element name="NroRenglon" msprop:Generator_ColumnVarNameInTable="columnNroRenglon" msprop:Generator_ColumnPropNameInRow="NroRenglon" msprop:Generator_ColumnPropNameInTable="NroRenglonColumn" msprop:Generator_UserColumnName="NroRenglon" type="xs:string" minOccurs="0" />
               <xs:element name="codigoBarra" msprop:Generator_ColumnVarNameInTable="columncodigoBarra" msprop:Generator_ColumnPropNameInRow="codigoBarra" msprop:Generator_ColumnPropNameInTable="codigoBarraColumn" msprop:Generator_UserColumnName="codigoBarra" type="xs:string" minOccurs="0" />
+              <xs:element name="PrecioVenta" msprop:Generator_ColumnVarNameInTable="columnPrecioVenta" msprop:Generator_ColumnPropNameInRow="PrecioVenta" msprop:Generator_ColumnPropNameInTable="PrecioVentaColumn" msprop:Generator_UserColumnName="PrecioVenta" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -126,6 +127,14 @@
               <xs:element name="TotalFinal" msprop:Generator_ColumnVarNameInTable="columnTotalFinal" msprop:Generator_ColumnPropNameInRow="TotalFinal" msprop:Generator_ColumnPropNameInTable="TotalFinalColumn" msprop:Generator_UserColumnName="TotalFinal" type="xs:string" minOccurs="0" />
               <xs:element name="subtotal" msprop:Generator_ColumnVarNameInTable="columnsubtotal" msprop:Generator_ColumnPropNameInRow="subtotal" msprop:Generator_ColumnPropNameInTable="subtotalColumn" msprop:Generator_UserColumnName="subtotal" type="xs:string" minOccurs="0" />
               <xs:element name="descuento" msprop:Generator_ColumnVarNameInTable="columndescuento" msprop:Generator_ColumnPropNameInRow="descuento" msprop:Generator_ColumnPropNameInTable="descuentoColumn" msprop:Generator_UserColumnName="descuento" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="PedidosConsolidados" msprop:Generator_TableClassName="PedidosConsolidadosDataTable" msprop:Generator_TableVarName="tablePedidosConsolidados" msprop:Generator_TablePropName="PedidosConsolidados" msprop:Generator_RowDeletingName="PedidosConsolidadosRowDeleting" msprop:Generator_RowChangingName="PedidosConsolidadosRowChanging" msprop:Generator_RowEvHandlerName="PedidosConsolidadosRowChangeEventHandler" msprop:Generator_RowDeletedName="PedidosConsolidadosRowDeleted" msprop:Generator_UserTableName="PedidosConsolidados" msprop:Generator_RowChangedName="PedidosConsolidadosRowChanged" msprop:Generator_RowEvArgName="PedidosConsolidadosRowChangeEvent" msprop:Generator_RowClassName="PedidosConsolidadosRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="numero" msprop:Generator_ColumnVarNameInTable="columnnumero" msprop:Generator_ColumnPropNameInRow="numero" msprop:Generator_ColumnPropNameInTable="numeroColumn" msprop:Generator_UserColumnName="numero" type="xs:string" minOccurs="0" />
+              <xs:element name="RazonSocial" msprop:Generator_ColumnVarNameInTable="columnRazonSocial" msprop:Generator_ColumnPropNameInRow="RazonSocial" msprop:Generator_ColumnPropNameInTable="RazonSocialColumn" msprop:Generator_UserColumnName="RazonSocial" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

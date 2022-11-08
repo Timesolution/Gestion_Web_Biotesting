@@ -35,7 +35,8 @@ namespace Gestion_Web
                 this.valor = Convert.ToInt32(Request.QueryString["m"]);
                 if (!IsPostBack)
                 {
-                    
+                    txtFechaDesde.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                    txtFechaHasta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     this.VerificarLogin();
                     this.cargarSucursal();
                     this.cargarMemo();
@@ -44,6 +45,8 @@ namespace Gestion_Web
                     this.cargarVencimientos();
                     this.cargarVencidos();
                     this.PopUpCRMPendiente();
+                    if(Session["Login_NombrePerfil"].ToString()=="Distribuidor")
+                    this.cargarModalBusqueda();       
 
                     string mascotas = System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Mascotas");
                     if (mascotas == "1")
@@ -59,6 +62,225 @@ namespace Gestion_Web
 
             }
             catch
+            {
+
+            }
+        }
+
+        private void cargarModalBusqueda()
+        {
+            try
+            {
+                this.CargarListaSucursal();
+                this.cargarGruposArticulos();
+                this.cargarArticulos();
+                this.cargarClientes();
+                this.cargarVendedores();
+                this.cargarProveedores();
+                this.cargarSubGruposArticulos(Convert.ToInt32(DropListGrupo.SelectedValue));
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void cargarProveedores()
+        {
+            try
+            {
+                controladorCliente contCliente = new controladorCliente();
+
+                DataTable dt = contCliente.obtenerProveedoresReducDT();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr2 = dt.NewRow();
+                dr2["alias"] = "Todos";
+                dr2["id"] = 0;
+                dt.Rows.InsertAt(dr2, 1);
+
+                this.DropListProveedores.DataSource = dt;
+                this.DropListProveedores.DataValueField = "id";
+                this.DropListProveedores.DataTextField = "alias";
+                this.DropListProveedores.SelectedValue = "0";
+                this.DropListProveedores.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        public void cargarVendedores()
+        {
+            try
+            {
+                controladorVendedor contVendedor = new controladorVendedor();
+                DropListVendedores.Items.Clear();
+
+                DataTable dt = contVendedor.obtenerVendedores();
+
+                //agrego todos
+                DataRow dr2 = dt.NewRow();
+                dr2["nombre"] = "Seleccione...";
+                dr2["id"] = -1;
+                dt.Rows.InsertAt(dr2, 0);
+
+                DataRow dr3 = dt.NewRow();
+                dr3["nombre"] = "Todos";
+                dr3["id"] = 0;
+                dt.Rows.InsertAt(dr3, 1);
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ListItem item = new ListItem();
+                    item.Value = dr["id"].ToString();
+                    item.Text = dr["nombre"].ToString() + " " + dr["apellido"].ToString();
+                    DropListVendedores.Items.Add(item);
+                }
+
+
+                this.DropListVendedores.SelectedValue = Session["Login_Vendedor"].ToString();
+                //this.DropListVendedor.DataSource = dt;
+                //this.DropListVendedor.DataValueField = "id";
+                //this.DropListVendedor.DataTextField = "nombre" + "apellido";
+
+                //this.DropListVendedor.DataBind();
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        private void cargarClientes()
+        {
+            try
+            {
+                ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+
+                DataTable dt = contClienteEntity.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+
+                Gestion_Api.Entitys.cliente clienteUsuario = contClienteEntity.ObtenerClienteId(Convert.ToInt32((int)Session["Login_Vendedor"]));
+
+                DataRow dr = dt.NewRow();
+                dr["alias"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                if (clienteUsuario != null)
+                {
+                    DataRow dr2 = dt.NewRow();
+                    dr2["alias"] = clienteUsuario.alias;
+                    dr2["id"] = clienteUsuario.id;
+                    dt.Rows.InsertAt(dr2, 1);
+                }
+                //agrego todos
+
+
+                this.DropListClientes.DataSource = dt;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+
+                this.DropListClientes.DataBind();
+                
+
+            }
+            catch (Exception ex)
+            {
+            }
+
+        }
+        private void cargarArticulos()
+        {
+            try
+            {
+
+                DataTable dt = contArticulo.obtenerArticulos2();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr2 = dt.NewRow();
+                dr2["descripcion"] = "Todos";
+                dr2["id"] = 0;
+                dt.Rows.InsertAt(dr2, 1);
+
+                this.DropListArticulos.DataSource = dt;
+                this.DropListArticulos.DataValueField = "id";
+                this.DropListArticulos.DataTextField = "descripcion";
+
+                this.DropListArticulos.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+        private void cargarGruposArticulos()
+        {
+            try
+            {
+
+                DataTable dt = contArticulo.obtenerGruposArticulos();
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr2 = dt.NewRow();
+                dr2["descripcion"] = "Todos";
+                dr2["id"] = 0;
+                dt.Rows.InsertAt(dr2, 1);
+
+                this.DropListGrupo.DataSource = dt;
+                this.DropListGrupo.DataValueField = "id";
+                this.DropListGrupo.DataTextField = "descripcion";
+                this.DropListGrupo.SelectedValue = "0";
+
+                this.DropListGrupo.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void CargarListaSucursal()
+        {
+            try
+            {
+                controladorSucursal contSucu = new controladorSucursal();
+                DataTable dt = contSucu.obtenerSucursales();
+
+                //agrego Seleccione
+                DataRow dr = dt.NewRow();
+                dr["nombre"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+                //agrego todos
+                DataRow dr2 = dt.NewRow();
+                dr2["nombre"] = "Todas";
+                dr2["id"] = 0;
+                dt.Rows.InsertAt(dr2, 1);
+
+
+                this.DropListSucursal.DataSource = dt;
+                this.DropListSucursal.DataValueField = "Id";
+                this.DropListSucursal.DataTextField = "nombre";
+                this.DropListSucursal.SelectedValue = "21";
+
+                this.DropListSucursal.DataBind();
+
+            }
+            catch (Exception ex)
             {
 
             }
@@ -93,35 +315,48 @@ namespace Gestion_Web
                 else
                 {
                     //verifico perfil
-                    string perfil = Session["Login_NombrePerfil"] as string;
+                    int IDperfil = (int)Session["Login_IdPerfil"];
+                    string perfil = Session["Login_NombrePerfil"].ToString();
+
                     if (WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
                     {
 
-                        if (perfil == "Cliente")
+                   
+
+                        if (IDperfil == 19)
                         {
                             //desactivo acciones
                             this.phClientes.Visible = true;
                             DataTable dt = contUser.ComprobarVCCyVP();
-                            if (dt.Rows[0]["estado"].ToString() == "0" && perfil == "Cliente")
+                            if (dt.Rows[0]["estado"].ToString() == "0" && IDperfil == 19)
                             {
                                 btnHacerPedido.Visible = false;
                             }
-                            if (dt.Rows[1]["estado"].ToString() == "0" && perfil == "Cliente")
+                            if (dt.Rows[1]["estado"].ToString() == "0" && IDperfil == 19)
                             {
                                 btnCuentaCorriente.Visible = false;
                             }
-                            if (perfil == "Cliente")
+                            if (IDperfil == 19)
                             {
                                 btnCliente2.Visible = false;
                             }
                         }
-                        if (perfil == "Distribuidor")
+                        if (IDperfil == 6 || IDperfil ==18)
                         {
                             this.phClientes.Visible = true;
-                            btnCliente2.Visible = true;
+                            btnCliente2.Visible = true;//lo sacamos hasta que demos el ok del sistema
+                            btnUsuario.Visible = true;
+                            //LinkButton1.Visible = true;
+                        }
+                        if(IDperfil == 24)
+                        {
+                            this.phClientes.Visible = true;
+                            btnCliente2.Visible = true;//lo sacamos hasta que demos el ok del sistema
+                            btnUsuario.Visible = true;
+                            btnCuentaCorriente.Visible = false;
                         }
 
-                        if (perfil != "Distribuidor" && perfil != "Cliente")
+                        if (IDperfil !=6 && IDperfil !=19 && IDperfil !=24 && IDperfil != 18)
                         {
 
                             //importacion, usa PARKER
@@ -674,5 +909,93 @@ namespace Gestion_Web
 
             }
         }
+
+        protected void btnBuscarCliente_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                String buscar = txtDescCliente.Text.Replace(' ', '%');
+                DataTable dtClientes = contCliente.obtenerClientesAliasDT(buscar);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                String buscar = this.txtDescArticulo.Text.Replace(' ', '%');
+                DataTable dt = contArticulo.obtenerArticulosByDescDT(buscar);
+
+                //cargo la lista
+                this.DropListArticulos.DataSource = dt;
+                this.DropListArticulos.DataValueField = "id";
+                this.DropListArticulos.DataTextField = "descripcion";
+                this.DropListArticulos.DataBind();
+
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        protected void DropListGrupo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                this.cargarSubGruposArticulos(Convert.ToInt32(DropListGrupo.SelectedValue));
+            }
+            catch
+            {
+
+            }
+        }
+        private void cargarSubGruposArticulos(int grupo)
+        {
+            try
+            {
+                DataTable dt = contArticulo.obtenerSubGruposArticulos(grupo);
+
+                //agrego todos
+                DataRow dr = dt.NewRow();
+                dr["descripcion"] = "Seleccione...";
+                dr["id"] = -1;
+                dt.Rows.InsertAt(dr, 0);
+
+                DataRow dr2 = dt.NewRow();
+                dr2["descripcion"] = "Todos";
+                dr2["id"] = 0;
+                dt.Rows.InsertAt(dr2, 1);
+
+                this.DropListSubGrupo.DataSource = dt;
+                this.DropListSubGrupo.DataValueField = "id";
+                this.DropListSubGrupo.DataTextField = "descripcion";
+                this.DropListSubGrupo.SelectedValue = "0";
+                this.DropListSubGrupo.DataBind();
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        protected void lbtnReporte_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=5&ex=1&fd=" + txtFechaDesde.Text +
+            "&fh=" + txtFechaHasta.Text + "&s=" + DropListSucursal.SelectedValue + "&prov=" + DropListProveedores.SelectedValue +
+            "&a=" + DropListArticulos.SelectedValue + "&sg=" + DropListSubGrupo.SelectedValue + "&g=" + DropListGrupo.SelectedValue +
+            "&c=" + DropListClientes.SelectedValue + "&v=" + DropListVendedores.SelectedValue);
+        }
+
+       
     }
 }

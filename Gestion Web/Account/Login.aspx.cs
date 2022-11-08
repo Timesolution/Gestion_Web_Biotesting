@@ -84,6 +84,8 @@ namespace Gestion_Web.Account
                         Session.Add("Pass", this.txtpassword.Text);
                         Session.Add("Login_IdUser", usuario.id);
                         Session.Add("Login_NombrePerfil", usuario.perfil.nombre);
+                        Session.Add("Login_IdPerfil", usuario.perfil.id);
+                        
                         Session.Add("Login_Permisos", usuario.permisos);
                         Session.Add("Login_Vendedor", usuario.vendedor.id);
                         Session.Add("Login_UserNafta", usuario.usuario);//Gestion YPF Cordoba Menu Venta combustible

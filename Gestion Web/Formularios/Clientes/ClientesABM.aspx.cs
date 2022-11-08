@@ -247,6 +247,33 @@ namespace Gestion_Web.Formularios.Clientes
                     //liEvento.Attributes.Add("class", "active");
                 }
 
+                if ((perfil == "Distribuidor" || perfil=="Bio-Lider") && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
+                {
+
+                    int IdCliente = Convert.ToInt32( Session["Login_Vendedor"].ToString());
+                    controladorCliente cc = new controladorCliente();
+                    DivDescuentoPorCantidad.Visible = false;
+                    linkContacto.Visible = false;
+                    linkIngresosBrutos.Visible = false;
+                    linkPuntos.Visible = false;
+                    int? vendedor = cc.ObtenerVendedorxIdCliente(IdCliente);
+
+                    this.DropListTipo.SelectedValue = "14";
+                    this.DropListFormaPago.SelectedValue = "1";
+                    if(vendedor !=null)
+                    this.ListVendedores.SelectedValue = vendedor.ToString();
+
+                    this.DropListTipo.Attributes.Add("disabled", "disabled");
+
+                    this.txtIngBrutos.Attributes.Add("disabled", "disabled");
+                    this.txtSaldoMaximo.Attributes.Add("disabled", "disabled");
+                    this.txtVencFC.Attributes.Add("disabled", "disabled");
+                   this.txtDescFC.Attributes.Add("disabled", "disabled");
+                    this.DropListFormaPago.Attributes.Add("disabled", "disabled");
+                    this.ListVendedores.Attributes.Add("disabled", "disabled");
+
+
+                }
             }
             catch (Exception ex)
             {
@@ -622,12 +649,6 @@ namespace Gestion_Web.Formularios.Clientes
 
                 this.DropListTipo.DataBind();
 
-                string perfil = Session["Login_NombrePerfil"] as string;
-                if (perfil == "Distribuidor" && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
-                {
-                    this.DropListTipo.SelectedValue = "14";
-                    this.DropListTipo.Attributes.Add("disabled", "disabled");
-                }
             }
             catch (Exception ex)
             {
@@ -674,7 +695,15 @@ namespace Gestion_Web.Formularios.Clientes
                 }
                 else
                 {
-                    DataTable dt = this.controlador.obtenerListaPrecios();
+                    DataTable dt = new DataTable();
+
+                    if ((string)Session["Login_NombrePerfil"] == "Distribuidor")
+                        dt = this.controlador.obtenerListaPrecioBioexperta();// agregar una funcion para listar
+                    else if ((int)Session["Login_IdPerfil"] == 24) //id biolider: 24
+                        dt = this.controlador.obtenerListaPrecioBioLider();
+                    else
+                        dt = this.controlador.obtenerListaPrecios();
+
 
                     //agrego todos
                     DataRow dr = dt.NewRow();
@@ -687,6 +716,8 @@ namespace Gestion_Web.Formularios.Clientes
                     this.ListListaPrecios.DataTextField = "nombre";
 
                     this.ListListaPrecios.DataBind();
+
+                   
                 }
             }
             catch (Exception ex)
@@ -736,10 +767,17 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 controladorGrupoCliente contGrupoCliente = new controladorGrupoCliente();
+                controladorCliente contCliente = new controladorCliente();
                 this.DropListGrupo.DataSource = contGrupoCliente.obtenerGruposClientes();
                 this.DropListGrupo.DataValueField = "id";
                 this.DropListGrupo.DataTextField = "descripcion";
-
+                if((int)Session["Login_IdPerfil"] == 6 || (int)Session["Login_IdPerfil"] == 24) 
+                {
+                    int IdCliente = (int)Session["Login_Vendedor"];
+                    Cliente c= contCliente.obtenerClienteID(IdCliente);
+                    this.DropListGrupo.SelectedValue = c.grupo.id.ToString();
+                    this.DropListGrupo.Attributes.Add("disabled", "disabled");
+                }
                 this.DropListGrupo.DataBind();
             }
             catch (Exception ex)
@@ -1052,7 +1090,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarDatosMillas();
 
                     this.cargarEventosCliente();
-                    if (perfil == "Distribuidor")
+                    if (perfil == "Distribuidor" || perfil == "Bio-Lider" )
                     {
                         var cr = this.contClienteEntity.obtenerClienteReferidoPorHijo(cl.id);
                         if (cr != null)
@@ -1700,10 +1738,15 @@ namespace Gestion_Web.Formularios.Clientes
                             //Verifico si utiliza modo distribución y si quien lo da de alta es dsitribuidor, se agrega al distribuidor como padre 
                             if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
                             {
-                                if (perfil == "Distribuidor")
+                                if (perfil == "Distribuidor" || perfil == "Bio-Lider" )
                                 {
                                     var idDistribuidor = (int)Session["Login_Vendedor"];
                                     Clientes_Referidos cr = new Clientes_Referidos();
+                                    if (DropListTipo.SelectedItem.Text.ToLower() == "vendedor" && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
+                                    {
+                                        cr.Padre = idDistribuidor;
+                                        cr.Hijo = i;
+                                    }
                                     if (DropListTipo.SelectedItem.Text.ToLower() == "lider")
                                     {
                                         cr.Padre = idDistribuidor;
@@ -4786,6 +4829,27 @@ namespace Gestion_Web.Formularios.Clientes
             {
 
 
+            }
+        }
+
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string perfil = Session["Login_NombrePerfil"] as string;
+
+                if (perfil == "Distribuidor" || perfil == "Bio-Lider")
+                {
+                    Response.Redirect("/Default.aspx");
+                }
+                else
+                {
+                    Response.Redirect("~/Formularios/Clientes/Clientesaspx.aspx");
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Redirect("/Default.aspx");
             }
         }
 

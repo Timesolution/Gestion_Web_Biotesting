@@ -39,16 +39,19 @@
                                              <li>
                                                 <asp:LinkButton ID="lbtnConsolidar" runat="server" OnClick="lbtnConsolidar_Click">Preparar Pedidos</asp:LinkButton>
                                             </li>
+                                             <li>
+                                                <asp:LinkButton ID="lbtnConsolidar2" runat="server" OnClick="lbtnConsolidar2_Click">Preparar Pedidos Bioexpertas</asp:LinkButton>
+                                            </li>
                                             <li>
                                                 <asp:LinkButton ID="lbtnFacturarFamilia" runat="server" OnClick="lbtnFacturarFamilia_Click" Visible="false">Facturar por Grupo</asp:LinkButton>
                                             </li>
                                             <li>
-                                                <a data-toggle="modal" href="#modalBultos">Impresion Bultos</a>
+                                                <asp:LinkButton runat="server" ID="btnImpresion" data-toggle="modal" href="#modalBultos">Impresion Bultos</asp:LinkButton>
                                             </li>
                                             <li>
                                                 <asp:LinkButton ID="btnModula" runat="server" OnClick="btnModula_Click">Enviar Modula</asp:LinkButton>
                                             </li>
-                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Consolidados</a>
+                                            <li class="dropdown-submenu dropdown-menu-right"><asp:LinkButton runat="server" ID="btnConsolidadoR" tabindex="-1" href="#">Consolidados</asp:LinkButton>
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <asp:LinkButton ID="ltbnConsolidados" runat="server" OnClick="ltbnConsolidados_Click">
@@ -64,7 +67,7 @@
                                                     </li>
                                                 </ul>
                                             </li>
-                                            <li class="dropdown-submenu dropdown-menu-right"><a tabindex="-1" href="#">Marcar como</a>
+                                            <li class="dropdown-submenu dropdown-menu-right"><asp:LinkButton runat="server" ID="btnMarcar" tabindex="-1" href="#">Marcar como</asp:LinkButton>
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <asp:LinkButton ID="ltbnEnPreparacion" runat="server" OnClick="ltbnMarcarComo_Click">
@@ -83,8 +86,9 @@
                                             <li>
                                                 <asp:LinkButton ID="lbtnVistaAvanzada" runat="server" OnClick="lbtnVistaAvanzada_Click">Vista Avanzada</asp:LinkButton>
                                             </li>
+                                           
                                             <li>
-                                                <a data-toggle="modal" href="#modalImportarPedidos">Importar Pedidos App</a>
+                                                <asp:LinkButton runat="server" ID="btnImportarPedido" data-toggle="modal" href="#modalImportarPedidos">Importar Pedidos App</asp:LinkButton>
                                             </li>
                                         </ul>
                                     </div>
@@ -383,6 +387,11 @@
                                             </asp:DropDownList>
                                             
                                         </div>
+                                    </div>
+                                    <div>
+                                        <label>Excluir pedidos de bioExpertos/as</label> &nbsp &nbsp
+                                        <asp:CheckBox ID="ChkbxBioexp" runat="server" onclick="CheckBioexperta()"/> 
+                                        <asp:Label ID="lblOpcion" Visible="false" runat="server"></asp:Label>
                                     </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
@@ -857,7 +866,14 @@
             }
         }
     </script>
-
+   <script>
+       function CheckBioexperta() {
+           if (ChkbxBioexp.checked)
+               document.getElementById('lblOpcion').textContent('1');
+           else
+               document.getElementById('lblOpcion').textContent('0');
+       }
+   </script>
     <script>
 
 

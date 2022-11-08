@@ -1189,7 +1189,7 @@ namespace Gestion_Web.Formularios.Reportes
         protected void lbtnExportar5_Click(object sender, EventArgs e)
         {
             string fd = this.txtFechaDesde.Text.ToString();
-            string fh = this.txtFechaHasta.Text.ToString();
+            string fh = this.txtFechaHasta.Text.ToString();//fechadesde,fechahasta,sucursal,idcliente
             Response.Redirect("/Formularios/Reportes/ImpresionReporte.aspx?valor=5&ex=1&fd=" + fd + "&fh=" + fh + "&s=" + suc + "&prov=" + idProveedor + "&a=" + idArticulo + "&sg=" + idSubGrupo + "&g=" + idGrupo + "&c=" + idCliente + "&v=" + idVendedor + "&l=" + this.listas + "&t=" + this.idTipo);
         }
 

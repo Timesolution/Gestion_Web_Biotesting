@@ -80,7 +80,23 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListTipo.SelectedValue = idTipo.ToString();
                     DropListClientes.SelectedValue = idCliente.ToString();
                     ListRazonSocial.SelectedValue = idCliente.ToString();
-                    
+
+                    string perfil2 = Session["Login_NombrePerfil"] as string;
+                    if (perfil2 == "Distribuidor")
+                    {
+                        phSucursales.Visible = false;
+                        phTipo.Visible = false;
+                        phClienteBusqueda.Visible = false;
+                        //this.txtCodCliente.Visible = false;
+                        //this.btnBuscarCod.Visible = false;
+                        //this.DropListTipo.Visible = false;
+                        //this.DropListSucursal.Visible = false;
+                        txtCodCliente.Attributes.Add("disabled", "disabled");
+                        btnBuscarCod.Attributes.Add("disabled", "disabled");
+                        DropListTipo.SelectedValue = "-1";
+                        DropListTipo.Attributes.Add("disabled", "disabled");
+                    }
+
                 }
                 if (idCliente > 0)
                 {
@@ -93,7 +109,11 @@ namespace Gestion_Web.Formularios.Facturas
                     this.btnAccion.Visible = true;
                     this.lbnCobros.Visible = true;
                 }
+                if (accion == 0)
+                {
+                    this.btnAccion.Visible = true;
 
+                }
                 if (accion == 1)
                 {                    
                     ScriptManager.RegisterStartupScript(this, GetType(), "cambiarIcono", "cambiarIcono('fa fa-toggle-off','Ventas > Cuentas Corrientes > Impagas');", true);
@@ -246,7 +266,34 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    if (perfil == "Cliente")
+                    if (perfil == "Distribuidor")
+                    {
+                        ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+                        //dt = contCliente.obtenerClientesByDistribuidorDT(this.idVendedor);//idvendedor es un cliente
+                        dt = contClienteEntity.obtenerLideresPorDistribuidor(this.idVendedor);
+                       
+                        DataRow dr = dt.NewRow();
+                        Gestor_Solution.Modelo.Cliente c = contCliente.obtenerClienteID(this.idVendedor);
+                        if (c != null)
+                        {
+                            dr["Id"] = c.id.ToString();
+                            dr["Alias"] = c.alias;
+                            dr["RazonSocial"] = c.razonSocial;
+                            dt.Rows.Add(dr);
+                        }
+                        this.DropListClientes.DataSource = dt;
+                        this.DropListClientes.DataValueField = "Id";
+                        this.DropListClientes.DataTextField = "Alias";
+                        this.DropListClientes.DataBind();
+                        this.DropListClientes.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+                        this.ListRazonSocial.DataSource = dt;
+                        this.ListRazonSocial.DataValueField = "Id";
+                        this.ListRazonSocial.DataTextField = "RazonSocial";
+                        this.ListRazonSocial.DataBind();
+                        this.ListRazonSocial.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                    }
+                    else if (perfil == "Cliente")
                     {
                         dt = contCliente.obtenerClientesByClienteDT(this.idVendedor);
                         this.DropListClientes.DataSource = dt;
@@ -998,7 +1045,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
-
+        
         protected void lbnCobros_Click(object sender, EventArgs e)
         {
             if (this.idCliente != 0 && this.idTipo >= 0 && this.idSucursal > 0) 

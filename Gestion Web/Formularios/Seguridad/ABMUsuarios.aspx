@@ -177,7 +177,7 @@
                                 <div class="col-md-8">
                                     <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregar_Click" />
                                     <asp:LinkButton ID="btnAgregarStore" runat="server" Text="Agregar al Store" Visible="false" class="btn btn-success" ValidationGroup="PVGroup" OnClick="btnAgregarStore_Click"></asp:LinkButton>
-                                    <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" PostBackUrl="../Seguridad/UsuariosF.aspx" />
+                                    <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" OnClick="btnCancelar_Click" />
                                 </div>
                             </ContentTemplate>
                             <Triggers>

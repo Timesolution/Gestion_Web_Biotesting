@@ -51,13 +51,24 @@ namespace Disipar.Models
             StringBuilder sb = new StringBuilder();
             sb.Append("<script type = 'text/javascript'>");
             sb.Append("window.onload=function(){");
-            sb.Append("$.msgbox(\"" + mensaje + "\", {type: \"info\"});");
+            sb.Append("$.msgbox(\"" + mensaje + "\", " +
+                "{type: \"info\"," +
+                "buttons : [" +
+                "{ type: \"submit\", value: \"Aceptar\"}," +
+                "]}," +
+                "function(result){" +
+                    "if (result == \"Aceptar\")" +
+                    "{");
             if (!String.IsNullOrEmpty(UrlRedirect))
             {
                 sb.Append("location.href = '" + UrlRedirect + "';");
             }
+
+            sb.Append("}" +
+                "});");
+
             //sb.Append(message);
-            sb.Append("};");
+            sb.Append("}");
             sb.Append("</script>");
 
             return sb.ToString();

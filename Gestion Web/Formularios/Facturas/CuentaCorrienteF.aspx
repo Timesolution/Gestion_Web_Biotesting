@@ -42,7 +42,7 @@
                                         <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                                
+
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
@@ -55,7 +55,7 @@
 
                                 <td>&nbsp
                                 </td>
-                                
+
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
@@ -74,11 +74,11 @@
                                         <asp:Label runat="server" ID="Label3" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
                                 </td>
-                               
+
                                 <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
-                                        <asp:LinkButton class="btn btn-primary" ToolTip="Exportar Reporte txt" ID="lbtnExportartxt"  Style="width: 100%" runat="server" OnClick="lbtnExportartxt_Click"> 
+                                        <asp:LinkButton class="btn btn-primary" ToolTip="Exportar Reporte txt" ID="lbtnExportartxt" Style="width: 100%" runat="server" OnClick="lbtnExportartxt_Click"> 
                                             <i ID="iconExportartxt" class="fa fa-print"></i>
                                         </asp:LinkButton>
 
@@ -114,7 +114,7 @@
                             <div class="stat">
                                 <h4>Saldo</h4>
                                 <asp:Label ID="labelSaldo" runat="server" Text="" class="value"></asp:Label>
-                                <asp:Label ID="labelMov" runat="server" Text="" class="value" ></asp:Label>
+                                <asp:Label ID="labelMov" runat="server" Text="" class="value"></asp:Label>
                             </div>
                             <!-- .stat -->
                         </div>
@@ -191,16 +191,16 @@
                                             <asp:BoundField DataField="GuiaDespacho" HeaderText="Guia Despacho" />
                                             <asp:TemplateField HeaderText=" ">
                                                 <ItemTemplate>
-                                                    <asp:LinkButton ID="btnCompensar" runat="server" class="btn ui-tooltip" title data-original-title="Compensacion de cuentas" CommandArgument='<%# Bind("Id") %>'  OnClientClick="openModal(this)" OnClick="btnCompensar_Click">                                                        
-                                                        <asp:Label runat="server" ID="literal1" style="display:none;" Text='<%# Bind("Id") %>'></asp:Label>
+                                                    <asp:LinkButton ID="btnCompensar" runat="server" class="btn ui-tooltip" title data-original-title="Compensacion de cuentas" CommandArgument='<%# Bind("Id") %>' OnClientClick="openModal(this)" OnClick="btnCompensar_Click">
+                                                        <asp:Label runat="server" ID="literal1" Style="display: none;" Text='<%# Bind("Id") %>'></asp:Label>
                                                         <i class="fa fa-exchange"></i>
                                                     </asp:LinkButton>
-                                                    <asp:LinkButton ID="btnComentario" runat="server" class="btn ui-tooltip" title data-original-title="Observaciones" CommandArgument='<%# Bind("TipoDoc") %>'  OnClientClick="openModalComentario()" OnClick="btnComentario_Click">                                                        
-                                                        <asp:Label runat="server" ID="Label1" style="display:none;" Text='<%# Bind("Id") %>' ></asp:Label>
+                                                    <asp:LinkButton ID="btnComentario" runat="server" class="btn ui-tooltip" title data-original-title="Observaciones" CommandArgument='<%# Bind("TipoDoc") %>' OnClientClick="openModalComentario()" OnClick="btnComentario_Click">
+                                                        <asp:Label runat="server" ID="Label1" Style="display: none;" Text='<%# Bind("Id") %>'></asp:Label>
                                                         <i class="shorcut-icon icon-comment"></i>
                                                     </asp:LinkButton>
-                                                    <asp:LinkButton ID="btnImprimir" runat="server" class="btn ui-tooltip" title data-original-title="Imprimir" CommandArgument='<%# Bind("TipoDoc") %>'  OnClick="btnImprimir_Click1">                                                        
-                                                        <asp:Label runat="server" ID="Label2" style="display:none;" Text='<%# Bind("Id") %>' ></asp:Label>
+                                                    <asp:LinkButton ID="btnImprimir" runat="server" class="btn ui-tooltip" title data-original-title="Imprimir" CommandArgument='<%# Bind("TipoDoc") %>' OnClick="btnImprimir_Click1">
+                                                        <asp:Label runat="server" ID="Label2" Style="display: none;" Text='<%# Bind("Id") %>'></asp:Label>
                                                         <i class="shorcut-icon icon-search"></i>
                                                     </asp:LinkButton>
                                                 </ItemTemplate>
@@ -255,6 +255,8 @@
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="txtFechaHasta" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
+                                        <asp:PlaceHolder ID="phClienteBusqueda" runat="server">
+
                                         <div class="form-group">
                                             <label class="col-md-4">Buscar Cliente</label>
                                             <div class="col-md-6">
@@ -265,6 +267,7 @@
                                                 <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
                                             </div>
                                         </div>
+                                        </asp:PlaceHolder>
                                         <div class="form-group">
                                             <label class="col-md-4">Cliente</label>
                                             <div class="col-md-6">
@@ -285,16 +288,20 @@
                                                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListRazonSocial" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4">Sucursal</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="DropListSucursal" runat="server" disabled class="form-control"></asp:DropDownList>
-                                                <!-- /input-group -->
+                                        <asp:PlaceHolder runat="server" ID="phSucursales">
+                                            <div class="form-group">
+                                                <label class="col-md-4">Sucursal</label>
+                                                <div class="col-md-6">
+                                                    <asp:DropDownList ID="DropListSucursal" runat="server" disabled class="form-control"></asp:DropDownList>
+                                                    <!-- /input-group -->
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
+                                                </div>
                                             </div>
-                                            <div class="col-md-2">
-                                                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListSucursal" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                            </div>
-                                        </div>
+                                        </asp:PlaceHolder>
+                                        <asp:PlaceHolder runat ="server" ID="phTipo">
+
                                         <div class="form-group">
                                             <label class="col-md-4">Tipo</label>
                                             <div class="col-md-6">
@@ -304,10 +311,12 @@
                                                     <asp:ListItem Value="1">PRP</asp:ListItem>
                                                 </asp:DropDownList>
                                             </div>
+                                        
                                             <%-- <div class="col-md-2">
                                         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListTipo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                     </div>--%>
-                                        </div>
+                                                </div>
+                                            </asp:PlaceHolder>
                                     </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
@@ -333,11 +342,11 @@
                                     <h4 class="modal-title">Compensacion entre Cuentas</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <h3 id="lbAguarde" runat="server">Aguarde <i class="fa fa-spinner fa-spin"></i></h3>                                    
-                                    
+                                    <h3 id="lbAguarde" runat="server">Aguarde <i class="fa fa-spinner fa-spin"></i></h3>
+
                                     <asp:Panel ID="panel1" runat="server" hidden="true">
                                         <div role="form" class="form-horizontal col-md-12">
-                                            <div class="form-group">
+                                            <div class="form-group" id="divSucursal">
                                                 <label class="col-md-4">Sucursal destino</label>
                                                 <div class="col-md-6">
                                                     <asp:DropDownList ID="ListSucursalDestino" runat="server" class="form-control" AutoPostBack="true" OnSelectedIndexChanged="ListSucursalDestino_SelectedIndexChanged"></asp:DropDownList>
@@ -350,14 +359,14 @@
                                             <div class="form-group">
                                                 <label class="col-md-4">Pto venta destino</label>
                                                 <div class="col-md-6">
-                                                    <asp:DropDownList ID="ListPuntoVentaDestino" runat="server" class="form-control" ></asp:DropDownList>
+                                                    <asp:DropDownList ID="ListPuntoVentaDestino" runat="server" class="form-control"></asp:DropDownList>
                                                     <!-- /input-group -->
                                                 </div>
                                                 <div class="col-md-2">
                                                     <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="ListPuntoVentaDestino" InitialValue="-1" ValidationGroup="CompensacionGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                                 </div>
                                             </div>
-                                            <asp:Label ID="lblMovimiento" runat="server" Text="label" ForeColor="White"></asp:Label>                                                     
+                                            <asp:Label ID="lblMovimiento" runat="server" Text="label" ForeColor="White"></asp:Label>
                                         </div>
                                     </asp:Panel>
 
@@ -383,15 +392,15 @@
                                     <h4 class="modal-title">Observaciones</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <h3 id="lbAguarde2" runat="server">Aguarde <i class="fa fa-spinner fa-spin"></i></h3>                                    
-                                    
+                                    <h3 id="lbAguarde2" runat="server">Aguarde <i class="fa fa-spinner fa-spin"></i></h3>
+
                                     <asp:Panel ID="panel2" runat="server" hidden="true">
                                         <div role="form" class="form-horizontal col-md-12">
                                             <div class="form-group">
                                                 <div class="col-md-12">
-                                                    <asp:TextBox ID="txtComentario" runat="server" class="form-control" disabled TextMode="MultiLine" Rows="4"/>
+                                                    <asp:TextBox ID="txtComentario" runat="server" class="form-control" disabled TextMode="MultiLine" Rows="4" />
                                                 </div>
-                                            </div>                                                  
+                                            </div>
                                         </div>
                                     </asp:Panel>
                                 </div>
@@ -417,12 +426,12 @@
         <script type="text/javascript">
             function openModal(boton) {
                 var texto = boton.children[0].textContent;
-                document.getElementById('<%= lbAguarde.ClientID %>').hidden = false;                   
-                document.getElementById('<%= panel1.ClientID %>').hidden = true;                   
+                document.getElementById('<%= lbAguarde.ClientID %>').hidden = false;
+                document.getElementById('<%= panel1.ClientID %>').hidden = true;
 
                 $('#modalCompensacion').modal('show');
             }
-            function openModalComentario() {                
+            function openModalComentario() {
                 document.getElementById('<%= lbAguarde2.ClientID %>').hidden = false;
                 document.getElementById('<%= panel2.ClientID %>').hidden = true;
                 $('#modalComentarios').modal('show');
@@ -460,4 +469,12 @@
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
     </script>
+    <%--<script type="text/javascript">
+        function BloquearParaDistribuidor() {
+            var usuario = document.getElementById(<%=Label3.ID %>);
+            if (usuario == "Distribuidor") {
+                document.getElementById(<%=divSucursal.id%>)
+            }
+        }
+    </script>--%>
 </asp:Content>

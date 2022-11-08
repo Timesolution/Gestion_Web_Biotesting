@@ -640,7 +640,7 @@
         </div>
     </form>
     <footer>
-    <div class="footer" style="position: absolute; width: 100%;">
+    <div class="footer" style=" width: 100%;">
 
         <div class="container">
             <div class="row">

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InformeXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <items />
+  <Id>80</Id>
+  <Empresa>0</Empresa>
+  <Sucursal>0</Sucursal>
+  <PuntoVenta>0</PuntoVenta>
+  <Cliente>0</Cliente>
+  <TipoCliente>0</TipoCliente>
+  <Tipo>0</Tipo>
+  <Documento>0</Documento>
+  <Marca>0</Marca>
+  <ListaPrecio>0</ListaPrecio>
+  <FormaPago>0</FormaPago>
+  <Vendedor>0</Vendedor>
+  <Anuladas>0</Anuladas>
+  <ArticulosInactivos>0</ArticulosInactivos>
+  <ArticulosPrecioConIva>0</ArticulosPrecioConIva>
+  <ArticulosAguparPorUbicacion>0</ArticulosAguparPorUbicacion>
+</InformeXML>

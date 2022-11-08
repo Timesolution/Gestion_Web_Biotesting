@@ -177,6 +177,15 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator6;
 
         /// <summary>
+        /// Control phClienteBusqueda.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phClienteBusqueda;
+
+        /// <summary>
         /// Control txtCodCliente.
         /// </summary>
         /// <remarks>
@@ -231,6 +240,15 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
 
         /// <summary>
+        /// Control phSucursales.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phSucursales;
+
+        /// <summary>
         /// Control DropListSucursal.
         /// </summary>
         /// <remarks>
@@ -247,6 +265,15 @@ namespace Gestion_Web.Formularios.Facturas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator2;
+
+        /// <summary>
+        /// Control phTipo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phTipo;
 
         /// <summary>
         /// Control DropListTipo.

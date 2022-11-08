@@ -67,9 +67,10 @@ namespace Gestion_Web.Formularios.Articulos
                     }
                     //cargo combos
                     this.cargarGruposArticulos();
+                    string tipoUsuario = Session["Login_NombrePerfil"].ToString();
+                  
+                        this.cargarClientes();
                     
-                    
-                    this.cargarClientes();
                     this.cargarSubGruposArticulos(Convert.ToInt32(ListGrupo.SelectedValue));
                 }
                 //this.lbtnVerPedido.Visible = true;
@@ -174,6 +175,7 @@ namespace Gestion_Web.Formularios.Articulos
             {
 
                 DataTable dt = contClienteEntity.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+                
                 Gestion_Api.Entitys.cliente clienteUsuario = contClienteEntity.ObtenerClienteId(Convert.ToInt32((int)Session["Login_Vendedor"]));
 
                 DataRow dr = dt.NewRow();
@@ -181,10 +183,13 @@ namespace Gestion_Web.Formularios.Articulos
                 dr["id"] = -1;
                 dt.Rows.InsertAt(dr, 0);
 
-                DataRow dr2 = dt.NewRow();
-                dr2["alias"] = clienteUsuario.alias;
-                dr2["id"] = clienteUsuario.id;
-                dt.Rows.InsertAt(dr2, 1);
+                if( clienteUsuario != null)
+                {
+                    DataRow dr2 = dt.NewRow();
+                    dr2["alias"] = clienteUsuario.alias;
+                    dr2["id"] = clienteUsuario.id;
+                    dt.Rows.InsertAt(dr2, 1);
+                }
                 //agrego todos
 
 
@@ -202,7 +207,7 @@ namespace Gestion_Web.Formularios.Articulos
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando grupos de articulos a la lista. " + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando clientes. " + ex.Message));
             }
 
         }
@@ -239,7 +244,7 @@ namespace Gestion_Web.Formularios.Articulos
                 Cliente cl = this.contCliente.obtenerClienteID(idCliente);
                 //vacio place holder
                 this.phArticulos.Controls.Clear();
-
+                //List<Articulo> articulos2 = articulos.Take(5).ToList();
                 foreach (Articulo art in articulos)
                 {
                     if (art.apareceLista == 1)
@@ -294,7 +299,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 TableCell celDescripcion = new TableCell();
                 celDescripcion.Text = art.descripcion;
-                celDescripcion.Width = Unit.Percentage(30);
+                celDescripcion.Width = Unit.Percentage(25);
                 celDescripcion.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celDescripcion);
 
@@ -336,12 +341,21 @@ namespace Gestion_Web.Formularios.Articulos
                 //celPrecio.Text = art.precioVenta.ToString("C");
                 //celPrecio.Text = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id).precioSinIva.ToString("C");
                 Articulo articulo = this.controlador.obtenerArticuloFacturar(art.codigo, cl.lisPrecio.id);
-                decimal totalSIva = (articulo.precioVenta / (1 + (articulo.porcentajeIva / 100)));
+                //decimal totalSIva = (articulo.precioVenta / (1 + (articulo.porcentajeIva / 100)));
+                decimal totalSIva = articulo.precioVenta;
+
                 celPrecio.Text = totalSIva.ToString("C");
                 celPrecio.Width = Unit.Percentage(5);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celPrecio);
+
+                //TableCell celIva = new TableCell();
+                //celIva.Text = (articulo.precioVenta- totalSIva).ToString("C");
+                //celPrecio.Width = Unit.Percentage(5);
+                //celPrecio.VerticalAlign = VerticalAlign.Middle;
+                //celPrecio.HorizontalAlign = HorizontalAlign.Right;
+                //tr.Cells.Add(celIva);
 
                 TableCell celAction = new TableCell();
                 TextBox txtCantidad = new TextBox();
@@ -463,7 +477,7 @@ namespace Gestion_Web.Formularios.Articulos
 
                 TableCell celPrecio = new TableCell();
                 //celPrecio.Text = art.precioVenta.ToString("C");
-                celPrecio.Text = totalSIva.ToString("C");
+                celPrecio.Text = articulo.precioVenta.ToString("C");
                 celPrecio.Width = Unit.Percentage(5);
                 celPrecio.VerticalAlign = VerticalAlign.Middle;
                 celPrecio.HorizontalAlign = HorizontalAlign.Right;
@@ -476,7 +490,8 @@ namespace Gestion_Web.Formularios.Articulos
                 txtCantidad.Width = Unit.Percentage(50);
                 txtCantidad.ID = "txtCantidad_" + art.id + "_" + pos;
                 txtCantidad.Attributes.Add("Style", "text-align: right;");
-                txtCantidad.Attributes.Add("disabled", "disabled");
+                if (accion != 3)
+                    txtCantidad.Attributes.Add("disabled", "disabled");
                 //txtCantidad.Attributes.Add("disabled", "disabled");
                 txtCantidad.Attributes.Add("onkeypress", "javascript:return validarNro(event)");
                 txtCantidad.Attributes.Add("min", "1");
@@ -518,12 +533,17 @@ namespace Gestion_Web.Formularios.Articulos
                 Pedido p = Session["PedidoCliente"] as Pedido;
                 int idCliente = (int)Session["Login_Vendedor"];
                 Cliente cliente = contCliente.obtenerClienteID(idCliente);
-
+                decimal total = 0;
+                decimal cantidadTotal = 0;
 
                 foreach (ItemPedido item in p.items)
                 {
                     this.cargarCarroPh(item.articulo, p.items.IndexOf(item), item.cantidad, cliente);
+                    total += item.precioUnitario * item.cantidad;
+                    cantidadTotal += item.cantidad;
                 }
+                txtTotalPedido.Text = total.ToString("C");
+                txtArtTotalPedido.Text = cantidadTotal.ToString();
 
                 //this.lbtnVerPedido.Visible = false;
                 this.lbtnGenerarPedido.Visible = true;
@@ -671,6 +691,7 @@ namespace Gestion_Web.Formularios.Articulos
                     p.senia = "0";
                     p.comentario = "-";
                     p.tipo = controladorPedido.obtenerTipoDoc("Pedido");
+                    if(borrador ==0)
                     p.estado = controladorPedido.obtenerEstadoDesc("A Autorizar");
 
 
@@ -1196,21 +1217,22 @@ namespace Gestion_Web.Formularios.Articulos
         }
     }
 
-    protected void lbtnGenerarPedidoBorrador_Click(object sender, EventArgs e)
-    {
-        try
+        protected void lbtnGenerarPedidoBorrador_Click(object sender, EventArgs e)
         {
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalPedidoBorrador();", true);
+            try
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showModalPedidoBorrador();", true);
+
+            }
+            catch (Exception ex)
+            {
+
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando pedido. " + ex.Message));
+            }
+
         }
-        catch (Exception ex)
-        {
 
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error agregando pedido. " + ex.Message));
-        }
-
-    }
-
-    protected void lbtnGenerarPedidoModalBorrador_Click(object sender, EventArgs e)
+        protected void lbtnGenerarPedidoModalBorrador_Click(object sender, EventArgs e)
     {
         try
         {

@@ -208,12 +208,12 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (fechaD != null && fechaD != null && idCliente != 0 && idSuc != 0 && idEstado != 0 && vendedor != 0 && idArticulo != 0)
                 {
-                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2,0,0,0);
+                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2,0,0,0,1);
                     this.cargarPedidos(dt);
                 }
                 else
                 {
-                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2,0,0,0);
+                    DataTable dt = this.controlador.obtenerPedidosRangoDT(fechaD, fechaH, fechaD, fechaH, idSuc, idCliente, idEstado, vendedor, this.tipoEntrega, this.tipoFecha, this.tipoFecha2,0,0,0,1);
                     this.cargarPedidos(dt);
                     //DataTable dt = this.controlador.obtenerPedidosRangoDT(this.txtFechaDesde.Text, this.txtFechaHasta.Text, this.txtFechaEntregaDesde.Text, this.txtFechaEntregaHasta.Text,
                     //    Convert.ToInt32(this.DropListSucursal.SelectedValue), Convert.ToInt32(this.DropListClientes.SelectedValue),

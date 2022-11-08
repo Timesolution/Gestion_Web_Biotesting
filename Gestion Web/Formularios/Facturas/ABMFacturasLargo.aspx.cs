@@ -683,7 +683,8 @@ namespace Gestion_Web.Formularios.Facturas
                 string recalcularPrecio = WebConfigurationManager.AppSettings.Get("recalcularPrecioPedido");
                 string tieneEstetica = WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica");
                 Configuracion config = new Configuracion();
-                Factura f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio), Convert.ToInt32(tieneEstetica));
+                Factura f = new Factura();
+                f = controlador.GenerarFacturaDesdePedido(pedidos, Convert.ToInt32(recalcularPrecio), Convert.ToInt32(tieneEstetica));
                 Session.Add("Factura", f);
                 this.ListEmpresa.SelectedValue = f.empresa.id.ToString();
                 this.ListSucursal.SelectedValue = "-1";
@@ -4703,6 +4704,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     int i = 0;
+
                     //Chequeo si eligio alguna divisa para guardar el tipo de cambio y facturo
                     if (DropListDivisa.SelectedValue != "-1")
                     {

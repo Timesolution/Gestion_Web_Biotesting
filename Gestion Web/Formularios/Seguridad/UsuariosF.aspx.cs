@@ -128,7 +128,14 @@ namespace Gestion_Web.Formularios.Seguridad
                 tr.Cells.Add(CelDireccion);
 
                 TableCell celPerfil = new TableCell();
-                celPerfil.Text = user.perfil.nombre;
+                if(user.perfil.nombre != "Cliente")
+                {
+                    celPerfil.Text = user.perfil.nombre;
+                }
+                else
+                {
+                    celPerfil.Text = "BioExperta/o";
+                }
                 celPerfil.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celPerfil);
 

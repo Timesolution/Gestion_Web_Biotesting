@@ -99,7 +99,12 @@ namespace Gestion_Web
                         Sucursal s = this.contSucu.obtenerSucursalID(idSuc);
                         this.Label1.Text = Context.User.Identity.Name;
                         this.Label2.Text = s.nombre;
-                        this.Label3.Text = Session["Login_NombrePerfil"] as string;
+                        if (Session["Login_NombrePerfil"] as string == "Vendedor")
+                            this.Label3.Text = "Coordinador";
+                        else if (Session["Login_NombrePerfil"] as string == "Cliente")
+                            this.Label3.Text = "Bio-experta/o";
+                        else
+                            this.Label3.Text = Session["Login_NombrePerfil"] as string;
                         this.cargarIniciales();
                     }
                     
@@ -118,7 +123,7 @@ namespace Gestion_Web
             try
             {
                 string perfil = Session["Login_NombrePerfil"] as string;
-                if (perfil != "Cliente"  && perfil != "Importacion")
+                if (perfil != "Cliente"  && perfil != "Importacion" && perfil != "Distribuidor" && perfil !="Bio-Lider" && perfil!="Vendedor")
                 {
                     this.phMenu.Visible = true;
                 }

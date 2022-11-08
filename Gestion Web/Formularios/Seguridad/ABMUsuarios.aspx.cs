@@ -18,6 +18,8 @@ namespace Gestion_Web.Formularios.Seguridad
         Mensajes mje = new Mensajes();
         controladorUsuario controlador = new controladorUsuario();
         controladorVendedor contVendedor = new controladorVendedor();
+        private ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
+
         private int idUsuario;
         private int valor;
         private int SeguridadCambiosSucursal = 0;
@@ -46,7 +48,14 @@ namespace Gestion_Web.Formularios.Seguridad
                     this.cargarSucursal(Convert.ToInt32(this.DropListEmpresa.SelectedValue));
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
                     this.cargarStores();
+                
+                    if (perfil == "Bio-Lider")
+                    {
+                        DropListPerfil.SelectedValue = "19";
+                        DropListPerfil.Attributes.Add("disabled", "disabled");
+                        DropListPerfil_SelectedIndexChanged(sender,e);
 
+                    }
                     if (this.valor == 2)
                     {
                         this.cargarUsuario(idUsuario);
@@ -58,6 +67,8 @@ namespace Gestion_Web.Formularios.Seguridad
                 Log.EscribirSQL(1, "Error", "Error en el pageload de usuarios. " + ex.Message);
             }
         }
+
+      
 
         private void VerificarLogin()
         {
@@ -102,6 +113,7 @@ namespace Gestion_Web.Formularios.Seguridad
                     {
                         if (s == "59")
                         {
+                           
                             return 1;
                         }
                     }
@@ -155,7 +167,13 @@ namespace Gestion_Web.Formularios.Seguridad
             {
                 ListClientes.Items.Clear();
                 controladorCliente contCliente = new controladorCliente();
-                DataTable dt = contCliente.obtenerClientesDT();
+                DataTable dt = new DataTable();
+                if (Session["Login_NombrePerfil"].ToString() == "Distribuidor" || Session["Login_NombrePerfil"].ToString() == "Bio-Lider") 
+                    dt= contClienteEntity.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+                else
+                    dt = contCliente.obtenerClientesDT();
+
+
 
                 DataRow dr = dt.NewRow();
                 dr["alias"] = "Seleccione...";
@@ -262,6 +280,13 @@ namespace Gestion_Web.Formularios.Seguridad
 
                 this.DropListPtoVenta.DataBind();
 
+                if ((int)Session["Login_IdPerfil"] == 6 || (int)Session["Login_IdPerfil"] == 24)
+                {
+
+                DropListPtoVenta.SelectedValue = "35";
+                DropListPtoVenta.Attributes.Add("disabled", "disabled");
+                }
+
             }
             catch (Exception ex)
             {
@@ -284,6 +309,9 @@ namespace Gestion_Web.Formularios.Seguridad
                     dt = controlador.obtenerPerfilesSinSuperAdministrador();
                 }
 
+                if (this.perfil == "Distribuidor")
+                    dt = controlador.ObtenerPerfilesDistribuidor();
+               
 
                 //agrego todos
                 DataRow dr = dt.NewRow();
@@ -375,13 +403,22 @@ namespace Gestion_Web.Formularios.Seguridad
             try
             {
                 controladorCliente contCliente = new controladorCliente();
-                DataTable dtClientes = contCliente.obtenerClientesAliasDT(this.txtCodCliente.Text);
+                DataTable dtClientes = new DataTable();
+                if (!string.IsNullOrEmpty(this.txtCodCliente.Text) && ((int)Session["Login_IdPerfil"] != 6 || (int)Session["Login_IdPerfil"] != 24))
+                {
 
-                //cargo la lista
-                this.ListClientes.DataSource = dtClientes;
-                this.ListClientes.DataValueField = "id";
-                this.ListClientes.DataTextField = "alias";
-                this.ListClientes.DataBind();
+                    dtClientes = contCliente.obtenerClientesAliasDT(this.txtCodCliente.Text);
+                }
+                else
+                {
+                    dtClientes = contClienteEntity.ObtenerFamiliaDelCliente(Convert.ToInt32((int)Session["Login_Vendedor"]));
+                }
+
+                    //cargo la lista
+                    this.ListClientes.DataSource = dtClientes;
+                    this.ListClientes.DataValueField = "id";
+                    this.ListClientes.DataTextField = "alias";
+                    this.ListClientes.DataBind();
 
             }
             catch (Exception ex)
@@ -493,7 +530,7 @@ namespace Gestion_Web.Formularios.Seguridad
                     {
                         user.vendedor.id = Convert.ToInt32(this.ListVendedores.SelectedValue);
                     }
-                    if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
+                    if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Bio-Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                     {
                         user.vendedor.id = Convert.ToInt32(this.ListClientes.SelectedValue);
                     }
@@ -621,10 +658,10 @@ namespace Gestion_Web.Formularios.Seguridad
             {
                 VerificarEstadoAgregarStore();
 
-                if (this.DropListPerfil.SelectedItem.Text == "Vendedor" || this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
+                if (this.DropListPerfil.SelectedItem.Text == "Vendedor" || this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Bio-Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                 {
 
-                    if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
+                    if (this.DropListPerfil.SelectedItem.Text == "Cliente" || this.DropListPerfil.SelectedItem.Text == "Distribuidor" || this.DropListPerfil.SelectedItem.Text == "Bio-Lider" || this.DropListPerfil.SelectedItem.Text == "Experta")
                     {
 
                         //cargo clientes en vez de vendedores
@@ -1050,6 +1087,24 @@ namespace Gestion_Web.Formularios.Seguridad
                 throw;
             }
 
+        }
+
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (perfil == "Distribuidor")
+                {
+                    Response.Redirect("/Default.aspx");
+                }
+                else {
+                    Response.Redirect("../Seguridad/UsuariosF.aspx");
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Redirect("/Default.aspx");
+            }
         }
     }
 }

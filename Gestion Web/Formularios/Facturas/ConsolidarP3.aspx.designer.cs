@@ -7,101 +7,83 @@
 // </generado automáticamente>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Reportes
+namespace Gestion_Web.Formularios.Facturas
 {
 
 
-    public partial class InformesF
+    public partial class ConsolidarP3
     {
 
         /// <summary>
-        /// Control btnAccion.
+        /// Control phSaldo.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnAccion;
+        protected global::System.Web.UI.WebControls.PlaceHolder phSaldo;
 
         /// <summary>
-        /// Control lblSaldo.
+        /// Control lblNroPedido.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblSaldo;
+        protected global::System.Web.UI.WebControls.Label lblNroPedido;
 
         /// <summary>
-        /// Control phInformes.
+        /// Control lblRealizador.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phInformes;
+        protected global::System.Web.UI.WebControls.Label lblRealizador;
 
         /// <summary>
-        /// Control txtFechaDesde.
+        /// Control lblDistribuidor.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFechaDesde;
+        protected global::System.Web.UI.WebControls.Label lblDistribuidor;
 
         /// <summary>
-        /// Control RequiredFieldValidator3.
+        /// Control listDirecciones.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator3;
+        protected global::System.Web.UI.WebControls.DropDownList listDirecciones;
 
         /// <summary>
-        /// Control txtFechaHasta.
+        /// Control RequiredFieldValidator7.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFechaHasta;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator7;
 
         /// <summary>
-        /// Control RequiredFieldValidator1.
+        /// Control phPedidos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidator1;
+        protected global::System.Web.UI.WebControls.PlaceHolder phPedidos;
 
         /// <summary>
-        /// Control DropListUsuario.
+        /// Control btnGuardarP.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListUsuario;
-
-        /// <summary>
-        /// Control DropListInformes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList DropListInformes;
-
-        /// <summary>
-        /// Control lbtnBuscar.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lbtnBuscar;
+        protected global::System.Web.UI.WebControls.LinkButton btnGuardarP;
     }
 }

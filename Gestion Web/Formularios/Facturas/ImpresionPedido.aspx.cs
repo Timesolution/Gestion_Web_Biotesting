@@ -40,6 +40,8 @@ namespace Gestion_Web.Formularios.Facturas
         private int estadoPedido;
         private decimal imprimirOtraDivisa;
         private int idMoneda;
+        private int TipoPerfil;
+        private int IdSolicitante;
         Moneda monedaElegida = new Moneda();
 
         DataTable dtPedidosTemp;
@@ -72,6 +74,9 @@ namespace Gestion_Web.Formularios.Facturas
                     cotizacion = Convert.ToInt32(Request.QueryString["co"]);
                     zonaEntrega = Convert.ToInt64(Request.QueryString["ze"]);
                     estadoPedido = Convert.ToInt32(Request.QueryString["ep"]);
+                    TipoPerfil = Convert.ToInt32(Request.QueryString["tp"]);
+                    IdSolicitante = Convert.ToInt32(Request.QueryString["sl"]);
+
 
                     ///Verifico si el usuario eligio imprimir el documento en otra divisa
                     if (Request.QueryString["div"] != null)
@@ -92,7 +97,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (accion == 1 && monedaOriginal == 0)
                     {
-                        
+
                         this.generarReporte2(idPedido);
                     }
                     if (accion == 2)
@@ -123,6 +128,12 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.generarReporte9(); //Pedidos con moneda original
                     }
+                    if (accion == 8)
+                    {
+                        this.generarReporte10(idPedido);
+                    }
+                    if (accion == 9)
+                        this.generarReporte11();
                 }
             }
             catch (Exception ex)
@@ -130,6 +141,69 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de Pedido. " + ex.Message));
 
                 Log.EscribirSQL(1, "ERROR", "Error al mostrar detalle de Pedido. " + ex.Message);
+            }
+        }
+
+        private void generarReporte11()
+        {
+            try
+            {
+                ControladorPedido cp = new ControladorPedido();
+                DataTable dtRankingProductos = cp.RankingProductos(fdesde, fhasta, TipoPerfil, IdSolicitante); //TERMINAR tipoperfil : vendedor/biolider || idsolicitante id del vendedor o id de cliente
+                this.dtPedidos = Session["dtDatosPedidos"] as DataTable;
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("ListadoRanking.rdlc");
+                ReportDataSource rds = new ReportDataSource("RankingProd", dtRankingProductos);
+
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+
+
+                this.ReportViewer1.LocalReport.Refresh();
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+                //get xls content
+                Byte[] xlsContent = this.ReportViewer1.LocalReport.Render("Excel", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                String filename = string.Format("{0}.{1}", "Ranking_Productos", "xls");
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/ms-excel";
+                this.Response.AddHeader("Content-Disposition", "attachment;filename=" + filename);
+                //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                this.Response.BinaryWrite(xlsContent);
+
+                this.Response.End();
+
+                //Warning[] warnings;
+
+                //string mimeType, encoding, fileNameExtension;
+
+                //string[] streams;
+
+                ////get pdf content
+
+                //Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                //this.Response.Clear();
+                //this.Response.Buffer = true;
+                //this.Response.ContentType = "application/pdf";
+                //this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                //this.Response.BinaryWrite(pdfContent);
+
+                //this.Response.End();
+
+
+            }
+            catch
+            {
+
             }
         }
 
@@ -237,7 +311,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
                 DataTable dtTotal = controlador.obtenerTotalPedido(idPedido);
                 Pedido P = controlador.obtenerPedidoId(idPedido);
-                
+
                 dtDatos.Columns.Add("codigoBarra");
                 Articulo a = new Articulo();
                 foreach (DataRow rowDatos in dtDatos.Rows)
@@ -339,7 +413,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal descuento = Convert.ToDecimal(row["descuento"]);
 
                 //PARA INTEGRAL SE LE QUITA EL IVA DEL 1.21 CUANDO HACE UNA COTIZACION
-                if (this.cotizacion == 1 && EsIntegral==1)
+                if (this.cotizacion == 1 && EsIntegral == 1)
                 {
                     descuento = Decimal.Round(Convert.ToDecimal(row["descuento"]), 2);
                 }
@@ -347,16 +421,302 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal subtotal = Convert.ToDecimal(row["subtotal"]) + descuento;
                 decimal retencion = Convert.ToDecimal(row["retenciones"]);
                 decimal total = Convert.ToDecimal(row["TotalFinal"]);
-                
-                
-                if (this.cotizacion == 1 && EsIntegral==1)
+
+
+                if (this.cotizacion == 1 && EsIntegral == 1)
                 {
                     foreach (DataRow rowDatos in dtDatos.Rows)
                     {
-                            Decimal d = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]) , 2);
-                            rowDatos[3] = d;
-                            Decimal t = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]), 2);// * Convert.ToDecimal( rowDatos["Cantidad"]);
-                            rowDatos["Total"] = t;
+                        Decimal d = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]), 2);
+                        rowDatos[3] = d;
+                        Decimal t = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]), 2);// * Convert.ToDecimal( rowDatos["Cantidad"]);
+                        rowDatos["Total"] = t;
+                    }
+                    dtTotal.Rows[0][0] = dtTotal.Rows[0][1];
+                }
+
+                ///Chequeo si eleigio imprimir el documento en otra divisa para hacer los calculos correspondientes
+                if (imprimirOtraDivisa > 0)
+                {
+                    foreach (DataRow rowDatos in dtDatos.Rows)
+                    {
+                        rowDatos["PrecioUnitario"] = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]) / imprimirOtraDivisa, 2);
+                        rowDatos["Total"] = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]) / imprimirOtraDivisa, 2);
+                    }
+
+                    subtotal = Decimal.Round(subtotal / imprimirOtraDivisa, 2);
+                    descuento = Decimal.Round(descuento / imprimirOtraDivisa, 2);
+                    retencion = Decimal.Round(retencion / imprimirOtraDivisa, 2);
+                    total = Decimal.Round(total / imprimirOtraDivisa, 2);
+
+                    dtTotal.Rows[0][0] = total.ToString();
+                    dtTotal.Rows[0][1] = subtotal.ToString();
+                    dtTotal.Rows[0][2] = descuento.ToString();
+                    dtTotal.Rows[0][3] = retencion.ToString();
+
+                    ///Sumo el comentario al campo de observaciones para informar en base a que divisa se realizaron los calculos de los precios
+                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Cotización emitida en divisa: (" + monedaElegida.moneda + ")";
+                }
+
+                int tieneSistemaEstetica = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("TieneSistemaEstetica"));
+
+                if (tieneSistemaEstetica == 1)
+                {
+                    dtDetalle.Rows[0]["Observaciones"] += "\r\n\r\n*Referido:  " + dtDetalle.Rows[0]["ZonaDescripcion"].ToString() + ".";
+                }
+
+                DataTable Consolidados = controlador.ObtenerComentarioConsolidados(idPedido);
+
+                ReportParameter paramZona = new ReportParameter("ParamZona", zona);
+                ReportParameter paramTel = new ReportParameter("ParamTel", telefono);
+                ReportParameter paramFormaPago = new ReportParameter("ParamFormaPago", formaPago);
+
+                ReportParameter param1 = new ReportParameter("ParamSubtotal", subtotal.ToString());
+                ReportParameter param2 = new ReportParameter("ParamRetencion", retencion.ToString());
+                ReportParameter param3 = new ReportParameter("ParamDescuento", descuento.ToString());
+
+                //parametros Datos empresa
+                ReportParameter param4 = new ReportParameter("ParamRazonSoc", razonSoc);
+                ReportParameter param5 = new ReportParameter("ParamIngresosBrutos", ingBrutos);
+                ReportParameter param6 = new ReportParameter("ParamFechaIni", fechaInicio);
+                ReportParameter param7 = new ReportParameter("ParamDomComer", direComer);
+                ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
+                ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
+                // param11 se carga solo para Integral.
+                ReportParameter param11 = new ReportParameter("ParamPorcentaje", P.neto10.ToString() + "%");
+
+
+
+                string imagen = this.generarCodigo(idPedido);
+                ReportParameter param10 = new ReportParameter("ParamCodBarra", @"file:///" + imagen);
+
+
+                this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
+                //Integral tiene una 'cotizacion.rdlc' especial. Los demás usan 'Pedidos.rdlc'
+                if (this.cotizacion == 1 && EsIntegral == 1)
+                {
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Cotizacion.rdlc");
+                }
+                else
+                {
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+                }
+                //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                //ReportDataSource rds = new ReportDataSource("DetallePedido", dtDetalle);
+                ReportDataSource rds = new ReportDataSource("DatosDetalle", dtDetalle);
+                ReportDataSource rds2 = new ReportDataSource("DatosPedido", dtDatos);
+                ReportDataSource rds3 = new ReportDataSource("TotalPedido", dtTotal);
+                ReportDataSource rds4 = new ReportDataSource();
+                //if (Consolidados.Rows.Count > 0 && Consolidados != null)
+                //{
+                rds4 = new ReportDataSource("PedidosConsolidados", Consolidados);
+                //}
+
+                this.ReportViewer1.LocalReport.DataSources.Clear();
+
+                this.ReportViewer1.LocalReport.DataSources.Add(rds);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds2);
+                this.ReportViewer1.LocalReport.DataSources.Add(rds3);
+
+                //if (Consolidados.Rows.Count > 0 && Consolidados != null)
+                    this.ReportViewer1.LocalReport.DataSources.Add(rds4);
+
+
+                this.ReportViewer1.LocalReport.SetParameters(paramZona);
+                this.ReportViewer1.LocalReport.SetParameters(paramTel);
+                this.ReportViewer1.LocalReport.SetParameters(paramFormaPago);
+                this.ReportViewer1.LocalReport.SetParameters(param1);
+                this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
+                this.ReportViewer1.LocalReport.SetParameters(param6);
+                this.ReportViewer1.LocalReport.SetParameters(param7);
+                this.ReportViewer1.LocalReport.SetParameters(param8);
+                this.ReportViewer1.LocalReport.SetParameters(param9);
+                this.ReportViewer1.LocalReport.SetParameters(param10);
+
+                if (EsIntegral == 1)
+                    this.ReportViewer1.LocalReport.SetParameters(param11);
+
+
+                //this.ReportViewer1.LocalReport.SetParameters(rpHora);
+                //this.ReportViewer1.LocalReport.SetParameters(rpDomicilio);
+                this.ReportViewer1.LocalReport.EnableExternalImages = true;
+
+
+                Warning[] warnings;
+
+                string mimeType, encoding, fileNameExtension;
+
+                string[] streams;
+
+                //get pdf content
+
+                Byte[] pdfContent = this.ReportViewer1.LocalReport.Render("PDF", null, out mimeType, out encoding, out fileNameExtension, out streams, out warnings);
+
+                this.Response.Clear();
+                this.Response.Buffer = true;
+                this.Response.ContentType = "application/pdf";
+                this.Response.AddHeader("content-length", pdfContent.Length.ToString());
+                this.Response.BinaryWrite(pdfContent);
+
+                this.Response.End();
+                return;
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void generarReporte10(int idPedido)
+        {
+            try
+            {
+                string fecha = string.Empty;
+                string hora = string.Empty;
+                string domicilio = string.Empty;
+                string zona = string.Empty;
+                string telefono = string.Empty;
+                string formaPago = string.Empty;
+
+                //si es INTEGRAL tener en cuenta que 'Cotizacion.rdlc' total subtotal y precio unitario se /1.21
+                int EsIntegral = Convert.ToInt32(WebConfigurationManager.AppSettings.Get("EsIntegral"));
+
+                ControladorClienteEntity controlCli = new ControladorClienteEntity();
+                ControladorArticulosEntity contArtEntity = new ControladorArticulosEntity();
+                controladorZona controlZona = new controladorZona();
+                controladorCliente controlCliente = new controladorCliente();
+                ControladorEmpresa controlEmpresa = new ControladorEmpresa();
+                Configuracion configuracion = new Configuracion();
+                //este trae el precio de venta del articulo para poder hacer una comparacion
+                DataTable dtDatos = controlador.obtenerDatosPedido2(idPedido);
+                DataTable dtDetalle = controlador.obtenerDetallePedido(idPedido);
+                DataTable dtTotal = controlador.obtenerTotalPedido(idPedido);
+                Pedido P = controlador.obtenerPedidoId(idPedido);
+
+                dtDatos.Columns.Add("codigoBarra");
+                Articulo a = new Articulo();
+                foreach (DataRow rowDatos in dtDatos.Rows)
+                {
+                    a = this.contArt.obtenerArticuloByID(Convert.ToInt32(rowDatos["Id"]));
+                    if (a != null)
+                    {
+                        rowDatos["codigoBarra"] = a.codigoBarra;
+                    }
+                    else
+                    {
+                        rowDatos["codigoBarra"] = "";
+                    }
+                }
+
+                var tiempo = configuracion.TiempoLineasPedido.Split(';');
+                dtDetalle.Columns.Add("TiempoLineasPedido");
+                try
+                {
+                    TimeSpan tiempoPorLinea = new TimeSpan(0, Convert.ToInt32(tiempo[0]), Convert.ToInt32(tiempo[1]));
+                    tiempoPorLinea = TimeSpan.FromTicks(tiempoPorLinea.Ticks * dtDatos.Rows.Count);
+                    dtDetalle.Rows[0]["TiempoLineasPedido"] = tiempoPorLinea.ToString(@"hh\:mm\:ss");
+                }
+                catch { }
+
+
+
+                int suc = Convert.ToInt32(dtDetalle.Rows[0]["Id_suc"]);
+
+                //levanto los datos de la factura
+                var drDatosFactura = dtDetalle.Rows[0];
+                //si es cotizacion reemplazo Pedido por cotizacion
+                if (this.cotizacion == 1)
+                {
+                    dtDetalle.Rows[0]["Numero"] = dtDetalle.Rows[0]["Numero"].ToString().Replace("Pedido", "Cotización");
+                }
+
+
+                //datos empresa emisora
+                DataTable dtEmpresa = controlEmpresa.obtenerEmpresaById((int)drDatosFactura["Empresa"]);
+
+                String razonSoc = String.Empty;
+                String direComer = String.Empty;
+                String condIVA = String.Empty;
+                String ingBrutos = String.Empty;
+                String fechaInicio = String.Empty;
+                String cuitEmpresa = String.Empty;
+
+                foreach (DataRow rowEmp in dtEmpresa.Rows)
+                {
+                    cuitEmpresa = rowEmp.ItemArray[1].ToString();
+                    razonSoc = rowEmp.ItemArray[2].ToString();
+                    ingBrutos = rowEmp.ItemArray[3].ToString();
+                    fechaInicio = Convert.ToDateTime(rowEmp["Fecha Inicio"]).ToString("dd/MM/yyyy");
+                    condIVA = rowEmp.ItemArray[5].ToString();
+                    direComer = rowEmp.ItemArray[6].ToString();
+                }
+                //verifico si tiene un contacto
+                int idCliente = 0;
+                foreach (DataRow dr in dtDetalle.Rows)
+                {
+                    //obtengo el id del cliente
+                    idCliente = Convert.ToInt32(dr["idCliente"]);
+                    //obtengo la forma de pago
+                    formaPago = dr["formaPago"].ToString();
+                }
+                //obtengo el telefono del cliente para agregarlo al pedido
+                List<contacto> contactosClientes = controlCliente.obtenerContactos(idCliente);
+                if (contactosClientes.Count > 0 & contactosClientes != null)
+                {
+                    telefono = contactosClientes[0].numero;
+                }
+                if (String.IsNullOrEmpty(telefono))
+                {
+                    telefono = "-";
+                }
+
+                //obtengo los datos de Zona entregaentrega
+                Clientes_Entregas cl = controlCli.obtenerEntregaCliente(idCliente);
+
+                if (cl != null)
+                {
+                    if (!string.IsNullOrEmpty(cl.Zona.nombre))
+                    {
+                        zona = cl.Zona.nombre;
+                    }
+                }
+                if (string.IsNullOrEmpty(zona))
+                {
+                    zona = "-";
+                }
+
+                dtDatos = contArtEntity.obtenerPresentacionesArtDT(dtDatos);
+                dtDatos = contArtEntity.obtenerStockArtDT(dtDatos, suc);
+
+                ///subtotal, retencion, descuento, total
+                DataRow row = dtTotal.Rows[0];
+
+                decimal descuento = Convert.ToDecimal(row["descuento"]);
+
+                //PARA INTEGRAL SE LE QUITA EL IVA DEL 1.21 CUANDO HACE UNA COTIZACION
+                if (this.cotizacion == 1 && EsIntegral == 1)
+                {
+                    descuento = Decimal.Round(Convert.ToDecimal(row["descuento"]), 2);
+                }
+
+                decimal subtotal = Convert.ToDecimal(row["subtotal"]) + descuento;
+                decimal retencion = Convert.ToDecimal(row["retenciones"]);
+                decimal total = Convert.ToDecimal(row["TotalFinal"]);
+
+
+                if (this.cotizacion == 1 && EsIntegral == 1)
+                {
+                    foreach (DataRow rowDatos in dtDatos.Rows)
+                    {
+                        Decimal d = Decimal.Round(Convert.ToDecimal(rowDatos["PrecioUnitario"]), 2);
+                        rowDatos[3] = d;
+                        Decimal t = Decimal.Round(Convert.ToDecimal(rowDatos["Total"]), 2);// * Convert.ToDecimal( rowDatos["Cantidad"]);
+                        rowDatos["Total"] = t;
                     }
                     dtTotal.Rows[0][0] = dtTotal.Rows[0][1];
                 }
@@ -407,9 +767,9 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param7 = new ReportParameter("ParamDomComer", direComer);
                 ReportParameter param8 = new ReportParameter("ParamCondIva", condIVA);
                 ReportParameter param9 = new ReportParameter("ParamCuitEmp", cuitEmpresa);
-               // param11 se carga solo para Integral.
+                // param11 se carga solo para Integral.
                 ReportParameter param11 = new ReportParameter("ParamPorcentaje", P.neto10.ToString() + "%");
-                
+
 
 
                 string imagen = this.generarCodigo(idPedido);
@@ -418,13 +778,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 //Integral tiene una 'cotizacion.rdlc' especial. Los demás usan 'Pedidos.rdlc'
-                if (this.cotizacion == 1 && EsIntegral==1)
+                if (this.cotizacion == 1 && EsIntegral == 1)
                 {
                     this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Cotizacion.rdlc");
                 }
                 else
                 {
-                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
+                    this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("PedidosCash.rdlc");
                 }
                 //this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Pedidos.rdlc");
 
@@ -435,7 +795,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds3 = new ReportDataSource("TotalPedido", dtTotal);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
-                
+
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);
                 this.ReportViewer1.LocalReport.DataSources.Add(rds3);
@@ -452,7 +812,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param8);
                 this.ReportViewer1.LocalReport.SetParameters(param9);
                 this.ReportViewer1.LocalReport.SetParameters(param10);
-                
+
                 if (EsIntegral == 1)
                     this.ReportViewer1.LocalReport.SetParameters(param11);
 

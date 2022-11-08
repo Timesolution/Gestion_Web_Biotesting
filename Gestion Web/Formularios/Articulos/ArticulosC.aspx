@@ -65,8 +65,9 @@
                                         <tr>
                                             <th style="width: 10%"></th>
                                             <th style="width: 10%">Codigo</th>
-                                            <th style="width: 30%">Descripcion</th>
-                                            <th style="width: 5%">P.Venta</th>
+                                            <th style="width: 25%">Descripcion</th>
+                                            <th style="width: 10%">P.Venta</th>
+                                            <%--<th style="width: 5%">Porc. IVA</th>--%>
                                             <th style="width: 15%">Cantidad</th>
 
                                         </tr>
@@ -85,10 +86,20 @@
             <div class="col-md-4 col-xs-4 sticky" style="position: sticky;
     top: 7%;">
                 <div class="widget stacked widget-table action-table">
-                    <div class="widget-header" style="padding-bottom: 12%">
-                        <i class="icon-shopping-cart"></i>
-                        <h3>Carrito</h3>
-                    </div>
+                    <div class="widget-header" style="padding-bottom: 8%;padding-top:1.5%">
+                   <div class="form-group">
+                            <div class="col-md-3">
+                                <i class="icon-shopping-cart"></i>
+                                <span>Carrito</span>
+                                </div>
+                            <div class="col-md-6" >
+                                <asp:TextBox runat="server" ID="txtTotalPedido" Style="text-align: right" class="form-control" Text="0.00" disabled />
+                            </div>
+                            <div class="col-md-3" >
+                                <asp:TextBox runat="server" ID="txtArtTotalPedido" Style="text-align: right" class="form-control" Text="0.00" disabled />
+                            </div>
+                        </div>
+                        </div>
                     <div class="widget-content">
                         <div class="panel-body">
                             <div class="table-responsive">
@@ -108,7 +119,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <asp:LinkButton ID="lbtnGenerarPedido" Text="Generar pedido" runat="server" class="btn btn-success" Style="font-size: 0.9em; margin-top: 20%" OnClick="lbtnGenerarPedido_Click" />
+                            <asp:LinkButton ID="lbtnGenerarPedido" Text="Enviar pedido" runat="server" class="btn btn-success" Style="font-size: 0.9em; margin-top: 20%" OnClick="lbtnGenerarPedido_Click" />
                             <asp:LinkButton ID="lbtnGenerarPedidoBorrador" Text="Generar pedido borrador" runat="server" Style="font-size: 0.9em; margin-top: 20%" class="btn btn-success" OnClick="lbtnGenerarPedidoBorrador_Click" />
                             <%--<asp:LinkButton ID="lbtnVerPedido" Text="Ver pedido" runat="server" class="btn btn-default" OnClick="lbtnVerPedido_Click" />--%>
                             <asp:LinkButton ID="lbtnContinuarPedido" Text="Continuar pedido" runat="server" class="btn btn-default" OnClick="lbtnContinuarPedido_Click" Visible="false" />
@@ -165,7 +176,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Confirmacion de pedido</h4>
+                    <h4 class="modal-title">Confirmacion de pedido borrador</h4>
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
@@ -180,7 +191,7 @@
 
 
                     <div class="modal-footer">
-                        <asp:LinkButton ID="lbtnGenerarPedidoModalBorrador" Text="Generar pedido" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedidoModalBorrador_Click" />
+                        <asp:LinkButton ID="lbtnGenerarPedidoModalBorrador" Text="Generar pedido borrador" runat="server" class="btn btn-success" OnClick="lbtnGenerarPedidoModalBorrador_Click" />
                         <button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancelar</button>
                     </div>
                 </div>
@@ -318,6 +329,12 @@
             document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
         }
     </script>
+  <%--  <script>
+        $(document).ready(function () {
+            document.getElementById('dataTables-example_next').innerHTML = "Siguiente";
+
+        });
+    </script>--%>
 
     <script>
         function mostrarMensaje(Boton) {
@@ -352,7 +369,13 @@
                 "bInfo": false,
                 "bAutoWidth": false,
                 "bStateSave": true,
-                "pageLength": 50
+                "pageLength": 50,
+                "language": {
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
                 //"columnDefs": [
                 //    { type: 'date-eu', targets: 5 }
                 //]
