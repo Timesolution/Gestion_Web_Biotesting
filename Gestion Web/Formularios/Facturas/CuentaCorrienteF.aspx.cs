@@ -38,6 +38,8 @@ namespace Gestion_Web.Formularios.Facturas
         int accion;
         string fechaDesde;
         string fechaHasta;
+        string ordX;
+        string venc;
         Mensajes m = new Mensajes();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -51,6 +53,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.fechaDesde = Request.QueryString["fd"];
                 this.fechaHasta = Request.QueryString["fh"];
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
+                this.ordX = Request.QueryString["ordX"];
+                this.venc = Request.QueryString["venc"];
                 //this.cargarMovimientos();
                 if (!IsPostBack)
                 {
@@ -100,14 +104,22 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (idCliente > 0)
                 {
+                    GridCtaCte.PageSize = Convert.ToInt32(configuracion.PageSizeGridView);
                     this.cargarMovimientos(idCliente, idSucursal, idTipo);
                 }
                 if (accion > 0)
                 {
-                    this.btnImpagas.Visible = true;
+                    //this.btnImpagas.Visible = true;
                     this.btnImprimir.Visible = true;
                     this.btnAccion.Visible = true;
-                    this.lbnCobros.Visible = true;
+                    if (idTipo >= 0)
+                    {
+                        this.lbnCobros.Visible = true;
+                    }
+                    else
+                    {
+                        this.lbnCobros.Visible = false;
+                    }
                 }
                 if (accion == 0)
                 {
@@ -115,7 +127,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 }
                 if (accion == 1)
-                {                    
+                {
                     ScriptManager.RegisterStartupScript(this, GetType(), "cambiarIcono", "cambiarIcono('fa fa-toggle-off','Ventas > Cuentas Corrientes > Impagas');", true);
                 }
                 if (accion == 2)
@@ -123,6 +135,8 @@ namespace Gestion_Web.Formularios.Facturas
                     ScriptManager.RegisterStartupScript(this, GetType(), "cambiarIcono", "cambiarIcono('fa fa-toggle-on','Ventas > Cuentas Corrientes');", true);
                 }
                 this.Form.DefaultButton = lbtnBuscar.UniqueID;
+
+
             }
             catch
             {
@@ -271,7 +285,7 @@ namespace Gestion_Web.Formularios.Facturas
                         ControladorClienteEntity contClienteEntity = new ControladorClienteEntity();
                         //dt = contCliente.obtenerClientesByDistribuidorDT(this.idVendedor);//idvendedor es un cliente
                         dt = contClienteEntity.obtenerLideresPorDistribuidor(this.idVendedor);
-                       
+
                         DataRow dr = dt.NewRow();
                         Gestor_Solution.Modelo.Cliente c = contCliente.obtenerClienteID(this.idVendedor);
                         if (c != null)
@@ -377,7 +391,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando sucursales. " + ex.Message));
             }
         }
-        
+
         public void cargarPuntoVentaDestino(int sucu)
         {
             controladorSucursal contSucu = new controladorSucursal();
@@ -406,22 +420,73 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                //DataTable datos = new DataTable();
-                //datos.Columns.Add("Id");
-                //datos.Columns.Add("Fecha");
-                //datos.Columns.Add("Numero");
-                //datos.Columns.Add("Debe",typeof(decimal));
-                //datos.Columns.Add("Haber", typeof(decimal));
-                //datos.Columns.Add("Saldo", typeof(decimal));
-                //datos.Columns.Add("Acumulado", typeof(decimal));
-                ////datos.Columns.Add("GuiaDespacho");
-                //datos.Columns.Add("TipoDoc");
+                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta);
 
-                //List<Movimiento> Movimiento = controlador.obtenerMovimientosByCuenta(idCliente,idSucursal,idTipo, this.accion);
-                //Movimiento = Movimiento.OrderBy(x => x.fecha).ToList();
-                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion,fdesde,fhasta);
-                this.GridCtaCte.DataSource = datos;
-                //var suma = datos.Compute("Sum(Saldo)", "");
+                datos.DefaultView.Sort = "FechaVenc desc";
+                string tipoOrden = "FechaVenc desc";
+                //Session["fechaVenc_estado"] = "";
+                if (ordX == "1")
+                {
+                    datos.DefaultView.Sort = "fecha asc";
+                    tipoOrden = "Fecha asc";
+                }
+                else if (ordX == "2")
+                {
+                    datos.DefaultView.Sort = "fecha desc";
+                    tipoOrden = "Fecha desc";
+                }
+                else if (ordX == "3")
+                {
+                    datos.DefaultView.Sort = "fechaVenc asc";
+                    tipoOrden = "FechaVenc asc";
+                }
+                else if (ordX == "4")
+                {
+                    datos.DefaultView.Sort = "fechaVenc desc";
+                    tipoOrden = "FechaVenc desc";
+                }
+
+                if (venc == "1")
+                {
+                    DataTable datosVenc = datos.Clone();
+                    foreach (DataRow item in datos.Rows)
+                    {
+                        if (!String.IsNullOrEmpty(item.ItemArray[12].ToString()))
+                        {
+                            if (Convert.ToInt32(item.ItemArray[12]) > 0)
+                            {
+                                DataRow dr = datosVenc.NewRow();
+                                dr["Id"] = item.ItemArray[0];
+                                dr["fecha"] = item.ItemArray[1];
+                                dr["Numero"] = item.ItemArray[2];
+                                dr["id_doc"] = item.ItemArray[3];
+                                dr["tipo_doc"] = item.ItemArray[4];
+                                dr["debe"] = item.ItemArray[5];
+                                dr["haber"] = item.ItemArray[6];
+                                dr["saldo"] = item.ItemArray[7];
+                                dr["SaldoAcumulado"] = item.ItemArray[8];
+                                dr["sucursal"] = item.ItemArray[9];
+                                dr["GuiaDespacho"] = item.ItemArray[10];
+                                dr["fechaVenc"] = item.ItemArray[11];
+                                dr["diasVencidos"] = item.ItemArray[12];
+                                dr["TipoDoc"] = item.ItemArray[13];
+                                datosVenc.Rows.Add(dr);
+                            }
+                        }
+                    }
+                    datos.Clear();
+                    foreach (DataRow dtRow in datosVenc.Rows)
+                    {
+                        datos.ImportRow(dtRow);
+                    }
+                    this.GridCtaCte.DataSource = datos;
+                }
+                else
+                {
+                    this.GridCtaCte.DataSource = datos;
+                }
+
+
                 decimal saldoAcumulado = 0;
 
                 foreach (DataRow row in datos.Rows)
@@ -445,91 +510,64 @@ namespace Gestion_Web.Formularios.Facturas
                     row["SaldoAcumulado"] = saldoAcumulado.ToString();
                 }
 
-                #region old
-                //if (this.accion == 2)
-                //{
-                //    foreach (Movimiento m in Movimiento)//cta cte
-                //    {
-                //        DataRow dr = datos.NewRow();
-                //        MovimientoView movV = new MovimientoView();
-                //        movV = m.ListarMovimiento();
-
-                //        if (movV.tipo.tipo.Contains("Factura") || movV.tipo.tipo.Contains("Credito") || movV.tipo.tipo.Contains("Debito") || movV.tipo.tipo.Contains("Presupuesto"))
-                //        {
-                //            Gestion_Api.Entitys.Despacho despacho = this.contDesp.obtenerDespachoByIdFactura(movV.id_doc);
-                //            if (despacho != null)
-                //            {
-                //                if (despacho.contrareembolso.Value == 1)
-                //                    dr["GuiaDespacho"] = "*CONTRA-REEMBOLSO*";
-                //            }
-                //        }
-
-                //        if (Math.Abs(m.debe) > 0)
-                //        {
-                //            //saldoAcumulado += m.saldo;
-                //            saldoAcumulado += m.debe;
-
-                //        }
-                //        if (Math.Abs(m.haber) > 0)
-                //        {
-                //            saldoAcumulado -= m.haber;
-
-                //        }
-                //        dr["Id"] = movV.id;
-                //        dr["Fecha"] = movV.fecha.ToString("dd/MM/yyyy");
-                //        dr["Numero"] = movV.tipo.tipo + " " + movV.numero.ToString().PadLeft(8, '0');
-                //        dr["Debe"] = movV.debe;
-                //        dr["Haber"] = movV.haber;
-                //        dr["Saldo"] = movV.saldo;
-                //        dr["Acumulado"] = saldoAcumulado.ToString();
-                //        if (movV.tipo.tipo.Contains("Recibo"))
-                //            dr["TipoDoc"] = movV.id + "_15";
-                //        else
-                //            dr["TipoDoc"] = movV.id_doc + "_" + movV.tipo.id;
-
-                //        datos.Rows.Add(dr);
-
-                //        //this.cargarEnPh(m, saldoAcumulado);
-                //    }
-                //}
-                //else
-                //{
-                //    foreach (Movimiento m in Movimiento)//impaga
-                //    {
-                //        DataRow dr = datos.NewRow();
-                //        MovimientoView movV = new MovimientoView();
-                //        movV = m.ListarMovimiento();
-
-                //        saldoAcumulado += m.saldo;
-
-                //        dr["Id"] = movV.id;
-                //        dr["Fecha"] = movV.fecha.ToString("dd/MM/yyyy");
-                //        dr["Numero"] = movV.tipo.tipo + " " + movV.numero.ToString().PadLeft(8, '0');
-                //        dr["Debe"] = movV.debe;
-                //        dr["Haber"] = movV.haber;
-                //        dr["Saldo"] = movV.saldo;
-                //        dr["Acumulado"] = saldoAcumulado.ToString();
-                //        if (movV.tipo.tipo.Contains("Recibo"))
-                //            dr["TipoDoc"] = movV.id_doc + "_15";
-                //        else
-                //            dr["TipoDoc"] = movV.id_doc + "_" + movV.tipo.id;
-
-                //        datos.Rows.Add(dr);
-                //        //this.cargarEnPh(m, saldoAcumulado);
-                //    }
-                //}
-                #endregion
-                
                 this.GridCtaCte.DataBind();
-                
 
-                //this.lblSaldo.Text = "Saldo $ " + saldoAcumulado.ToString();
-                this.labelSaldo.Text = saldoAcumulado.ToString("C");                
-                this.cargarLabel(idCliente,idSucursal,idTipo);
+
+                this.labelSaldo.Text = saldoAcumulado.ToString("C");
+                this.cargarLabel(idCliente, idSucursal, idTipo);
+                cargarLabelSaldos();
+                lblParametros.Text += "Ordenado por " + tipoOrden;
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error buscando cliente. " + ex.Message));
+            }
+        }
+
+        private void cargarLabelSaldos()
+        {
+            try
+            {
+                DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
+                DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+
+                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta); //Vencidas
+                DataTable dtImpagas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 2, fdesde, fhasta); //Impagas
+
+                decimal saldoAcumuladoVenc = 0;
+                decimal saldoAcumuladoImp = 0;
+
+                foreach (DataRow item in dtVencidas.Rows)
+                {
+                    if (!String.IsNullOrEmpty(item.ItemArray[12].ToString()))
+                    {
+                        if (Convert.ToInt32(item.ItemArray[12]) > 0)
+                        {
+                            saldoAcumuladoVenc += Convert.ToDecimal(item["saldo"]);
+                        }
+                    }
+                }
+
+                foreach (DataRow row in dtImpagas.Rows)
+                {
+                    if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                    {
+                        saldoAcumuladoImp += Convert.ToDecimal(row["debe"]);
+                    }
+                    if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                    {
+                        saldoAcumuladoImp -= Convert.ToDecimal(row["haber"]);
+                    }
+                }
+
+                this.labelSaldoVenc.Text = saldoAcumuladoVenc.ToString("C");
+                this.labelSaldoImp.Text = saldoAcumuladoImp.ToString("C");
+
+
+            }
+            catch (Exception ex)
+            {
+
             }
         }
 
@@ -549,7 +587,7 @@ namespace Gestion_Web.Formularios.Facturas
                         Cliente cl = this.contrCliente.obtenerClienteID(idCliente);
                         label += cl.razonSocial + ",";
                     }
-                    
+
                 }
                 if (idSucursal > 0)
                 {
@@ -563,7 +601,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.lblParametros.Text = label;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando datos de Busqueda. " + ex.Message));
 
@@ -642,7 +680,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
-        
+
         #region eventos
         protected void lbtnBuscar_Click(object sender, EventArgs e)
         {
@@ -660,9 +698,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.DropListClientes.SelectedValue = this.ListRazonSocial.SelectedValue;                
+                this.DropListClientes.SelectedValue = this.ListRazonSocial.SelectedValue;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error seleccionando valor en cliente. " + ex.Message));
             }
@@ -672,7 +710,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                this.ListRazonSocial.SelectedValue = this.DropListClientes.SelectedValue;                
+                this.ListRazonSocial.SelectedValue = this.DropListClientes.SelectedValue;
             }
             catch (Exception ex)
             {
@@ -685,7 +723,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 DataTable dtClientes = this.contrCliente.obtenerClientesAliasDT(this.txtCodCliente.Text);
-                
+
                 //cargo la lista
                 this.DropListClientes.DataSource = dtClientes;
                 this.DropListClientes.DataValueField = "id";
@@ -718,7 +756,7 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
-        
+
         protected void btnImpagas_Click(object sender, EventArgs e)
         {
             try
@@ -729,13 +767,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    Response.Redirect("CuentaCorrienteF.aspx?a=1&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);                
+                    Response.Redirect("CuentaCorrienteF.aspx?a=1&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);
                 }
-                
+
             }
             catch
             {
- 
+
             }
         }
 
@@ -745,18 +783,83 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 DataTable dtDatos = (DataTable)this.GridCtaCte.DataSource;
 
+                DataView dtV = dtDatos.DefaultView;
+
+                dtV.Sort = "FechaVenc desc";
+                string tipoOrden = "FechaVenc desc";
+                //Session["fechaVenc_estado"] = "";
+                if (ordX == "1")
+                {
+                    dtV.Sort = "fecha asc";
+                    tipoOrden = "Fecha asc";
+                }
+                else if (ordX == "2")
+                {
+                    dtV.Sort = "fecha desc";
+                    tipoOrden = "Fecha desc";
+                }
+                else if (ordX == "3")
+                {
+                    dtV.Sort = "fechaVenc asc";
+                    tipoOrden = "FechaVenc asc";
+                }
+                else if (ordX == "4")
+                {
+                    dtV.Sort = "fechaVenc desc";
+                    tipoOrden = "FechaVenc desc";
+                }
+
+                dtDatos = dtV.ToTable();
+
+                if (venc == "1")
+                {
+                    DataTable datosVenc = dtDatos.Clone();
+                    foreach (DataRow item in dtDatos.Rows)
+                    {
+                        if (!String.IsNullOrEmpty(item.ItemArray[12].ToString()))
+                        {
+                            if (Convert.ToInt32(item.ItemArray[12]) > 0)
+                            {
+                                DataRow dr = datosVenc.NewRow();
+                                dr["Id"] = item.ItemArray[0];
+                                dr["fecha"] = item.ItemArray[1];
+                                dr["Numero"] = item.ItemArray[2];
+                                dr["id_doc"] = item.ItemArray[3];
+                                dr["tipo_doc"] = item.ItemArray[4];
+                                dr["debe"] = item.ItemArray[5];
+                                dr["haber"] = item.ItemArray[6];
+                                dr["saldo"] = item.ItemArray[7];
+                                dr["SaldoAcumulado"] = item.ItemArray[8];
+                                dr["sucursal"] = item.ItemArray[9];
+                                dr["GuiaDespacho"] = item.ItemArray[10];
+                                dr["fechaVenc"] = item.ItemArray[11];
+                                dr["diasVencidos"] = item.ItemArray[12];
+                                dr["TipoDoc"] = item.ItemArray[13];
+                                datosVenc.Rows.Add(dr);
+                            }
+                        }
+                    }
+                    dtDatos.Clear();
+                    foreach (DataRow dtRow in datosVenc.Rows)
+                    {
+                        dtDatos.ImportRow(dtRow);
+                    }
+                }
+
+
                 Session.Add("datosMov", dtDatos);
                 Session.Add("saldoMov", labelSaldo.Text);
 
-                Response.Redirect("ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion);
-                
+                //Response.Redirect("ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion+"','_blank')", true);
+
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error al mostrar detalle de factura desde la interfaz. " + ex.Message));
                 Log.EscribirSQL(1, "ERROR", "Error cargando reporte cta cte detalle desde la interfaz. " + ex.Message);
             }
-            
+
         }
 
         protected void lbtnExportar_Click(object sender, EventArgs e)
@@ -769,7 +872,7 @@ namespace Gestion_Web.Formularios.Facturas
                 Session.Add("datosMov", dtDatos);
                 Session.Add("saldoMov", labelSaldo.Text);
 
-                Response.Redirect("ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion + "&e=1");                
+                Response.Redirect("ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion + "&e=1");
             }
             catch (Exception ex)
             {
@@ -800,7 +903,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 LinkButton btn = sender as LinkButton;
-                string movimiento = btn.CommandArgument;                
+                string movimiento = btn.CommandArgument;
                 string idDoc = movimiento.Split('_')[0];
                 string tipoDoc = movimiento.Split('_')[1];
 
@@ -809,7 +912,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (tipoDoc != "15" && tipoDoc != "16" && tipoDoc != "18" && tipoDoc != "31" && tipoDoc != "32")
                 {
                     Factura f = this.contFact.obtenerFacturaId(Convert.ToInt32(idDoc));
-                    if(f != null)
+                    if (f != null)
                         this.txtComentario.Text = f.comentario;
                 }
 
@@ -834,7 +937,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string script = "";
                     if (tipoDoc == 17 || tipoDoc == 11 || tipoDoc == 12)//Si es PRP o Nota Cred. PRP o Nota Deb. PRP
                     {
-                        script ="window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idDoc + "','_blank');";
+                        script = "window.open('ImpresionPresupuesto.aspx?Presupuesto=" + idDoc + "','_blank');";
                     }
                     else
                     {
@@ -904,14 +1007,14 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "$.msgbox(\"Solo puede compensar mov que no tengan cancelaciones!.\");", true);                    
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "$.msgbox(\"Solo puede compensar mov que no tengan cancelaciones!.\");", true);
                 }
 
-                
+
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrio un error al generar movimiento compensacion de cta. \",{type: \"error\"});", true);                    
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, this.UpdatePanel1.GetType(), "alert", "$.msgbox(\"Ocurrio un error al generar movimiento compensacion de cta. \",{type: \"error\"});", true);
                 //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error al generar movimiento compensacion de cta. " + ex.Message));
             }
         }
@@ -965,16 +1068,17 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                
+
                 SolicitarReporteCuentaCorriente();
             }
-            catch (Exception ex) { 
-            
-                
-               
-                    int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente. Ubicacion: CuentaCorrienteF.aspx. Metodo: lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
-                
+            catch (Exception ex)
+            {
+
+
+
+                int idError = Log.EscribirSQLDevuelveID((int)Session["Login_IdUser"], "ERROR", "CATCH: No se pudo generar el archivo.txt con la cuenta corriente. Ubicacion: CuentaCorrienteF.aspx. Metodo: lbtnExportarCuentaCorriente_Click. Excepcion: " + ex.Message);
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError(idError.ToString()));
+
             }
 
         }
@@ -1045,13 +1149,55 @@ namespace Gestion_Web.Formularios.Facturas
             }
 
         }
-        
+
         protected void lbnCobros_Click(object sender, EventArgs e)
         {
-            if (this.idCliente != 0 && this.idTipo >= 0 && this.idSucursal > 0) 
+            if (this.idCliente != 0 && this.idTipo >= 0 && this.idSucursal > 0)
             {
-                Response.Redirect("../Cobros/CobranzaF.aspx?cliente=" + this.idCliente + "&sucursal=" + this.idSucursal + "&tipo=" + this.idTipo);
+                //Response.Redirect("../Cobros/CobranzaF.aspx?cliente=" + this.idCliente + "&sucursal=" + this.idSucursal + "&tipo=" + this.idTipo);
+                //ScriptManager.RegisterStartupScript(this, GetType(), "cambiarIcono", "abrirCobros('"+ this.idCliente+"', '"+ this.idSucursal+"', '"+idTipo+"')", true);
+                //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", "window.open('../Cobros/CobranzaF.aspx?cliente=" + this.idCliente + "&sucursal=" + this.idSucursal + "&tipo=" + this.idTipo + "', '_blank');");
             }
+        }
+
+        protected void btnVer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnOrdenarX_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnTodos_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=2&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);
+        }
+
+        protected void btnVencidas_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc=1");
+        }
+
+        protected void btnFEAsc_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ordX=1");
+        }
+
+        protected void btnFEDesc_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ordX=2");
+        }
+
+        protected void btnFVAsc_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ordX=3");
+        }
+
+        protected void btnFVDesc_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ordX=4");
         }
     }
 }

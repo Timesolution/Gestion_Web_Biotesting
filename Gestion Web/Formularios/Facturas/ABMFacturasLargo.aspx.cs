@@ -1055,6 +1055,17 @@ namespace Gestion_Web.Formularios.Facturas
                     DropListLista.CssClass = "form-control";
                 }
 
+                if (listPermisos.Contains("250"))
+                {
+                    btnAgregar.Attributes.Add("disabled","disabled");
+                    btnAgregarRemitir.Attributes.Add("disabled","disabled");
+                }
+                else if(!listPermisos.Contains("250"))
+                {
+                    btnAgregar.Attributes.Remove("disabled");
+                    btnAgregarRemitir.Attributes.Remove("disabled");
+                }
+
                 if (!listPermisos.Contains("209") && accion == 9 || !listPermisos.Contains("211") && accion == 6)
                     phAgregarItems.Visible = false;
 
@@ -2080,6 +2091,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     controladorCliente controladorCliente = new controladorCliente();
                     this.cliente = controladorCliente.obtenerClienteID(this.cliente.id);
+                    FechaVenc.Text = DateTime.Now.AddDays(Convert.ToDouble(cliente.vencFC)).ToString("dd/MM/yyyy");
                     //Cargo el total de los puntos.
                     CargarPuntosCliente(idCliente);
                     cargarClienteEnLista(cliente.id);
@@ -2087,21 +2099,27 @@ namespace Gestion_Web.Formularios.Facturas
                     txtCUIT.Text = this.cliente.cuit;
                     ListTipo.SelectedValue = cliente.tipoCliente.id.ToString();
 
+                    int maxCantDias = obtenerMaxCantDias(cliente.id, idSucursal);
+
                     if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
 
-                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - $" + saldoOperativo.ToString("N", new CultureInfo("is-IS"));
                         ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
 
                     }
                     else
                     {
 
-                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                        this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - $" + saldoOperativo.ToString("N", new CultureInfo("is-IS"));
                         ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
 
 
                     }
+                    string saldoMax = Convert.ToDecimal(cliente.saldoMax) < saldoOperativo ? "danger" : "success";
+                    string diasVenc = Convert.ToInt32(cliente.vencFC) < maxCantDias ? "danger" : "success";
+                    lblSaldoMaxDiasVenc.Text = "<span class=\"text-"+ saldoMax + "\">SALDO MAXIMO: $ " + this.cliente.saldoMax.ToString("N", new CultureInfo("is-IS")) + "</span> | " +
+                        "<span class=\"text-"+ diasVenc + "\">VTO FC EN DIAS: " + this.cliente.vencFC + "</span>";
                     if (this.cliente.cuit.Length == 11)
                     {
                         this.txtDniCredito.Text = this.cliente.cuit.Substring(2, this.cliente.cuit.Length - 3);
@@ -2404,7 +2422,8 @@ namespace Gestion_Web.Formularios.Facturas
                 row["SaldoAcumulado"] = saldoAcumulado.ToString();
             }
 
-            saldoOperativo = cliente.saldoMax - saldoAcumulado;
+            //saldoOperativo = cliente.saldoMax - saldoAcumulado;
+            saldoOperativo = saldoAcumulado;
             return saldoOperativo;
         }
 
@@ -2593,6 +2612,46 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private int obtenerMaxCantDias(int idCliente, int idSucursal)
+        {
+            try
+            {
+                DateTime fdesde = Convert.ToDateTime("2000/01/01", new CultureInfo("es-AR"));
+                DateTime fhasta = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+
+                DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta);
+                int maxCantDias = 0;
+                bool primerValor = true;
+                foreach (DataRow item in datos.Rows)
+                {
+                    if (Convert.ToInt32(item["saldo"]) > 0)
+                    {
+                        //guardo el primer "diasVencidos" como el mas alto
+                        if (primerValor)
+                        {
+                            if (!String.IsNullOrEmpty(item["diasVencidos"].ToString()))
+                            {
+                                maxCantDias = Convert.ToInt32(item["diasVencidos"]);
+                                primerValor = false;
+                            }
+                        }
+                        else
+                        {
+                            if (!String.IsNullOrEmpty(item["diasVencidos"].ToString()) && Convert.ToInt32(item["diasVencidos"]) > maxCantDias)
+                            {
+                                maxCantDias = Convert.ToInt32(item["diasVencidos"]);
+                            }
+                        }
+                    }
+                }
+                return maxCantDias;
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+        }
+
         private void obtenerNroFactura()
         {
             try
@@ -2600,17 +2659,20 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente controladorCliente = new controladorCliente();
                 this.cliente = controladorCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                 decimal saldoOperativo = ObtenerSaldoOperativo();
+
+                int maxCantDias = obtenerMaxCantDias(cliente.id, idSucursal);
+
                 if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                 {
 
-                    this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                    this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + "No Informa" + " - " + this.cliente.cuit + " - $" + saldoOperativo.ToString("N", new CultureInfo("is-IS")) + " - "+ maxCantDias;
                     ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
 
                 }
                 else
                 {
 
-                    this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - " + saldoOperativo.ToString();
+                    this.labelCliente.Text = this.cliente.razonSocial.Replace('-', ' ') + " - " + this.cliente.iva + " - " + this.cliente.cuit + " - $" + saldoOperativo.ToString("N", new CultureInfo("is-IS")) + " - "+ maxCantDias;
                     ListIVA.SelectedIndex = this.ListIVA.Items.IndexOf(ListIVA.Items.FindByText(cliente.iva));
 
 
@@ -4724,6 +4786,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (i > 0)
                     {
+                        // guardar fecha vencimiento
+                        controlador.saveFechaVenc(i,FechaVenc.Text);
+
                         decimal puntos = 0.0m;
 
                         if (!string.IsNullOrEmpty(txtCanjearPuntos.Text))
@@ -5223,9 +5288,62 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void btnAgregarArt_Click(object sender, EventArgs e)
         {
-            //_codigoArticuloParaAgregar = txtCodigo.Text;
-            this.CargarProductoAFactura();
-            this.ActualizarTotales();
+            try
+            {
+                //_codigoArticuloParaAgregar = txtCodigo.Text;
+
+                //Busco el idArticulo, su idCategoria y si es el primero lo guardo en un session
+                var art = contArticulo.obtenerArticuloFacturar(txtCodigo.Text, Convert.ToInt32(this.DropListLista.SelectedValue));
+
+                var dt = contArticulo.getArticulo_CategoriaByIdArt(art.id);
+
+                int idCateg = -1; // no tiene categoria o tiene idCategoria = -1, en la tabla Articulos_Categorias
+                if (dt.Rows.Count != 0)
+                {
+                    idCateg = Convert.ToInt32(dt.Rows[0]["idCategoria"]);
+                }
+                if (phArticulos.Controls.Count == 0)
+                {
+                    Session["idCategoria"] = idCateg;
+                }
+
+                //Valido si el art pertenece a la misma categoria
+                if (Convert.ToInt32(Session["idCategoria"]) == idCateg)
+                {
+                    this.CargarProductoAFactura();
+                    this.ActualizarTotales();
+                }
+                else
+                {
+                    //Informamos que no coincide la categoria de este art con el primer art cargado.
+                    int alert = dt.Rows.Count >0 ? Convert.ToInt32(dt.Rows[0]["alerta"]): -1;
+                    if (alert == 2) // Bloquea
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"El articulo seleccionado no pertenece a la misma categoria que la del primer articulo cargado.\", {type: \"info\"});", true);
+                    }
+                    else // Advierte o no tiene tipo de alerta
+                    {
+                        string script = "$.msgbox(\"El articulo seleccionado no pertenece a la misma categoria que la del primer articulo cargado.<br><br> <strong>Desea agregarlo igualmente?</strong>\", { " +
+                            "type: \"confirm\"," +
+                            "buttons:" +
+                            "[  " +
+                            "   { type: \"submit\", value: \"Si\"}," +
+                            "   { type: \"submit\", value: \"No\"}," +
+                            "]" +
+                            "}, function(result) {" +
+                            "   if(result == \"Si\"){" +
+                            "       ConfirmarAgregarArt()" +
+                            "   }" +
+                            "}); ";
+
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", script, true);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
 
@@ -6274,12 +6392,14 @@ namespace Gestion_Web.Formularios.Facturas
                 this.obtenerNroFactura();
 
                 CargarDropList_DireccionesDeEntregaDelCliente((int)usuario_cliente.IdCliente);
+                
             }
             catch
             {
 
             }
         }
+
 
         protected void ListEmpresa_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -12734,5 +12854,10 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        protected void lbtnAgregarArticuloASPHide_Click(object sender, EventArgs e)
+        {
+            this.CargarProductoAFactura();
+            this.ActualizarTotales();
+        }
     }
 }

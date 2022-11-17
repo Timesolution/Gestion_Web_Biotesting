@@ -146,7 +146,7 @@ namespace Gestion_Web.Formularios.Herramientas
                 this.DropListMostrarAlicuotaIVAenDescripcionArticulosDeFacturas.SelectedValue = configuracion.MostrarAlicuotaIVAenDescripcionArticulosDeFacturas;
                 this.DropListModificarCantidadEnVentaEntreSucursales.SelectedValue = configuracion.ModificarCantidadEnVentaEntreSucursales;
                 this.txtObservacionesFC.Text = configuracion.ObservacionesFC;
-                
+                this.txtPageSizeGV.Text = configuracion.PageSizeGridView;
 
                 VisualizacionArticulos vista = new VisualizacionArticulos();
                 this.CheckBoxProv.Checked = Convert.ToBoolean(vista.columnaProveedores);
@@ -1906,6 +1906,26 @@ namespace Gestion_Web.Formularios.Herramientas
             return resultadoJSON;
         }
 
-      
+        protected void lbtnPageSizeGridView_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                configuracion.PageSizeGridView = this.txtPageSizeGV.Text;
+                int i = configuracion.ModificarPageSizeGridView();
+                if (i > 0)
+                {
+                    Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Se modifico configuracion.");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"Opcion: PageSizeGridView modificada con exito!. \", {type: \"info\"});", true);
+                }
+                else
+                {
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "$.msgbox(\"No se pudo actualizar Opcion: PageSizeGridView!. \", {type: \"error\"});", true);
+                }
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

@@ -42,9 +42,6 @@
     <link href="./Scripts/plugins/msgbox/jquery.msgbox.css" rel="stylesheet">
     
     <style>
-        .footer{
-
-        }
 
         .more-ot-alert {
             display: none;
@@ -227,17 +224,18 @@
                                                 <ul class="dropdown-menu">
                                                     <li><a tabindex="-1" href="/../../Formularios/Articulos/Articulos.aspx">Articulos</a></li>
                                                     <li><a tabindex="-1" href="/../../Formularios/Articulos/ArticulosNew.aspx">ArticulosNew</a></li>
+                                                    <li><a href="/../../Formularios/Categoria/ABMCategorias.aspx">Categorías</a></li>
                                                     <li><a tabindex="-1" href="/../../Formularios/Articulos/ComparativaProveedorF.aspx">Comparativa</a></li>
+                                                    <li><a href="/../../Formularios/Articulos/ArticulosDiferenciasStock.aspx">Diferencias Stock por Excel</a></li>
                                                     <li class="dropdown-submenu">
                                                         <a tabindex="-1" href="#">Grupos</a>
                                                         <ul class="dropdown-menu">
                                                             <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposArticulos.aspx">Grupos</a></li>
+                                                            <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
                                                         </ul>
                                                     </li>
-                                                    <li><a href="/../../Formularios/Articulos/ABMSubGruposArticulos.aspx">Sub-Grupos</a></li>
                                                     <li><a href="/../../Formularios/Articulos/ABMMarcas.aspx">Marcas</a></li>
                                                     <li><a href="/../../Formularios/Articulos/ABMTrazabilidad.aspx">Trazabilidad</a></li>
-                                                    <li><a href="/../../Formularios/Articulos/ArticulosDiferenciasStock.aspx">Diferencias Stock por Excel</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
@@ -252,14 +250,9 @@
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Clientes</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a tabindex="-1" href="/../../Formularios/Clientes/Clientesaspx.aspx">Clientes</a></li>
-                                                    <li><a tabindex="-1" href="/../../Formularios/Clientes/FamiliaF.aspx">Familia</a></li>
-                                                    <li><a href="/../../Formularios/Clientes/ABMGruposClientes.aspx">Grupos</a></li>
-                                                    <li><a href="/../../Formularios/Clientes/ABMReferidos.aspx">Referidos</a></li>
-                                                    <li><a href="/../../Formularios/Clientes/ABMSupervisores.aspx">Supervisores</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ActividadClientes.aspx">Actividad</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ABMCategoriasClientes.aspx">Categorias</a></li>
-                                                    <li><a href="/../../Formularios/Clientes/ProspectosF">Prospectos</a></li>
-                                                    <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
+                                                    <li><a tabindex="-1" href="/../../Formularios/Clientes/Clientesaspx.aspx">Clientes</a></li>
                                                     <li class="dropdown-submenu">
                                                         <a tabindex="-1" href="#">Estados</a>
                                                         <ul class="dropdown-menu">
@@ -267,8 +260,13 @@
                                                             <li><a href="/../../Formularios/Clientes/ABMEstadosCRM.aspx">Estados CRM</a></li>
                                                         </ul>
                                                     </li>
+                                                    <li><a tabindex="-1" href="/../../Formularios/Clientes/FamiliaF.aspx">Familia</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMGruposClientes.aspx">Grupos</a></li>
                                                     <li><a href="/../../Formularios/Clientes/ImportarClientes.aspx">Importar Clientes</a></li>
-                                                    <li><a href="/../../Formularios/Clientes/ActividadClientes.aspx">Actividad</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ProspectosF">Prospectos</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMReferidos.aspx">Referidos</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMSupervisores.aspx">Supervisores</a></li>
+                                                    <li><a href="/../../Formularios/Clientes/ABMTiposClientes.aspx">Tipos</a></li>
                                                 </ul>
                                             </li>
                                             <%--<li><a href="">Contactos</a></li>--%>
@@ -279,11 +277,11 @@
                                                 <a tabindex="" href="#">Lista de Precios</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a tabindex="-1" href="/../../Formularios/Listas/AdminListas.aspx">Administrador</a></li>
-                                                    <li><a href="/../../Formularios/Listas/ListasABM.aspx">Listas</a></li>
                                                     <li><a href="/../../Formularios/Listas/ABMSubListas.aspx">Categorias</a></li>
                                                     <asp:PlaceHolder ID="phImportarListaDePrecio" Visible="false" runat="server">
                                                         <li><a href="/../../Formularios/Listas/ImportarListaDePrecio.aspx">Importar Lista De Precio</a></li>
                                                     </asp:PlaceHolder>
+                                                    <li><a href="/../../Formularios/Listas/ListasABM.aspx">Listas</a></li>
                                                 </ul>
                                             </li>
                                             <li>
@@ -319,10 +317,10 @@
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Personal</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Personal/Empleados.aspx">Personal</a></li>
                                                     <li><a href="/../../Formularios/Personal/CCEmpleados.aspx">Cuenta Corriente</a></li>
                                                     <li><a href="/../../Formularios/Personal/PagosEmpleadosF.aspx">Pagos</a></li>
                                                     <li><a href="/../../Formularios/Personal/PagosEmpleadosRealizadosF.aspx">Pagos Realizados</a></li>
+                                                    <li><a href="/../../Formularios/Personal/Empleados.aspx">Personal</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
@@ -342,8 +340,8 @@
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Surtidores</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Surtidores/SurtidoresF.aspx">Surtidores</a></li>
                                                     <li><a href="/../../Formularios/Surtidores/SurtidoresCierreF.aspx">Cierres</a></li>
+                                                    <li><a href="/../../Formularios/Surtidores/SurtidoresF.aspx">Surtidores</a></li>
                                                 </ul>
                                             </li>
 
@@ -351,22 +349,22 @@
                                                 <a tabindex="" href="#">Tarjetas</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Valores/ABMOperadores.aspx">Operadores</a></li>
-                                                    <li><a href="/../../Formularios/Valores/ABMTarjetas.aspx">Tarjetas</a></li>
                                                     <li><a href="/../../Formularios/Valores/ABMPosnet.aspx">Posnet</a></li>
+                                                    <li><a href="/../../Formularios/Valores/ABMTarjetas.aspx">Tarjetas</a></li>
                                                 </ul>
                                             </li>
 
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Vendedores</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Vendedores/Vendedores.aspx">Vendedores</a></li>
                                                     <li class="dropdown-submenu">
                                                         <a tabindex="-1" href="#">Comisiones</a>
                                                         <ul class="dropdown-menu">
-                                                            <li><a href="/../../Formularios/Vendedores/Comisiones/ComisionesPorGrupoF.aspx">Comisiones por Vendedores</a></li>
                                                             <li><a tabindex="-1" href="/../../Formularios/Articulos/ABMGruposComisiones.aspx">Comisiones por Grupo</a></li>
+                                                            <li><a href="/../../Formularios/Vendedores/Comisiones/ComisionesPorGrupoF.aspx">Comisiones por Vendedores</a></li>
                                                         </ul>
                                                     </li>
+                                                    <li><a href="/../../Formularios/Vendedores/Vendedores.aspx">Vendedores</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="/../../Formularios/Zonas/ZonasF.aspx">Zonas</a></li>
@@ -382,24 +380,23 @@
                                         </a>
 
                                         <ul class="dropdown-menu">
-                                            <li><a href="/../../Formularios/Compras/OrdenesCompraF.aspx">Ordenes de Compra</a></li>
                                             <li><a href="/../../Formularios/Compras/ArticulosPedirF.aspx">Articulos a Pedir</a></li>
+                                            <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
+                                            <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
+                                            <li><a href="/../../Formularios/Compras/DiferenciaCompraMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                            <li><a href="/../../Formularios/Compras/Entregas/EntregasF.aspx">Entregas Mercaderia</a></li>
+                                            <li><a href="/../../Formularios/Compras/OrdenesCompraF.aspx">Ordenes de Compra</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Importaciones</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Compras/ImportacionesF.aspx">Importaciones</a></li>
-                                                    <li><a href="/../../Formularios/Compras/ImportacionesTiposGastosABM.aspx">Tipos Gastos</a></li>
                                                     <li><a href="/../../Formularios/Compras/ImportacionesMonedasABM.aspx">Monedas</a></li>
+                                                    <li><a href="/../../Formularios/Compras/ImportacionesTiposGastosABM.aspx">Tipos Gastos</a></li>
                                                 </ul>
                                             </li>
-
-                                            <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
-                                            <li><a href="/../../Formularios/Compras/ComprasF.aspx">Compras</a></li>
-                                            <li><a href="/../../Formularios/Compras/DiferenciaCompraMercaderiaF.aspx">Diferencias Mercaderia</a></li>
-                                            <li><a href="/../../Formularios/Compras/Entregas/EntregasF.aspx">Entregas Mercaderia</a></li>
-                                            <li><a href="/../../Formularios/Compras/CCCompraF.aspx">Cuentas Corrientes</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosF.aspx">Pagos</a></li>
                                             <li><a href="/../../Formularios/Pagos/PagosRealizadosF.aspx">Pagos Realizados</a></li>
+                                            <li><a href="/../../Formularios/Compras/RemitoF.aspx">Remitos</a></li>
                                             <li><a href="/../../Formularios/Compras/RetencionesF.aspx">Retenciones</a></li>
                                         </ul>
                                     </li>
@@ -412,29 +409,11 @@
                                         </a>
 
                                         <ul class="dropdown-menu">
+                                            <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
+                                            <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
                                             <li><a href="/../../Formularios/Facturas/ComisionesF.aspx">Comisiones</a></li>
                                             <li><a href="/../../Formularios/Facturas/CotizacionesC.aspx">Cotizaciones</a></li>
-                                            <li><a href="/../../Formularios/Facturas/PedidosP.aspx">Pedidos</a></li>
-                                            <li><a href="/../../Formularios/Facturas/PedidosModula.aspx">Pedidos Modula</a></li>
-                                            <li><a href="/../../Formularios/Facturas/RemitosR.aspx">Remitos</a></li>
-                                            <li><a href="/../../Formularios/Facturas/DespachosF.aspx">Guias despacho</a></li>
                                             <li><a href="/../../Formularios/Facturas/CRM.aspx">CRM</a></li>
-
-                                            <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">Ventas</a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
-                                                    <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
-                                                    <asp:PlaceHolder ID="phAceptarMercaderia" Visible="true" runat="server">
-                                                        <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
-                                                        <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
-                                                    </asp:PlaceHolder>
-                                                    <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
-                                                    <li><a href="/../../Formularios/Facturas/FacturasImportacion2.aspx">Importar Ventas 2</a></li>
-                                                    <li><a href="/../../Formularios/Facturas/LiquidacionesABM.aspx">Liquidaciones BQS</a></li>
-                                                </ul>
-                                            </li>
-
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Cuentas Corrientes</a>
                                                 <ul class="dropdown-menu">
@@ -442,14 +421,31 @@
                                                     <li><a href="/../../Formularios/Facturas/CronogramaPagosF.aspx">Cronograma de Pagos</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/../../Formularios/Facturas/FacturasReferidos.aspx">Referidos Facturas</a></li>
-
-                                            <li><a href="/../../Formularios/Cobros/CobranzaF.aspx">Cobros</a></li>
-                                            <li><a href="/../../Formularios/Cobros/CobrosRealizadosF.aspx">Cobros Realizados</a></li>
-                                            <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
+                                            <li><a href="/../../Formularios/Facturas/DespachosF.aspx">Guias despacho</a></li>
                                             <asp:PlaceHolder ID="phOrdenReparacion" Visible="false" runat="server">
                                                 <li><a href="/../../Formularios/OrdenReparacion/OrdenReparacionF.aspx">Ordenes de Reparacion</a></li>
                                             </asp:PlaceHolder>
+                                            <li><a href="/../../Formularios/Facturas/PedidosP.aspx">Pedidos</a></li>
+                                            <li><a href="/../../Formularios/Facturas/PedidosModula.aspx">Pedidos Modula</a></li>
+                                            <li><a href="/../../Formularios/Facturas/FacturasReferidos.aspx">Referidos Facturas</a></li>
+                                            <li><a href="/../../Formularios/Facturas/RemitosR.aspx">Remitos</a></li>
+                                            <li><a href="/../../Formularios/Facturas/RetencionesF.aspx">Retenciones</a></li>
+
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Ventas</a>
+                                                <ul class="dropdown-menu">
+                                                    <asp:PlaceHolder ID="phAceptarMercaderia" Visible="true" runat="server">
+                                                        <li><a href="/../../Formularios/Facturas/FacturasMercaderiasF.aspx">Aceptar Mercaderia</a></li>
+                                                        <li><a href="/../../Formularios/Facturas/DiferenciasMercaderiaF.aspx">Diferencias Mercaderia</a></li>
+                                                    </asp:PlaceHolder>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasImportacion.aspx">Importar Ventas</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasImportacion2.aspx">Importar Ventas 2</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/LiquidacionesABM.aspx">Liquidaciones BQS</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasF.aspx">Ventas</a></li>
+                                                    <li><a href="/../../Formularios/Facturas/FacturasSucursalesF.aspx">Ventas a Sucursales</a></li>
+                                                </ul>
+                                            </li>
+
                                             <asp:PlaceHolder ID="phCombustible" runat="server" Visible="false">
                                                 <li><a href="/../../Formularios/Facturas/ABMFacturasRapido.aspx">Ventas Combustibles</a></li>
                                             </asp:PlaceHolder>
@@ -470,7 +466,6 @@
                                             <li><a href="">Balance</a></li>
                                             <li><a href="/../../Formularios/Valores/BancosF.aspx">Bancos</a></li>
                                             <li><a href="/../../Formularios/Valores/CajaF.aspx">Caja</a></li>
-                                            <li><a href="/../../Formularios/Valores/CajaCierreF.aspx">Cierre Caja</a></li>
                                             <li><a href="/../../Formularios/Valores/CajaDiferenciasF.aspx">Caja Diferencias</a></li>
                                             <li><a href="/../../Formularios/Valores/CashFlowF.aspx">Cashflow</a></li>
                                             <li class="dropdown-submenu">
@@ -479,22 +474,23 @@
                                                     <li><a href="/../../Formularios/Valores/ChequesF_2.aspx">Cheques</a></li>
                                                 </ul>
                                             </li>
+                                            <li><a href="/../../Formularios/Valores/CajaCierreF.aspx">Cierre Caja</a></li>
                                             <li><a href="/../../Formularios/Valores/CreditosF.aspx">Creditos</a></li>
                                             <li><a href="">Cuenta Personal</a></li>
                                             <li><a href="/../../Formularios/Valores/ABMDivisas.aspx">Divisas</a></li>
                                             <li><a href="/../../Formularios/Valores/MayorF.aspx">Mayor</a></li>
                                             <li><a href="/../../Formularios/Valores/PagaresF.aspx">Pagares</a></li>
+                                            <li><a href="/../../Formularios/Valores/RemesasF.aspx">Remesas</a></li>
                                             <li><a href="/../../Formularios/Valores/RetencionesF.aspx">Retenciones</a></li>
                                             <li><a href="/../../Formularios/Valores/SolicitudesF.aspx">Solicitudes </a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Tarjetas</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Valores/TarjetasF.aspx">Tarjetas</a></li>
                                                     <li><a href="/../../Formularios/Valores/LiquidacionesF.aspx">Liquidaciones</a></li>
                                                     <li><a href="/../../Formularios/Valores/LotesTarjetasF.aspx">Lotes</a></li>
+                                                    <li><a href="/../../Formularios/Valores/TarjetasF.aspx">Tarjetas</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/../../Formularios/Valores/RemesasF.aspx">Remesas</a></li>
                                         </ul>
                                     </li>
 
@@ -506,13 +502,12 @@
                                         </a>
 
                                         <ul class="dropdown-menu">
+                                            <li><a href="/../../Formularios/Reportes/AlertasAPP/AlertasAPP.aspx">Alertas</a></li>
+                                            <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
                                             <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">Ventas</a>
+                                                <a tabindex="" href="#">Compras</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Reportes/ReportesArticulos.aspx">Articulos</a></li>
-                                                    <li><a href="/../../Formularios/Reportes/PedidoDetallesF.aspx">Cotizaciones</a></li>
-                                                    <li><a href="/../../Formularios/Reportes/ReportesVentas.aspx">Ventas</a></li>
-                                                    <li><a href="/../../Formularios/Reportes/VentasUnidadesF.aspx">Unidades</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/ReportesCompras.aspx">Articulos</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
@@ -522,18 +517,8 @@
                                                     <li><a href="/../../Formularios/Reportes/ReportesProveedoresF.aspx">Proveedores</a></li>
                                                 </ul>
                                             </li>
-                                            <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">Stock</a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Reportes/StockF.aspx">Unidades</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">Compras</a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Reportes/ReportesCompras.aspx">Articulos</a></li>
-                                                </ul>
-                                            </li>
+                                            <li><a href="/../../Formularios/Reportes/InformesF.aspx">Informes Solicitados</a></li>
+                                            <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Saldos</a>
                                                 <ul class="dropdown-menu">
@@ -552,11 +537,22 @@
                                                     <li><a href="/../../Formularios/Reportes/ImpresionReporteBeneficios.aspx?a=1">Lista De Socios</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/../../Formularios/Reportes/AlertasAPP/AlertasAPP.aspx">Alertas</a></li>
-                                            <li><a href="/../../Formularios/Reportes/BalanceF.aspx">Balance</a></li>
-                                            <li><a href="/../../Formularios/Reportes/RentabilidadFCosto.aspx">Rentabilidad</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Stock</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/StockF.aspx">Unidades</a></li>
+                                                </ul>
+                                            </li>
                                             <li><a href="/../../Formularios/Reportes/ReportesTrazabilidad.aspx">Trazabilidad</a></li>
-                                            <li><a href="/../../Formularios/Reportes/InformesF.aspx">Informes Solicitados</a></li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Ventas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Reportes/ReportesArticulos.aspx">Articulos</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/PedidoDetallesF.aspx">Cotizaciones</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/VentasUnidadesF.aspx">Unidades</a></li>
+                                                    <li><a href="/../../Formularios/Reportes/ReportesVentas.aspx">Ventas</a></li>
+                                                </ul>
+                                            </li>
                                         </ul>
                                     </li>
 
@@ -571,6 +567,17 @@
                                             <li><a href="">Acerca de...</a></li>
 
                                             <li class="dropdown-submenu">
+                                                <a tabindex="" href="#">Alertas</a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="/../../Formularios/Herramientas/PanelAlertasMail.aspx">Alertas Clinico</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/HistorialSMS.aspx">Historial de SMS</a></li>
+                                                    <li><a href="/../../Formularios/Herramientas/AdminSMS.aspx">SMS Creditos</a></li>
+                                                    <%--<li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>--%>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Ayuda</a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="/../../Formularios/Herramientas/Soporte.aspx">Soporte</a></li>
@@ -579,28 +586,17 @@
                                             <li><a href="/../../Formularios/Herramientas/FormasVenta.aspx">Formas de venta</a></li>
                                             <li><a href="/../../Formularios/Herramientas/InformeBTBF.aspx">Informe BTB</a></li>
                                             <li><a href="/../../Formularios/Herramientas/ActPadronF.aspx">Ingresos Brutos</a></li>
-                                            <li><a href="/../../Formularios/Herramientas/ImportacionPedidosAPP.aspx">Procesar Pedidos</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Libro De IVA Digital</a></li>
                                             <li><a href="/../../Formularios/Herramientas/NumeracionDocumentos.aspx">Numeracion Documentos</a></li>
                                             <li><a href="/../../Formularios/Herramientas/PanelControl.aspx">Panel de Control</a></li>
-                                            <li><a href="/../../Formularios/Herramientas/RegimenF.aspx">Libro De IVA Digital</a></li>
+                                            <li><a href="/../../Formularios/Herramientas/ImportacionPedidosAPP.aspx">Procesar Pedidos</a></li>
                                             <li class="dropdown-submenu">
                                                 <a tabindex="" href="#">Seguridad</a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Seguridad/Perfiles.aspx">Perfiles</a></li>
-                                                    <li><a href="/../../Formularios/Seguridad/UsuariosF.aspx">Usuarios</a></li>
                                                     <li><a href="/../../Formularios/Seguridad/AdministracionPerfiles.aspx">Administracion</a></li>
                                                     <li><a href="/../../Formularios/Seguridad/AuditoriaF.aspx">Auditoria</a></li>
-                                                </ul>
-                                            </li>
-                                            <li class="dropdown-submenu">
-                                                <a tabindex="" href="#">Alertas</a>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="/../../Formularios/Herramientas/PanelAlertasMail.aspx">Alertas Clinico</a></li>
-                                                    <li><a href="/../../Formularios/Herramientas/AdminSMS.aspx">SMS Creditos</a></li>
-                                                    <li><a href="/../../Formularios/Herramientas/PanelAlertasSMS.aspx">Configuracion Alertas</a></li>
-                                                    <li><a href="/../../Formularios/Herramientas/AsuntosSMS.aspx">Campañas y Alertas Enviadas</a></li>
-                                                    <li><a href="/../../Formularios/Herramientas/HistorialSMS.aspx">Historial de SMS</a></li>
-                                                    <%--<li><a href="/../../Formularios/Herramientas/TareasF.aspx">Cumpleaños y tareas</a></li>--%>
+                                                    <li><a href="/../../Formularios/Seguridad/Perfiles.aspx">Perfiles</a></li>
+                                                    <li><a href="/../../Formularios/Seguridad/UsuariosF.aspx">Usuarios</a></li>
                                                 </ul>
                                             </li>
                                             <li class="dropdown-submenu">
@@ -640,7 +636,7 @@
         </div>
     </form>
     <footer>
-    <div class="footer" style=" width: 100%;">
+    <div class="footer" style=" width: 100%;position:fixed; bottom:0;">
 
         <div class="container">
             <div class="row">

@@ -1,10 +1,18 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CuentaCorrienteF.aspx.cs" Inherits="Gestion_Web.Formularios.Facturas.CuentaCorrienteF" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        .paddingTable {
+            padding-top: 20px;
+        }
+
+        .hRight{
+            text-align:right;
+        }
+    </style>
     <div class="main">
 
-        <%--<div class="container">--%><div>
-
+        <div>
 
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
@@ -37,16 +45,16 @@
                                 <td>&nbsp
                                 </td>
 
-                                <td style="width: 95%">
+                                <td style="width: 70%">
                                     <h5>
-                                        <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#cccccc"></asp:Label>
+                                        <asp:Label runat="server" ID="lblParametros" Text="" ForeColor="#aaaaaa"></asp:Label>
                                     </h5>
                                 </td>
 
-                                <td style="width: 5%">
+                                <td>
                                     <div class="shortcuts" style="height: 100%">
 
-                                        <asp:LinkButton class="btn btn-primary" ToolTip="Cobros" ID="lbnCobros" Visible="false" Style="width: 100%" runat="server" OnClick="lbnCobros_Click"> 
+                                        <asp:LinkButton class="btn btn-primary" ToolTip="Cobros" ID="lbnCobros" Visible="false" Style="width: 100%" runat="server" OnClientClick="lbnCobros_Click(event)"> 
                                             <i ID="iconCobros" class="fa icon-usd"></i>
                                         </asp:LinkButton>
 
@@ -56,26 +64,62 @@
                                 <td>&nbsp
                                 </td>
 
-                                <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
+                                <td>
+                                    <div class="btn-group" style="height: 100%">
 
-                                        <asp:LinkButton class="btn btn-primary" ToolTip="Impagas" ID="btnImpagas" Visible="false" Style="width: 100%" runat="server" OnClick="btnImpagas_Click"> 
-                                            <i ID="iconImpaga" class="fa fa-exclamation-triangle"></i>
-                                        </asp:LinkButton>
+                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="btnVer" style="width: 100%">
+                                            Ver <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <asp:LinkButton ID="btnTodos" runat="server" OnClick="btnTodos_Click">Todos</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnVencidas" runat="server" OnClick="btnVencidas_Click">Vencidas</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnImpagas" runat="server" OnClick="btnImpagas_Click">Impagas</asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>&nbsp
+                                </td>
+                                <td>
+                                    <div class="btn-group" style="height: 100%">
 
+                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="btnOrdenarX" style="width: 100%">
+                                            Ordenar por <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <asp:LinkButton ID="btnFEAsc" runat="server" OnClick="btnFEAsc_Click">Fecha emision Asc</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnFEDesc" runat="server" OnClick="btnFEDesc_Click">Fecha emision Desc</asp:LinkButton>
+
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnFVAsc" runat="server" OnClick="btnFVAsc_Click">Fecha vencimiento Asc</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="btnFVDesc" runat="server" OnClick="btnFVDesc_Click">Fecha vencimiento Desc</asp:LinkButton>
+                                            </li>
+
+                                        </ul>
                                     </div>
                                 </td>
 
-                                <td>&nbsp
+                                <%--<td>&nbsp
                                 </td>
 
                                 <td style="width: 95%">
                                     <h5>
                                         <asp:Label runat="server" ID="Label3" Text="" ForeColor="#cccccc"></asp:Label>
                                     </h5>
-                                </td>
+                                </td>--%>
 
-                                <td style="width: 5%">
+                                <%--                                <td style="width: 5%">
                                     <div class="shortcuts" style="height: 100%">
 
                                         <asp:LinkButton class="btn btn-primary" ToolTip="Exportar Reporte txt" ID="lbtnExportartxt" Style="width: 100%" runat="server" OnClick="lbtnExportartxt_Click"> 
@@ -84,20 +128,19 @@
 
                                     </div>
 
-                                </td>
+                                </td>--%>
 
                                 <td>&nbsp
                                 </td>
 
-                                <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
+                                <td>
+                                    <div class="shortcuts">
 
-                                        <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda" style="width: 130%">
+                                        <a class="btn btn-primary" data-toggle="modal" href="#modalBusqueda">
                                             <i class="shortcut-icon icon-filter"></i>
                                         </a>
                                     </div>
                                 </td>
-
                             </tr>
                         </table>
                     </div>
@@ -112,9 +155,15 @@
                     <div class="widget-content">
                         <div id="big_stats" class="cf">
                             <div class="stat">
-                                <h4>Saldo</h4>
-                                <asp:Label ID="labelSaldo" runat="server" Text="" class="value"></asp:Label>
+                                <h4>Saldo Impagas</h4>
+                                <asp:Label ID="labelSaldo" runat="server" Text="" class="value" Visible="false"></asp:Label>
+                                <asp:Label ID="labelSaldoImp" runat="server" Text="" class="value"></asp:Label>
                                 <asp:Label ID="labelMov" runat="server" Text="" class="value"></asp:Label>
+                            </div>
+                            <div class="stat">
+                                <h4>Saldo Vencidas</h4>
+                                <asp:Label ID="labelSaldoVenc" runat="server" Text="" class="value"></asp:Label>
+                                <asp:Label ID="labelMovVenc" runat="server" Text="" class="value"></asp:Label>
                             </div>
                             <!-- .stat -->
                         </div>
@@ -138,57 +187,38 @@
                             <asp:Label ID="lblSaldo" runat="server" Style="text-align: right" Text="" ForeColor="#666666" Font-Bold="true"></asp:Label>
                         </h3>
                     </div>
-                    <%--<div class="widget-content">
-                        <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
-                            <ContentTemplate>
-                                <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
-                                <table class="table table-bordered table-striped" id="dataTablesCC-example">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Numero</th>
-                                            <th>Debe</th>
-                                            <th>Haber</th>
-                                            <th>Saldo</th>
-                                            <th>Saldo Acumulado</th>
-                                        </tr>
-
-                                    </thead>
-                                    <tbody>
-                                        <asp:PlaceHolder ID="phCuentaCorriente" runat="server"></asp:PlaceHolder>
-                                    </tbody>
-                                </table>
-                            </ContentTemplate>
-                            <Triggers>
-                            </Triggers>
-                        </asp:UpdatePanel>
-                    </div>--%>
-                    <%-- widget content --%>
+                    
 
                     <div class="widget-content">
                         <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Always">
                             <ContentTemplate>
-                                <div class="table-responsive col-md-12">
+                                <div class="table-responsive col-md-12 paddingTable">
                                     <asp:GridView ID="GridCtaCte" class="table table-striped table-bordered table-hover"
-                                        runat="server" AllowPaging="True" OnPageIndexChanging="GridInforme_PageIndexChanging" AllowSorting="true" PageSize="15">
+                                        runat="server" AllowPaging="True" OnPageIndexChanging="GridInforme_PageIndexChanging" AllowSorting="true">
                                         <Columns>
                                             <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-HorizontalAlign="Right">
-                                                <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                                                <ItemStyle HorizontalAlign="Left"></ItemStyle>
+                                            </asp:BoundField>
+                                            <asp:BoundField DataField="FechaVenc" HeaderText="FechaVenc" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-HorizontalAlign="Right">
+                                                <ItemStyle HorizontalAlign="Left"></ItemStyle>
                                             </asp:BoundField>
                                             <asp:BoundField DataField="Numero" HeaderText="Descripcion" />
-                                            <asp:BoundField DataField="Debe" HeaderText="Debe" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" ItemStyle-HorizontalAlign="Right">
+                                            <asp:BoundField DataField="Debe" HeaderText="Debe" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" HeaderStyle-CssClass="hRight" ItemStyle-HorizontalAlign="Right">
                                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                                             </asp:BoundField>
-                                            <asp:BoundField DataField="Haber" HeaderText="Haber" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" ItemStyle-HorizontalAlign="Right">
+                                            <asp:BoundField DataField="Haber" HeaderText="Haber" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" HeaderStyle-CssClass="hRight" ItemStyle-HorizontalAlign="Right">
                                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                                             </asp:BoundField>
-                                            <asp:BoundField DataField="Saldo" HeaderText="Saldo" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" ItemStyle-HorizontalAlign="Right">
+                                            <asp:BoundField DataField="Saldo" HeaderText="Saldo" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" HeaderStyle-CssClass="hRight" ItemStyle-HorizontalAlign="Right">
                                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                                             </asp:BoundField>
-                                            <asp:BoundField DataField="SaldoAcumulado" HeaderText="Saldo Acumulado" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" ItemStyle-HorizontalAlign="Right">
+                                            <asp:BoundField DataField="SaldoAcumulado" HeaderText="Saldo Acumulado" DataFormatString="{0:$#,##0.00;-$#,##0.00;0}" HeaderStyle-CssClass="hRight" ItemStyle-HorizontalAlign="Right">
                                                 <ItemStyle HorizontalAlign="Right"></ItemStyle>
                                             </asp:BoundField>
-                                            <asp:BoundField DataField="GuiaDespacho" HeaderText="Guia Despacho" />
+                                            <asp:BoundField DataField="DiasVencidos" HeaderText="Dias Vencidos" DataFormatString="" HeaderStyle-CssClass="hRight" ItemStyle-HorizontalAlign="Right">
+                                                <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                                            </asp:BoundField>
+                                            <%--<asp:BoundField DataField="GuiaDespacho" HeaderText="Guia Despacho" />--%>
                                             <asp:TemplateField HeaderText=" ">
                                                 <ItemTemplate>
                                                     <asp:LinkButton ID="btnCompensar" runat="server" class="btn ui-tooltip" title data-original-title="Compensacion de cuentas" CommandArgument='<%# Bind("Id") %>' OnClientClick="openModal(this)" OnClick="btnCompensar_Click">
@@ -257,16 +287,16 @@
                                         </div>
                                         <asp:PlaceHolder ID="phClienteBusqueda" runat="server">
 
-                                        <div class="form-group">
-                                            <label class="col-md-4">Buscar Cliente</label>
-                                            <div class="col-md-6">
-                                                <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
-                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-4">Buscar Cliente</label>
+                                                <div class="col-md-6">
+                                                    <asp:TextBox ID="txtCodCliente" class="form-control" runat="server"></asp:TextBox>
+                                                </div>
 
-                                            <div class="col-md-2">
-                                                <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                                <div class="col-md-2">
+                                                    <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                                </div>
                                             </div>
-                                        </div>
                                         </asp:PlaceHolder>
                                         <div class="form-group">
                                             <label class="col-md-4">Cliente</label>
@@ -300,23 +330,20 @@
                                                 </div>
                                             </div>
                                         </asp:PlaceHolder>
-                                        <asp:PlaceHolder runat ="server" ID="phTipo">
+                                        <asp:PlaceHolder runat="server" ID="phTipo">
 
-                                        <div class="form-group">
-                                            <label class="col-md-4">Tipo</label>
-                                            <div class="col-md-6">
-                                                <asp:DropDownList ID="DropListTipo" runat="server" class="form-control">
-                                                    <asp:ListItem Value="-1">Ambos</asp:ListItem>
-                                                    <asp:ListItem Value="0">FC</asp:ListItem>
-                                                    <asp:ListItem Value="1">PRP</asp:ListItem>
-                                                </asp:DropDownList>
-                                            </div>
-                                        
-                                            <%-- <div class="col-md-2">
-                                        <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListTipo" InitialValue="-1" ValidationGroup="BusquedaGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
-                                    </div>--%>
+                                            <div class="form-group">
+                                                <label class="col-md-4">Tipo</label>
+                                                <div class="col-md-6">
+                                                    <asp:DropDownList ID="DropListTipo" runat="server" class="form-control">
+                                                        <asp:ListItem Value="-1">Ambos</asp:ListItem>
+                                                        <asp:ListItem Value="0">FC</asp:ListItem>
+                                                        <asp:ListItem Value="1">PRP</asp:ListItem>
+                                                    </asp:DropDownList>
                                                 </div>
-                                            </asp:PlaceHolder>
+
+                                            </div>
+                                        </asp:PlaceHolder>
                                     </div>
                                 </ContentTemplate>
                             </asp:UpdatePanel>
@@ -421,6 +448,18 @@
                 document.getElementById('iconImpaga').className = valor;
                 document.getElementById('hImpagas').textContent = valor2;
             }
+
+            function lbnCobros_Click(e) {
+                e.preventDefault()
+                let url = new URLSearchParams(window.location.search)
+                let Cliente = url.get('Cliente')
+                let Sucursal = url.get('Sucursal')
+                let Tipo = url.get('Tipo')
+
+                if (Cliente != 0 && Tipo >= 0 && Sucursal > 0) {
+                    window.open('../Cobros/CobranzaF.aspx?cliente=' + Cliente + '&sucursal=' + Sucursal + '&tipo=' + Tipo, '_blank');
+                }
+            }
         </script>
 
         <script type="text/javascript">
@@ -462,19 +501,18 @@
         <script src="../../Scripts/plugins/lightbox/jquery.lightbox.min.js"></script>
         <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
         <script src="../../Scripts/demo/notifications.js"></script>
+
+        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
     </div>
     <script>
         function pageLoad() {
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
         }
+        $(document).ready(function () {
+            //$('#MainContent_GridCtaCte').DataTable({})
+        })
     </script>
-    <%--<script type="text/javascript">
-        function BloquearParaDistribuidor() {
-            var usuario = document.getElementById(<%=Label3.ID %>);
-            if (usuario == "Distribuidor") {
-                document.getElementById(<%=divSucursal.id%>)
-            }
-        }
-    </script>--%>
+
 </asp:Content>

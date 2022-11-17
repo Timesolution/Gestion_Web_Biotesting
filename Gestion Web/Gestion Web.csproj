@@ -52,9 +52,8 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Estetica Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Estetica Api\Estetica Api\bin\Release\Estetica Api.dll</HintPath>
+    <Reference Include="Estetica Api">
+      <HintPath>..\..\EsteticaAPI\Estetica Api\bin\Debug\Estetica Api.dll</HintPath>
     </Reference>
     <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -108,7 +107,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Millas_Api">
-      <HintPath>..\..\Depedencias\Millas_Api.dll</HintPath>
+      <HintPath>..\..\GestionWeb\Gestion Web\bin\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -116,9 +115,8 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Planario_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Depedencias\Planario_Api.dll</HintPath>
+    <Reference Include="Planario_Api">
+      <HintPath>..\..\GestionWeb\Gestion Web\bin\Planario_Api.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -129,11 +127,11 @@
       <HintPath>..\packages\QRCoder.1.4.1\lib\net40\QRCoder.dll</HintPath>
     </Reference>
     <Reference Include="Report_Api">
-      <HintPath>..\..\Depedencias\Report_Api.dll</HintPath>
+      <HintPath>..\..\Gestion-Api-VUOI\Gestion Api\Auxiliares\Report_Api.dll</HintPath>
     </Reference>
     <Reference Include="Store_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Depedencias\Store_Api.dll</HintPath>
+      <HintPath>..\..\GestionWeb\Gestion Web\bin\Store_Api.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -201,7 +199,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Task_Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Depedencias\Task_Api.dll</HintPath>
+      <HintPath>..\..\GestionWeb\Gestion Web\bin\Task_Api.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -375,6 +373,7 @@
     <Content Include="Formularios\Articulos\ArticulosNew.aspx" />
     <Content Include="Formularios\Articulos\ArticulosTest.aspx" />
     <Content Include="Formularios\Articulos\BusquedaPopUp.aspx" />
+    <Content Include="Formularios\Categoria\ABMCategorias.aspx" />
     <Content Include="Formularios\Clientes\ABMEstadosCRM.aspx" />
     <Content Include="Formularios\Clientes\ABMSupervisores.aspx" />
     <Content Include="Formularios\Clientes\ActividadClientes.aspx" />
@@ -786,6 +785,7 @@
     <Content Include="font\glyphicons-halflings-regular.eot" />
     <Content Include="font\glyphicons-halflings-regular.ttf" />
     <Content Include="font\glyphicons-halflings-regular.woff" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\JSFunciones1.js" />
     <Content Include="Formularios\Surtidores\dsSurtidores.xsc">
       <DependentUpon>dsSurtidores.xsd</DependentUpon>
@@ -1500,6 +1500,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsNominaArticulos.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Categoria\ABMCategorias.aspx.cs">
+      <DependentUpon>ABMCategorias.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Formularios\Categoria\ABMCategorias.aspx.designer.cs">
+      <DependentUpon>ABMCategorias.aspx</DependentUpon>
     </Compile>
     <Compile Include="Formularios\Clientes\ABMEstadosCRM.aspx.cs">
       <DependentUpon>ABMEstadosCRM.aspx</DependentUpon>

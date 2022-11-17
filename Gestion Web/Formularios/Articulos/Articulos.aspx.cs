@@ -541,24 +541,24 @@ namespace Gestion_Web.Formularios.Articulos
                     tr.Cells.Add(celStock);
                     phColumna8.Visible = true;
                 }
-                if (vista.columnaMarca == 1)
-                {
-                    tr.Cells.Add(celMarca);
-                    phColumna9.Visible = true;
-                }
-                if (vista.columnaMoneda == 1)
-                {
-                    if (config.monedaArticulos == "1")//0=en pesos, 1 = en dolar/euro/lo que sea
-                    {
-                        if (Convert.ToDecimal(row["cambioMoneda"]) > 0)
-                        {
-                            celPrecio.Text = decimal.Round(Convert.ToDecimal(row["precioVenta"]) / Convert.ToDecimal(row["cambioMoneda"]), 4).ToString("C");
-                            celPrecioSIva.Text = decimal.Round(Convert.ToDecimal(row["precioSinIva"]) / Convert.ToDecimal(row["cambioMoneda"]), 4).ToString("C");
-                        }
-                    }
-                    tr.Cells.Add(celMoneda);
-                    phColumna4.Visible = true;
-                }
+                //if (vista.columnaMarca == 1)
+                //{
+                //    tr.Cells.Add(celMarca);
+                //    phColumna9.Visible = true;
+                //}
+                //if (vista.columnaMoneda == 1)
+                //{
+                //    if (config.monedaArticulos == "1")//0=en pesos, 1 = en dolar/euro/lo que sea
+                //    {
+                //        if (Convert.ToDecimal(row["cambioMoneda"]) > 0)
+                //        {
+                //            celPrecio.Text = decimal.Round(Convert.ToDecimal(row["precioVenta"]) / Convert.ToDecimal(row["cambioMoneda"]), 4).ToString("C");
+                //            celPrecioSIva.Text = decimal.Round(Convert.ToDecimal(row["precioSinIva"]) / Convert.ToDecimal(row["cambioMoneda"]), 4).ToString("C");
+                //        }
+                //    }
+                //    tr.Cells.Add(celMoneda);
+                //    phColumna4.Visible = true;
+                //}
                 if (vista.columnaActualizacion == 1)
                 {
                     tr.Cells.Add(celUltimaActualizacion);

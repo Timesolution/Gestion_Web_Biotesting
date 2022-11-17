@@ -293,6 +293,10 @@ namespace Gestion_Web.Formularios.Facturas {
             
             private global::System.Data.DataColumn columnSaldoAcumulado;
             
+            private global::System.Data.DataColumn columnFechaVenc;
+            
+            private global::System.Data.DataColumn columnDiasVencidos;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public dtMovimientosDataTable() {
@@ -384,6 +388,22 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn FechaVencColumn {
+                get {
+                    return this.columnFechaVenc;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn DiasVencidosColumn {
+                get {
+                    return this.columnDiasVencidos;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -419,7 +439,7 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public dtMovimientosRow AdddtMovimientosRow(string id, string fecha, string Numero, string debe, string haber, string saldo, string SaldoAcumulado) {
+            public dtMovimientosRow AdddtMovimientosRow(string id, string fecha, string Numero, string debe, string haber, string saldo, string SaldoAcumulado, string FechaVenc, string DiasVencidos) {
                 dtMovimientosRow rowdtMovimientosRow = ((dtMovimientosRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         id,
@@ -428,7 +448,9 @@ namespace Gestion_Web.Formularios.Facturas {
                         debe,
                         haber,
                         saldo,
-                        SaldoAcumulado};
+                        SaldoAcumulado,
+                        FechaVenc,
+                        DiasVencidos};
                 rowdtMovimientosRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowdtMovimientosRow);
                 return rowdtMovimientosRow;
@@ -458,6 +480,8 @@ namespace Gestion_Web.Formularios.Facturas {
                 this.columnhaber = base.Columns["haber"];
                 this.columnsaldo = base.Columns["saldo"];
                 this.columnSaldoAcumulado = base.Columns["SaldoAcumulado"];
+                this.columnFechaVenc = base.Columns["FechaVenc"];
+                this.columnDiasVencidos = base.Columns["DiasVencidos"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -477,6 +501,10 @@ namespace Gestion_Web.Formularios.Facturas {
                 base.Columns.Add(this.columnsaldo);
                 this.columnSaldoAcumulado = new global::System.Data.DataColumn("SaldoAcumulado", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnSaldoAcumulado);
+                this.columnFechaVenc = new global::System.Data.DataColumn("FechaVenc", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnFechaVenc);
+                this.columnDiasVencidos = new global::System.Data.DataColumn("DiasVencidos", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDiasVencidos);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -731,6 +759,38 @@ namespace Gestion_Web.Formularios.Facturas {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string FechaVenc {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtMovimientos.FechaVencColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'FechaVenc\' de la tabla \'dtMovimientos\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtMovimientos.FechaVencColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string DiasVencidos {
+                get {
+                    try {
+                        return ((string)(this[this.tabledtMovimientos.DiasVencidosColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("El valor de la columna \'DiasVencidos\' de la tabla \'dtMovimientos\' es DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tabledtMovimientos.DiasVencidosColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsidNull() {
                 return this.IsNull(this.tabledtMovimientos.idColumn);
             }
@@ -811,6 +871,30 @@ namespace Gestion_Web.Formularios.Facturas {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetSaldoAcumuladoNull() {
                 this[this.tabledtMovimientos.SaldoAcumuladoColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsFechaVencNull() {
+                return this.IsNull(this.tabledtMovimientos.FechaVencColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetFechaVencNull() {
+                this[this.tabledtMovimientos.FechaVencColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsDiasVencidosNull() {
+                return this.IsNull(this.tabledtMovimientos.DiasVencidosColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetDiasVencidosNull() {
+                this[this.tabledtMovimientos.DiasVencidosColumn] = global::System.Convert.DBNull;
             }
         }
         

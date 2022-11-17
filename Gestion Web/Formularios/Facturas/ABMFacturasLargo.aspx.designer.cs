@@ -96,6 +96,15 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.Label labelCliente;
 
         /// <summary>
+        /// lblSaldoMaxDiasVenc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblSaldoMaxDiasVenc;
+
+        /// <summary>
         /// ListSucursalCliente control.
         /// </summary>
         /// <remarks>
@@ -429,6 +438,15 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarArticuloASP;
 
         /// <summary>
+        /// lbtnAgregarArticuloASPHide control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lbtnAgregarArticuloASPHide;
+
+        /// <summary>
         /// linkCombustible control.
         /// </summary>
         /// <remarks>
@@ -562,6 +580,15 @@ namespace Gestion_Web.Formularios.Facturas
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.DropDownList ListReferido;
+
+        /// <summary>
+        /// FechaVenc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox FechaVenc;
 
         /// <summary>
         /// txtComentarios control.

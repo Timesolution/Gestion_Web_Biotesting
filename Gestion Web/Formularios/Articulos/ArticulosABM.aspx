@@ -560,6 +560,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
+                                                        <label for="validateSelect" class="col-md-4">Categorias</label>
+                                                        <div class="col-md-4">
+                                                            <asp:DropDownList ID="ddlCategorias" runat="server" class="form-control"></asp:DropDownList>
+
+                                                        </div>
+
+                                                        <div class="col-md-4">
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator61" runat="server" ErrorMessage="Seleccione una SubLista" ControlToValidate="DropListSubLista" InitialValue="-1" ValidationGroup="ArticuloGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label class="col-md-4">Observacion</label>
                                                         <div class="col-md-4">
                                                             <asp:TextBox ID="txtObservacion" runat="server" TextMode="MultiLine" Rows="4" class="form-control"></asp:TextBox>

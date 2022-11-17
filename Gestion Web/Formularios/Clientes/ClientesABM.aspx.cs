@@ -45,6 +45,7 @@ namespace Gestion_Web.Formularios.Clientes
         controladorUsuario controladorUsuario = new controladorUsuario();
         controladorCobranza controladorCobranza = new controladorCobranza();
 
+
         //para saber si es alta(1) o modificacion(2)
         private int accion;
         //private string cuit;
@@ -80,18 +81,6 @@ namespace Gestion_Web.Formularios.Clientes
                     lbCUITDNI.InnerText = "RUT";
                 }
 
-                //if (chbDisparaTarea.Checked == true)
-                //{
-                //    divVencimientoTarea.Visible = true;
-                //    divTarea.Visible = true;
-                //    divSituacion.Visible = true;
-                //}
-                //else
-                //{
-                //    divVencimientoTarea.Visible = false;
-                //    divTarea.Visible = false;
-                //    divSituacion.Visible = false;
-                //}
 
 
                 this.VerificarLogin();
@@ -170,6 +159,8 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarEstadosFiltro();
                     this.cargarPlanCuentas();
                     this.cargarUsuarios();
+                    cargarClientesImputados();
+                    selectClienteImputado(idCliente);
 
                     //this.cargarTipoContacto();
 
@@ -247,10 +238,10 @@ namespace Gestion_Web.Formularios.Clientes
                     //liEvento.Attributes.Add("class", "active");
                 }
 
-                if ((perfil == "Distribuidor" || perfil=="Bio-Lider") && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
+                if ((perfil == "Distribuidor" || perfil == "Bio-Lider") && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
                 {
 
-                    int IdCliente = Convert.ToInt32( Session["Login_Vendedor"].ToString());
+                    int IdCliente = Convert.ToInt32(Session["Login_Vendedor"].ToString());
                     controladorCliente cc = new controladorCliente();
                     DivDescuentoPorCantidad.Visible = false;
                     linkContacto.Visible = false;
@@ -260,15 +251,15 @@ namespace Gestion_Web.Formularios.Clientes
 
                     this.DropListTipo.SelectedValue = "14";
                     this.DropListFormaPago.SelectedValue = "1";
-                    if(vendedor !=null)
-                    this.ListVendedores.SelectedValue = vendedor.ToString();
+                    if (vendedor != null)
+                        this.ListVendedores.SelectedValue = vendedor.ToString();
 
                     this.DropListTipo.Attributes.Add("disabled", "disabled");
 
                     this.txtIngBrutos.Attributes.Add("disabled", "disabled");
                     this.txtSaldoMaximo.Attributes.Add("disabled", "disabled");
                     this.txtVencFC.Attributes.Add("disabled", "disabled");
-                   this.txtDescFC.Attributes.Add("disabled", "disabled");
+                    this.txtDescFC.Attributes.Add("disabled", "disabled");
                     this.DropListFormaPago.Attributes.Add("disabled", "disabled");
                     this.ListVendedores.Attributes.Add("disabled", "disabled");
 
@@ -502,7 +493,7 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListFormaPago.DataValueField = "id";
                 this.DropListFormaPago.DataTextField = "forma";
                 this.DropListFormaPago.DataBind();
-                
+
 
 
             }
@@ -717,7 +708,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                     this.ListListaPrecios.DataBind();
 
-                   
+
                 }
             }
             catch (Exception ex)
@@ -771,10 +762,10 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListGrupo.DataSource = contGrupoCliente.obtenerGruposClientes();
                 this.DropListGrupo.DataValueField = "id";
                 this.DropListGrupo.DataTextField = "descripcion";
-                if((int)Session["Login_IdPerfil"] == 6 || (int)Session["Login_IdPerfil"] == 24) 
+                if ((int)Session["Login_IdPerfil"] == 6 || (int)Session["Login_IdPerfil"] == 24)
                 {
                     int IdCliente = (int)Session["Login_Vendedor"];
-                    Cliente c= contCliente.obtenerClienteID(IdCliente);
+                    Cliente c = contCliente.obtenerClienteID(IdCliente);
                     this.DropListGrupo.SelectedValue = c.grupo.id.ToString();
                     this.DropListGrupo.Attributes.Add("disabled", "disabled");
                 }
@@ -1000,6 +991,79 @@ namespace Gestion_Web.Formularios.Clientes
 
             }
         }
+
+        public void cargarClientesImputados()
+        {
+            try
+            {
+
+                DataTable dt = new DataTable();
+                string perfil = Session["Login_NombrePerfil"] as string;
+
+                dt = controlador.obtenerClientesDT();
+
+                if (this.accion == 2 || this.accion == 4)
+                {
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        if (row.ItemArray[0].ToString() == idCliente.ToString())
+                        {
+                            row.Delete();
+                        }
+                    }
+                }
+
+                this.DropListClientes.DataSource = dt;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+                this.DropListClientes.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+                
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error cargando proveedores a la lista. " + ex.Message));
+            }
+        }
+
+        public void selectClienteImputado(int idCliente)
+        {
+            try
+            {
+                var dtCli = controlador.getCliente_ImputadoCtaCte(idCliente);
+                foreach (var item in dtCli.Rows)
+                {
+
+                }
+                DropListClientes.SelectedValue = dtCli.Rows[0].ItemArray[2].ToString();
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        protected void btnBuscarCod_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataTable dtClientes = this.controlador.obtenerClientesAliasDT(this.txtBoxClienteImp.Text);
+
+                //cargo la lista
+                this.DropListClientes.DataSource = dtClientes;
+                this.DropListClientes.DataValueField = "id";
+                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataBind();
+                this.DropListClientes.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         #endregion
 
         #region datos clientes
@@ -1090,7 +1154,7 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarDatosMillas();
 
                     this.cargarEventosCliente();
-                    if (perfil == "Distribuidor" || perfil == "Bio-Lider" )
+                    if (perfil == "Distribuidor" || perfil == "Bio-Lider")
                     {
                         var cr = this.contClienteEntity.obtenerClienteReferidoPorHijo(cl.id);
                         if (cr != null)
@@ -1727,6 +1791,9 @@ namespace Gestion_Web.Formularios.Clientes
                             //Actualizo IIBB según el padrón de Clientes
                             if (i > 0)
                             {
+                                //agregar imputado cta cte
+                                controlador.agregarCliente_ImputadoCtaCte(i, Convert.ToInt32(DropListClientes.SelectedValue));
+
                                 int iibb = this.controlador.actualizarPadronCliente(i, this.txtCuit.Text.Replace("-", ""), 1);//1 = padron clientes, 2 = padron proveedores
                             }
 
@@ -1738,7 +1805,7 @@ namespace Gestion_Web.Formularios.Clientes
                             //Verifico si utiliza modo distribución y si quien lo da de alta es dsitribuidor, se agrega al distribuidor como padre 
                             if (WebConfigurationManager.AppSettings.Get("Distribucion") == "1")
                             {
-                                if (perfil == "Distribuidor" || perfil == "Bio-Lider" )
+                                if (perfil == "Distribuidor" || perfil == "Bio-Lider")
                                 {
                                     var idDistribuidor = (int)Session["Login_Vendedor"];
                                     Clientes_Referidos cr = new Clientes_Referidos();
@@ -1825,7 +1892,7 @@ namespace Gestion_Web.Formularios.Clientes
                                 var idDistribuidor = (int)Session["Login_Vendedor"];
                                 Clientes_Referidos cr = new Clientes_Referidos();
 
-                                
+
                                 if (DropListTipo.SelectedItem.Text.ToLower() == "vendedor" && WebConfigurationManager.AppSettings["EsTestingBio"] == "1")
                                 {
                                     cr.Padre = idDistribuidor;
@@ -2099,6 +2166,20 @@ namespace Gestion_Web.Formularios.Clientes
                             cliente.origen = 1;
                             Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico cliente: " + this.txtCodCliente.Text);
                             int i = this.controlador.modificarCliente(cliente, cuitCli, codCli);
+
+                            var dtCli = controlador.getCliente_ImputadoCtaCte(cliente.id);
+
+                            if (dtCli.Rows.Count > 0)
+                            {
+                                //modificar imputado cta cte
+                                controlador.modificarCliente_ImputadoCtaCte(cliente.id, Convert.ToInt32(DropListClientes.SelectedValue));
+                            }
+                            else
+                            {
+                                controlador.agregarCliente_ImputadoCtaCte(cliente.id, Convert.ToInt32(DropListClientes.SelectedValue));
+                            }
+
+
                             if (idForma > 0)
                             {
                                 this.contClienteEntity.modificarFormaVentaACliente(cliente.id, idForma);
@@ -3785,7 +3866,7 @@ namespace Gestion_Web.Formularios.Clientes
         private void agregarEventoCliente()
         {
             try
-            {          
+            {
                 Clientes_Eventos eventos = new Clientes_Eventos();
                 ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
 
@@ -3799,13 +3880,13 @@ namespace Gestion_Web.Formularios.Clientes
                 {
                     eventos.Usuario = Convert.ToInt32((int)Session["Login_IdUser"]);
                 }
-                else 
+                else
                 {
-                    
+
                     eventos.Descripcion = "Creado por " + Convert.ToString(Session["User"]) + ": " + eventos.Descripcion;
                     eventos.Usuario = Convert.ToInt32(ddlUsuario.SelectedValue);
                 }
-                
+
 
 
                 if (chbDisparaTarea.Checked == true)
@@ -4693,11 +4774,11 @@ namespace Gestion_Web.Formularios.Clientes
                 List<IIBBTemporal> listaTemporal = new List<IIBBTemporal>();
                 foreach (var item in listaIIBB)
                 {
-                    
+
                     string descripcionPlanCuentas = controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id) != null
-                        && controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows.Count > 0  
-                        ? controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows[0][1].ToString() 
-                        : "Sin Plan" ;
+                        && controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows.Count > 0
+                        ? controladorCliente.obtenerPlanCuentaByIdIIBB(item.Id).Rows[0][1].ToString()
+                        : "Sin Plan";
                     listaTemporal.Add(new IIBBTemporal
                     {
                         Id = item.Id.ToString(),
@@ -4778,7 +4859,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ControladorPlanCuentas controladorPlanCuentas = new ControladorPlanCuentas();
                 //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
-                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5,txtBusqueda.Text);
+                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5, txtBusqueda.Text);
 
                 if (dtPlanCuentas != null)
                 {
@@ -4809,7 +4890,7 @@ namespace Gestion_Web.Formularios.Clientes
             {
                 ControladorPlanCuentas controladorPlanCuentas = new ControladorPlanCuentas();
                 //Articulo art = this.controlador.obtenerArticuloCodigo(busqueda);
-                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5,txtBusqueda.Text);
+                List<Cuentas_Contables> dtPlanCuentas = controladorPlanCuentas.BusquedaUltimoNivelByDescripcion(5, txtBusqueda.Text);
 
                 if (dtPlanCuentas != null)
                 {

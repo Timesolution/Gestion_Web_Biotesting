@@ -347,6 +347,7 @@
 
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label for="message" class="col-md-4">Alerta</label>
 
@@ -358,26 +359,44 @@
                                                     </div>
 
                                                     <div class="form-group" id="DivDescuentoPorCantidad" runat="server">
-                                                        <asp:Label for="validateSelect" runat="server" ID="LabelDescuentoPorCantidad" Visible="false" class="col-md-4">Aplica Descuento por Cantidad</asp:Label>
+                                                        <asp:Label for="validateSelect" runat="server" ID="LabelDescuentoPorCantidad" Visible="false" class="col-md-4"><strong>Aplica Descuento por Cantidad</strong></asp:Label>
                                                         <div class="col-md-4">
                                                             <asp:DropDownList ID="ListDescuentoPorCantidad" runat="server" Visible="false" class="form-control">
                                                                 <asp:ListItem Text="Si" Value="1"></asp:ListItem>
                                                                 <asp:ListItem Text="No" Value="0"></asp:ListItem>
                                                             </asp:DropDownList>
                                                         </div>
-                                                        <%--<div class="col-md-3">
-                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator39" runat="server" ErrorMessage="El campo es obligatorio" ControlToValidate="DropListIva" InitialValue="-1" ValidationGroup="ClienteGroup" SetFocusOnError="true" Font-Bold="true" ForeColor="Red"></asp:RequiredFieldValidator>
+
+                                                    </div>
+
+
+                                                    <asp:PlaceHolder ID="phClienteBusqueda" runat="server">
+
+                                                        <div class="form-group">
+                                                            <label class="col-md-4">Buscar Imputado CtaCte</label>
+                                                            <div class="col-md-4">
+                                                                <asp:TextBox ID="txtBoxClienteImp" class="form-control" runat="server"></asp:TextBox>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <asp:LinkButton ID="btnBuscarCod" runat="server" Text="<span class='shortcut-icon icon-search'></span>" class="btn btn-info" OnClick="btnBuscarCod_Click" />
+                                                            </div>
+                                                        </div>
+                                                    </asp:PlaceHolder>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4">Imputado CtaCte</label>
+                                                        <div class="col-md-4">
+                                                            <asp:DropDownList ID="DropListClientes" runat="server" AutoPostBack="true" class="form-control"></asp:DropDownList>
+                                                        </div>
+
+                                                        <%--<div class="col-md-4">
+                                                            <asp:RequiredFieldValidator ID="RequiredFieldValidator42" runat="server" ErrorMessage="<h3>*</h3>" ControlToValidate="DropListClientes" InitialValue="-1" ValidationGroup="ClienteGroup" SetFocusOnError="true" ForeColor="Red" Font-Bold="true"></asp:RequiredFieldValidator>
                                                         </div>--%>
                                                     </div>
 
 
-                                                    <%-- <div class="form-group">
-                                                        <div class="col-md-4"></div>
 
-                                                        <div class="col-md-4">
-                                                    
-                                                        </div>
-                                                    </div>--%>
+
                                                 </fieldset>
                                             </div>
                                         </ContentTemplate>
@@ -386,7 +405,7 @@
                                     </asp:UpdatePanel>
                                     <div class="col-md-8">
                                         <asp:Button ID="btnAgregar" runat="server" Text="Guardar" class="btn btn-success" OnClick="btnAgregar_Click" ValidationGroup="ClienteGroup" />
-                                        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" OnClick="btnCancelar_Click"  />
+                                        <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" class="btn btn-default" OnClick="btnCancelar_Click" />
                                     </div>
                                 </div>
 
@@ -1341,7 +1360,7 @@
 
                                         <div class="form-group">
                                             <div class="col-md-12">
-                                                 <div class="col-md-1">
+                                                <div class="col-md-1">
                                                     <label for="name"></label>
                                                 </div>
                                                 <div class="col-md-4">

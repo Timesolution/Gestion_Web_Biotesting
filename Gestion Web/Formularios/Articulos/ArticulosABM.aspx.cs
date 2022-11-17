@@ -32,6 +32,7 @@ namespace Gestion_Web.Formularios.Articulos
         controladorSucursal contSucursal = new controladorSucursal();
         controladorListaPrecio contLista = new controladorListaPrecio();
         controladorUsuario contUser = new controladorUsuario();
+        controladorCategoria cCategoria = new controladorCategoria();
 
         controladorCobranza contCobranza = new controladorCobranza();
 
@@ -96,7 +97,8 @@ namespace Gestion_Web.Formularios.Articulos
                     this.cargarSucursalesAlListBoxDeArticulo();
                     this.cargarIVA();
                     this.cargarIVAProveedores();
-
+                    cargarCategorias();
+                    selectCategoria(id);
                     //cargo fecha de carga
                     //this.txtFechaAlta.Text = DateTime.Now.ToString("dd/MM/yyyy");
                     //this.txtModificado.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -568,6 +570,41 @@ namespace Gestion_Web.Formularios.Articulos
             }
         }
 
+
+        protected void cargarCategorias()
+        {
+            DataTable dt = this.cCategoria.getCategoria();
+
+            //agrego todos
+            DataRow dr = dt.NewRow();
+            dr["nombre"] = "Seleccione...";
+            dr["id"] = -1;
+            dt.Rows.InsertAt(dr, 0);
+
+            this.ddlCategorias.DataSource = dt;
+            this.ddlCategorias.DataValueField = "id";
+            this.ddlCategorias.DataTextField = "nombre";
+
+            this.ddlCategorias.DataBind();
+        }
+
+        protected void selectCategoria(int idArt)
+        {
+            try
+            {
+                DataTable dt = controlador.getArticulo_CategoriaByIdArt(idArt);
+                if (dt.Rows.Count > 0)
+                {
+                    ddlCategorias.SelectedValue = dt.Rows[0].ItemArray[2].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
         public void cargarSucursal()
         {
             try
@@ -963,6 +1000,10 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (i > 0)
                 {
+                    int idCateg = Convert.ToInt32(ddlCategorias.SelectedValue);
+                    //guardo la categoria del articulo, se puede agregar seleccione y tomarlo como que no tiene categoria
+                    controlador.saveArticulo_Categoria(i, idCateg);
+
                     //si logre dar de alta el articulo intento guardar los datos de despacho y los datos de presentaciones 
                     // i = idArticulo nuevo
 
@@ -1076,6 +1117,21 @@ namespace Gestion_Web.Formularios.Articulos
 
                 if (i == 1)
                 {
+
+                    int idCateg = Convert.ToInt32(ddlCategorias.SelectedValue);
+                    DataTable dt = controlador.getArticulo_CategoriaByIdArt(id);
+
+                    //guardo la categoria del articulo, se puede agregar seleccione y tomarlo como que no tiene categoria
+                    if (dt.Rows.Count >0)
+                    {
+                        controlador.updateArticulo_CategoriaByIdArt(id, idCateg);
+                    }
+                    else
+                    {
+                        controlador.saveArticulo_Categoria(id, idCateg);
+                    }
+
+
                     //cargo bien
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Modifico Articulo: " + this.txtDescripcion.Text);
                     //this.controlador.modificarArticuloMarca(art.id, Convert.ToInt32(this.DropListMarca.SelectedValue));
@@ -4759,5 +4815,6 @@ namespace Gestion_Web.Formularios.Articulos
             }
 
         }
+
     }
 }

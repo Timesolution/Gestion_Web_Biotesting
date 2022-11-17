@@ -73,8 +73,11 @@
                                                         <div role="form" class="form-horizontal col-md-12">
                                                             <div class="form-inline">
                                                                 <label class="col-md-12">
-                                                                    <label class="col-md-12">
-                                                                        <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label></label>
+                                                                        <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                </label>
+                                                                <label class="col-md-12">
+                                                                    <asp:Label ID="lblSaldoMaxDiasVenc" runat="server" Text=""></asp:Label>
+                                                                </label>
                                                             </div>
 
                                                             <div class="form-inline">
@@ -369,6 +372,8 @@
                                                         <i class="btn-icon-only icon-plus"></i>
                                                     </button>--%>
                                                         <asp:LinkButton ID="lbtnAgregarArticuloASP" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="btnAgregarArt_Click" Visible="true" />
+                                                        <asp:LinkButton ID="lbtnAgregarArticuloASPHide" runat="server" OnClick="lbtnAgregarArticuloASPHide_Click" Visible="true" />
+                                                        
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -467,7 +472,7 @@
                                                                                             <asp:CheckBox ID="chkEnviarMail" runat="server" AutoPostBack="true" Text="Enviar mail" OnCheckedChanged="chkEnviarMail_CheckedChanged" />
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="form-group">
+                                                                                    <div class="form-group" style="display: none">
                                                                                         <label class="col-md-3">Divisa: </label>
                                                                                         <div class="col-md-4">
                                                                                             <div class="input-group">
@@ -493,10 +498,16 @@
                                                                                             <asp:Label runat="server" ID="lblDivisaFacturar"></asp:Label>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div class="form-group" style="display: normal">
+                                                                                    <div class="form-group" style="display: none">
                                                                                         <label class="col-md-3">Referidos:</label>
                                                                                         <div class="col-md-8">
                                                                                             <asp:DropDownList ID="ListReferido" runat="server" class="form-control"></asp:DropDownList>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label class="col-md-3">Fecha vencimiento:</label>
+                                                                                        <div class="col-md-4">
+                                                                                            <asp:TextBox ID="FechaVenc" runat="server" class="form-control" placeholder="dd/MM/aaaa" Style="text-align: center"></asp:TextBox>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="form-group">
@@ -2393,8 +2404,15 @@
                 if (document.getElementById('<%= hiddenPtoVtaTipo.ClientID%>').value == 1) {
                 $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy', minDate: '-6D', maxDate: '+0D' });
             }
-            else {
+                else {
+                    let today = new Date();
+                    let dd = String(today.getDate()).padStart(2, '0');
+                    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    let yyyy = today.getFullYear();
+
+                    today = yyyy + '-' + mm + '-' + dd;
                 $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+                $("#<%= FechaVenc.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy', minDate: '0' });
             }
             $("#<%= txtFechaEntrega.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
             $("#<%= txtFechaSolicitudManual.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -2458,6 +2476,7 @@
 
             $(function () {
                 $("#<%= txtFecha.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
+                $("#<%= FechaVenc.ClientID %>").datepicker('option', { dateFormat: 'dd/mm/yy' });
         });
 
         </script>
@@ -3027,6 +3046,10 @@
                     return false;
                 }
                 return true;
+            }
+
+            function ConfirmarAgregarArt() {
+                document.getElementById('<%= lbtnAgregarArticuloASPHide.ClientID %>').click()
             }
         </script>
 </asp:Content>

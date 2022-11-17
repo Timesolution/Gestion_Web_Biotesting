@@ -668,6 +668,17 @@
                                                 <asp:LinkButton ID="LinkButton2" runat="server" Text="<span class='fa fa-expand'></span>" data-toggle="modal" href="#modalMailEstetica" class="btn btn-success" />
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="validateSelect" class="col-md-4">Cant. registros por pagina:</label>
+                                            <div class="col-md-4">
+                                                <asp:TextBox ID="txtPageSizeGV" runat="server" class="form-control" TextMode="Number" min="0" onkeypress="javascript:return validarNro(event)"></asp:TextBox>
+                                            </div>
+                                            <div class="col-md-2">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <asp:LinkButton ID="lbtnPageSizeGridView" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="lbtnPageSizeGridView_Click" />
+                                            </div>
+                                        </div>
                                     </ContentTemplate>
                                 </asp:UpdatePanel>
                             </fieldset>

@@ -12,7 +12,7 @@
   <xs:element name="dsCuentaCorriente" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsCuentaCorriente" msprop:Generator_UserDSName="dsCuentaCorriente">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="dtMovimientos" msprop:Generator_TableClassName="dtMovimientosDataTable" msprop:Generator_TableVarName="tabledtMovimientos" msprop:Generator_TablePropName="dtMovimientos" msprop:Generator_RowDeletingName="dtMovimientosRowDeleting" msprop:Generator_RowChangingName="dtMovimientosRowChanging" msprop:Generator_RowEvHandlerName="dtMovimientosRowChangeEventHandler" msprop:Generator_RowDeletedName="dtMovimientosRowDeleted" msprop:Generator_UserTableName="dtMovimientos" msprop:Generator_RowChangedName="dtMovimientosRowChanged" msprop:Generator_RowEvArgName="dtMovimientosRowChangeEvent" msprop:Generator_RowClassName="dtMovimientosRow">
+        <xs:element name="dtMovimientos" msprop:Generator_TableClassName="dtMovimientosDataTable" msprop:Generator_TableVarName="tabledtMovimientos" msprop:Generator_RowChangedName="dtMovimientosRowChanged" msprop:Generator_TablePropName="dtMovimientos" msprop:Generator_RowDeletingName="dtMovimientosRowDeleting" msprop:Generator_RowChangingName="dtMovimientosRowChanging" msprop:Generator_RowEvHandlerName="dtMovimientosRowChangeEventHandler" msprop:Generator_RowDeletedName="dtMovimientosRowDeleted" msprop:Generator_RowClassName="dtMovimientosRow" msprop:Generator_UserTableName="dtMovimientos" msprop:Generator_RowEvArgName="dtMovimientosRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:string" minOccurs="0" />
@@ -22,6 +22,8 @@
               <xs:element name="haber" msprop:Generator_ColumnVarNameInTable="columnhaber" msprop:Generator_ColumnPropNameInRow="haber" msprop:Generator_ColumnPropNameInTable="haberColumn" msprop:Generator_UserColumnName="haber" type="xs:string" minOccurs="0" />
               <xs:element name="saldo" msprop:Generator_ColumnVarNameInTable="columnsaldo" msprop:Generator_ColumnPropNameInRow="saldo" msprop:Generator_ColumnPropNameInTable="saldoColumn" msprop:Generator_UserColumnName="saldo" type="xs:string" minOccurs="0" />
               <xs:element name="SaldoAcumulado" msprop:Generator_ColumnVarNameInTable="columnSaldoAcumulado" msprop:Generator_ColumnPropNameInRow="SaldoAcumulado" msprop:Generator_ColumnPropNameInTable="SaldoAcumuladoColumn" msprop:Generator_UserColumnName="SaldoAcumulado" type="xs:string" minOccurs="0" />
+              <xs:element name="FechaVenc" msprop:Generator_ColumnVarNameInTable="columnFechaVenc" msprop:Generator_ColumnPropNameInRow="FechaVenc" msprop:Generator_ColumnPropNameInTable="FechaVencColumn" msprop:Generator_UserColumnName="FechaVenc" type="xs:string" minOccurs="0" />
+              <xs:element name="DiasVencidos" msprop:Generator_ColumnVarNameInTable="columnDiasVencidos" msprop:Generator_ColumnPropNameInRow="DiasVencidos" msprop:Generator_ColumnPropNameInTable="DiasVencidosColumn" msprop:Generator_UserColumnName="DiasVencidos" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

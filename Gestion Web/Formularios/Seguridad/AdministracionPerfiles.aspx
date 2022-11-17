@@ -2,9 +2,9 @@
 
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div class="container">
-
-        <div class="col-md-12 col-xs-12">
+    <div class="container" style="margin-bottom:38px;">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
             <div class="widget stacked">
 
                 <div class="widget-header">
@@ -79,8 +79,10 @@
             </div>
             <!-- /widget -->
         </div>
+        </div>
 
-        <div class="col-md-12 col-xs-12">
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
             <div class="widget stacked widget-table action-table">
 
                 <div class="widget-header">
@@ -126,10 +128,13 @@
 
             </div>
         </div>
+        </div>
 
-        <div class="col-md-8">
-                                                    <asp:LinkButton ID="lbtnActualizar" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnActualizar_Click" />
+        <div class="row">
+            <div class="col-md-12">
+                <asp:LinkButton ID="lbtnActualizar" runat="server" Text="Guardar" class="btn btn-success" OnClick="lbtnActualizar_Click" />
 
+            </div>
         </div>
 
     </div>
@@ -140,7 +145,7 @@
     <div id="modalGrupo" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Agregar Grupo</h4>
@@ -301,8 +306,7 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44)// Detectar . (punto) y backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
