@@ -50,16 +50,8 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Saldo: </Value>
-                <Style>
-                  <FontSize>22pt</FontSize>
-                </Style>
-              </TextRun>
-              <TextRun>
                 <Value>=Parameters!ParamSaldo.Value</Value>
-                <Style>
-                  <FontSize>22pt</FontSize>
-                </Style>
+                <Style />
               </TextRun>
             </TextRuns>
             <Style>
@@ -68,15 +60,16 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>1.54341cm</Top>
+        <Top>2.24576cm</Top>
         <Left>0.22253cm</Left>
-        <Height>0.95814cm</Height>
-        <Width>20.17416cm</Width>
+        <Height>0.57329cm</Height>
+        <Width>4.58138cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
+          <VerticalAlign>Middle</VerticalAlign>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
           <PaddingTop>2pt</PaddingTop>
@@ -96,7 +89,7 @@
         </Style>
       </Line>
       <Line Name="Line3">
-        <Top>2.67793cm</Top>
+        <Top>2.99543cm</Top>
         <Left>20.39669cm</Left>
         <Height>0cm</Height>
         <Width>-20.21098cm</Width>
@@ -443,6 +436,7 @@
                             <TextRun>
                               <Value>=Fields!fecha.Value</Value>
                               <Style>
+                                <FontSize>8pt</FontSize>
                                 <Format>dd/MM/yyyy</Format>
                               </Style>
                             </TextRun>
@@ -481,7 +475,8 @@
                             <TextRun>
                               <Value>=Fields!FechaVenc.Value</Value>
                               <Style>
-                                <Format>d</Format>
+                                <FontSize>8pt</FontSize>
+                                <Format>dd/MM/yyyy</Format>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -518,7 +513,9 @@
                           <TextRuns>
                             <TextRun>
                               <Value>=Fields!Numero.Value</Value>
-                              <Style />
+                              <Style>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
@@ -555,6 +552,7 @@
                             <TextRun>
                               <Value>=Fields!debe.Value</Value>
                               <Style>
+                                <FontSize>8pt</FontSize>
                                 <Language>en-US</Language>
                               </Style>
                             </TextRun>
@@ -595,6 +593,7 @@
                             <TextRun>
                               <Value>=Fields!haber.Value</Value>
                               <Style>
+                                <FontSize>8pt</FontSize>
                                 <Language>en-US</Language>
                               </Style>
                             </TextRun>
@@ -635,6 +634,7 @@
                             <TextRun>
                               <Value>=Fields!saldo.Value</Value>
                               <Style>
+                                <FontSize>8pt</FontSize>
                                 <Language>en-US</Language>
                               </Style>
                             </TextRun>
@@ -675,6 +675,7 @@
                             <TextRun>
                               <Value>=Fields!SaldoAcumulado.Value</Value>
                               <Style>
+                                <FontSize>8pt</FontSize>
                                 <Language>en-US</Language>
                               </Style>
                             </TextRun>
@@ -715,6 +716,7 @@
                             <TextRun>
                               <Value>=Fields!DiasVencidos.Value</Value>
                               <Style>
+                                <FontSize>8pt</FontSize>
                                 <Language>en-US</Language>
                               </Style>
                             </TextRun>
@@ -1063,9 +1065,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>dsCtaCorriente</DataSetName>
-        <Top>3.05096cm</Top>
+        <Top>3.36846cm</Top>
         <Left>0.22249cm</Left>
-        <Height>1.67653cm</Height>
+        <Height>1.67654cm</Height>
         <Width>20.36095cm</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -1075,6 +1077,233 @@
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox6">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!ParamSaldoVenc.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>2.24576cm</Top>
+        <Left>5.34401cm</Left>
+        <Height>0.57328cm</Height>
+        <Width>4.58139cm</Width>
+        <ZIndex>5</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox8">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!ParamSaldoMax.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>2.24576cm</Top>
+        <Left>10.74151cm</Left>
+        <Height>0.57328cm</Height>
+        <Width>4.58139cm</Width>
+        <ZIndex>6</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox19">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!ParamDiasVenc.Value</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox2</rd:DefaultName>
+        <Top>2.24576cm</Top>
+        <Left>15.82151cm</Left>
+        <Height>0.57328cm</Height>
+        <Width>4.58139cm</Width>
+        <ZIndex>7</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox21">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Saldo Impagas:</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox21</rd:DefaultName>
+        <Top>1.51331cm</Top>
+        <Left>0.22253cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.58138cm</Width>
+        <ZIndex>8</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox23">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Saldo Vencidas: </Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox23</rd:DefaultName>
+        <Top>1.51331cm</Top>
+        <Left>5.34401cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.58139cm</Width>
+        <ZIndex>9</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox25">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Saldo Máximo: </Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox25</rd:DefaultName>
+        <Top>1.51331cm</Top>
+        <Left>10.73855cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.58434cm</Width>
+        <ZIndex>10</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox27">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Días Vencidos: </Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox27</rd:DefaultName>
+        <Top>1.51331cm</Top>
+        <Left>15.82151cm</Left>
+        <Height>0.6cm</Height>
+        <Width>4.57518cm</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>2.11458in</Height>
     <Style />
@@ -1231,6 +1460,18 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ParamSaldo">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamSaldoVenc">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamSaldoMax">
+      <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ParamDiasVenc">
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

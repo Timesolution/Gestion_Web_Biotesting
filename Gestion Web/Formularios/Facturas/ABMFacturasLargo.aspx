@@ -373,6 +373,8 @@
                                                     </button>--%>
                                                         <asp:LinkButton ID="lbtnAgregarArticuloASP" class="btn btn-info" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" OnClick="btnAgregarArt_Click" Visible="true" />
                                                         <asp:LinkButton ID="lbtnAgregarArticuloASPHide" runat="server" OnClick="lbtnAgregarArticuloASPHide_Click" Visible="true" />
+                                                        <asp:LinkButton ID="lbtnPermitirArtConCategAlert" runat="server" OnClick="lbtnPermitirArtConCategAlert_Click" Visible="true" />
+                                                        <asp:LinkButton ID="lbtnPermitirFactArtConCategAlert" runat="server" OnClick="lbtnPermitirFactArtConCategAlert_Click" Visible="true" />
                                                         
                                                     </td>
                                                 </tr>
@@ -2973,6 +2975,8 @@
                         __doPostBack("UpdateButton", "");
                     }
                 };
+                modal.width= 769
+                modal.top= 64
                 //modal.showUrl("ModalCreate.aspx?start=" + start + "&resource=" + resource);
                 modal.showUrl("BuscarArticulos.aspx?accion=1&suc=" + idSucursal);
             }
@@ -3050,6 +3054,16 @@
 
             function ConfirmarAgregarArt() {
                 document.getElementById('<%= lbtnAgregarArticuloASPHide.ClientID %>').click()
+            }
+
+            function ConfirmarFacturarArts(estado) {
+                if (estado == 0) {
+                    //Solo confirma.
+                    document.getElementById('<%= lbtnPermitirArtConCategAlert.ClientID %>').click()
+                } else if (estado == 1) {
+                    //Confirma y factura.
+                    document.getElementById('<%= lbtnPermitirFactArtConCategAlert.ClientID %>').click()
+                }
             }
         </script>
 </asp:Content>

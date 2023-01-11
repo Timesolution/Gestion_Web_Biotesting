@@ -832,6 +832,8 @@
     <Content Include="Formularios\Articulos\StockValorizadoDetalladoR.rdlc" />
     <Content Include="Formularios\Articulos\ListaCatalogoR.rdlc" />
     <Content Include="Formularios\Facturas\Cotizacion.rdlc" />
+    <Content Include="Formularios\Cobros\Cobros.rdlc" />
+    <Content Include="Formularios\Cobros\CobrosPRP.rdlc" />
     <None Include="Formularios\OrdenReparacion\dsOrdenReparacion.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -3466,8 +3468,8 @@
     <EmbeddedResource Include="Formularios\Clientes\InformeProveedoresR.rdlc" />
     <EmbeddedResource Include="Formularios\Clientes\InformeClientesVendedorR.rdlc" />
     <EmbeddedResource Include="Formularios\Clientes\InformeClientes.rdlc" />
-    <EmbeddedResource Include="Formularios\Cobros\CobrosPRP.rdlc" />
-    <EmbeddedResource Include="Formularios\Cobros\Cobros.rdlc" />
+    <EmbeddedResource Include="Formularios\Cobros\CobrosPRP_.rdlc" />
+    <EmbeddedResource Include="Formularios\Cobros\Cobros_.rdlc" />
     <EmbeddedResource Include="Formularios\Cobros\Cobros2.rdlc" />
     <EmbeddedResource Include="Formularios\Cobros\CobrosVendedoresR.rdlc">
       <SubType>Designer</SubType>

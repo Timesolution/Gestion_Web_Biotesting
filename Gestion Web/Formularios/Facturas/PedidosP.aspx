@@ -204,7 +204,7 @@
                                         <th>Fecha</th>
                                         <th>Numero</th>
                                         <th>Razon</th>
-                                        <th>Total</th>
+                                        <th style="text-align:right;">Total</th>
                                         <th>Estado</th>
                                         <th id="lineasTabla" runat="server">Lineas</th>
                                         <th id="bultosTabla" runat="server">Bultos</th>
@@ -817,10 +817,7 @@
 
     </script>
 
-    <!-- Page-Level Plugin Scripts - Tables -->
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
-    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
-    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+    
 
     <link href="../../css/pages/reports.css" rel="stylesheet">
     <!-- Core Scripts - Include with every page -->
@@ -845,6 +842,11 @@
 
     <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+    <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
 
     <script>
         function CheckAll() {

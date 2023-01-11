@@ -17,7 +17,9 @@
                         <table class="table table-bordered table-striped" id="tbDocumentos">
                             <thead>
                                 <tr>
-                                    <th style="width: 70%">Numero</th>
+                                    <th style="width: 50%">Numero</th>
+                                    <th style="width: 10%">Fecha</th>
+                                    <th style="width: 10%">Fecha vencimiento</th>
                                     <th style="width: 15%">Saldo</th>
                                     <th style="width: 15%">Imputar</th>
 
@@ -27,6 +29,8 @@
                                 <asp:PlaceHolder ID="phDocumentos" runat="server"></asp:PlaceHolder>
                                 <tr>
                                     <th>Total</th>
+                                    <th></th>
+                                    <th></th>
                                     <th>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
@@ -748,6 +752,7 @@
 
     <script src="../../Scripts/libs/jquery-1.9.1.min.js"></script>
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="../../Scripts/plugins/msgbox/jquery.msgbox.min.js"></script>
 
     <script>
         function pageLoad() {
@@ -858,7 +863,8 @@
         function TotalImputado() {
             var total = 0;
             for (var i = 1; i < document.getElementById('tbDocumentos').rows.length - 1; i++) {
-                var txtValor = document.getElementById('tbDocumentos').rows[i].cells[2].childNodes[0].value;
+                //var txtValor = document.getElementById('tbDocumentos').rows[i].cells[2].childNodes[0].value;
+                var txtValor = document.getElementById('tbDocumentos').rows[i].cells[4].childNodes[0].value;
                 var valor = txtValor.replace(',', '.');
                 //if (valor > 0) {
                 if (valor != 0) {
@@ -884,7 +890,8 @@
             function () {
                 var total = 0;
                 for (var i = 1; i < document.getElementById('tbDocumentos').rows.length - 1; i++) {
-                    var txtValor = document.getElementById('tbDocumentos').rows[i].cells[2].childNodes[0].value;
+                    //var txtValor = document.getElementById('tbDocumentos').rows[i].cells[2].childNodes[0].value;
+                    var txtValor = document.getElementById('tbDocumentos').rows[i].cells[4].childNodes[0].value;
                     var valor = txtValor.replace(',', '.');
                     //if (valor > 0) {
                     if (valor != 0) {

@@ -81,6 +81,12 @@ namespace Gestion_Web.Formularios.Facturas
                 Session["datosMov"] = null;
                 String lblSaldo = Session["saldoMov"] as String;
                 Session["saldoMov"] = null;
+                String lblSaldoVenc = Session["saldoVenc"] as String;
+                Session["saldoAcumulado"] = null;
+                String lblSaldoMax = Session["saldoMax"] as String;
+                Session["saldoMax"] = null;
+                String lblDiasVenc = Session["diasVenc"] as String;
+                Session["diasVenc"] = null;
 
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("Report2.rdlc");
@@ -88,11 +94,17 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportDataSource rds2 = new ReportDataSource("dsCtaCorriente", dtDatos);
                 ReportParameter param = new ReportParameter("ParamCliente", cliente.razonSocial + " - " + cliente.codigo);
                 ReportParameter param2 = new ReportParameter("ParamSaldo",lblSaldo);
+                ReportParameter param3 = new ReportParameter("ParamSaldoVenc", lblSaldoVenc);
+                ReportParameter param4 = new ReportParameter("ParamSaldoMax", lblSaldoMax);
+                ReportParameter param5 = new ReportParameter("ParamDiasVenc", lblDiasVenc);
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds2);                
                 this.ReportViewer1.LocalReport.SetParameters(param);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
+                this.ReportViewer1.LocalReport.SetParameters(param3);
+                this.ReportViewer1.LocalReport.SetParameters(param4);
+                this.ReportViewer1.LocalReport.SetParameters(param5);
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;

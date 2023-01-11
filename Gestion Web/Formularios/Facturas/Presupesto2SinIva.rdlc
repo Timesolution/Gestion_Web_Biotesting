@@ -997,13 +997,13 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.50369in</Height>
+        <Height>1.53841in</Height>
         <Style />
       </Body>
       <Width>7.43092in</Width>
       <Page>
         <PageHeader>
-          <Height>8.00806cm</Height>
+          <Height>8.76653cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1286,7 +1286,7 @@
               </Style>
             </Textbox>
             <Line Name="Line2">
-              <Top>7.79914cm</Top>
+              <Top>8.43414cm</Top>
               <Left>0.20727cm</Left>
               <Height>0cm</Height>
               <Width>18.00852cm</Width>
@@ -1389,8 +1389,42 @@
               <Top>6.90633cm</Top>
               <Left>0.17198cm</Left>
               <Height>0.6cm</Height>
-              <Width>18.00852cm</Width>
+              <Width>18.04381cm</Width>
               <ZIndex>11</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox4">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Fecha Vencimiento: </Value>
+                      <Style />
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Parameters!fechaVenc.Value</Value>
+                      <Style />
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox4</rd:DefaultName>
+              <Top>7.66092cm</Top>
+              <Left>0.20727cm</Left>
+              <Height>0.6cm</Height>
+              <Width>17.97323cm</Width>
+              <ZIndex>12</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1902,6 +1936,10 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="fechaVenc">
+      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

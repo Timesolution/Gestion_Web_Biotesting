@@ -1864,6 +1864,12 @@
         <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
         <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
+        <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+        <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
+
+        <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
+
         <script>
             function pageLoad() {
                 $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -1936,7 +1942,6 @@
                 return true;
             }
         </script>
-
-
+                
     </div>
 </asp:Content>

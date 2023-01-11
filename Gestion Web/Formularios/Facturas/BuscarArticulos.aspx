@@ -78,7 +78,9 @@
                                     <td style="width: 80%">
                                         <div class="col-md-12">
                                             <div class="imput-group">
-                                                <asp:TextBox ID="txtBuscarArticulos" runat="server" class="form-control" Text=""></asp:TextBox>
+                                                <%--<asp:TextBox ID="txtBuscarArticulos" runat="server" class="form-control" Text=""></asp:TextBox>--%>
+                                                <%--<input type="text" id="filter" placeholder="Buscar" class="form-control " onkeyup="doSearch()" style="margin:0 0 12px 55px;" />--%>
+                                                <asp:TextBox ID="txtBuscarArticulos" runat="server" class="form-control" Text="" placeholder="Buscar"></asp:TextBox>
                                             </div>
                                         </div>
                                     </td>
@@ -94,6 +96,7 @@
                         </div>
                     </div>
                     <div class="widget widget-table">
+                        
                         <table class="table table-striped table-bordered" id="articulosTabla">
                             <thead>
                                 <tr>
@@ -123,6 +126,12 @@
         </div>
 
     </form>
+    <script src="../../Scripts/jquery-1.10.2.js"></script>
+    <script src="../../Scripts/bootstrap.min.js"></script>
+
+    <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
+    <link href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet" />
 
     <script>
         //valida los campos solo numeros
@@ -194,6 +203,48 @@
         }
     </script>
 
+    <script>
+        $(document).ready(function () {
+
+            $('#articulosTabla').dataTable({
+                "paging": true,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+
+            });
+
+            $('.dataTables_filter').hide()
+            $('#<%=txtBuscarArticulos.ClientID%>').on('keyup', function () {
+                $('#articulosTabla').DataTable().search(
+                    this.value
+                ).draw();
+            });
+        })
+    </script>
 </body>
 </html>
 

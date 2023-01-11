@@ -23,6 +23,7 @@ using iTextSharp.text;
 using Image = iTextSharp.text.Image;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 
 namespace Gestion_Web.Formularios.Facturas
 {
@@ -53,6 +54,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorMoneda controladorMoneda = new controladorMoneda();
         ControladorFacturaMoneda controladorFacturaMoneda = new ControladorFacturaMoneda();
         controladorContacto controlContacto = new controladorContacto();
+        controladorCuentaCorriente cCuentaCorriente = new controladorCuentaCorriente();
 
         #endregion
 
@@ -170,6 +172,16 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 Factura fact = this.controlador.obtenerFacturaId(idPresupuesto);
+
+                //obtengo la fecha de vencimiento
+                string dMyFVenc = "";
+                DataTable dtFFVenc =cCuentaCorriente.getFechaVencByIdFactura(fact.id);
+                if (dtFFVenc != null && dtFFVenc.Rows.Count > 0)
+                {
+                    string[] fechaVenc = dtFFVenc.Rows[0]["fechaVenc"].ToString().Split(' ')[0].Split('/');
+                    dMyFVenc = fechaVenc[1] + "/" + fechaVenc[0] + "/" + fechaVenc[2];
+                }
+
                 //obtengo detalle de items
                 //DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
                 DataTable dtDatos = controlador.obtenerDatosPresupuesto(idPresupuesto);
@@ -327,6 +339,7 @@ namespace Gestion_Web.Formularios.Facturas
 
 
                 ReportParameter param = new ReportParameter("TotalPresupuesto", total.ToString("C"));
+                ReportParameter param1 = new ReportParameter("fechaVenc", dMyFVenc);
                 ReportParameter param2 = new ReportParameter("Subtotal", subtotal.ToString("C"));
                 ReportParameter param3 = new ReportParameter("Descuento", descuento.ToString("C"));
                 ReportParameter param03 = new ReportParameter("ParamSucFact", sucursalFact);//sucursalFact
@@ -356,6 +369,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.DataSources.Add(rds4);
 
                 this.ReportViewer1.LocalReport.SetParameters(param);
+                this.ReportViewer1.LocalReport.SetParameters(param1);
                 this.ReportViewer1.LocalReport.SetParameters(param2);
                 this.ReportViewer1.LocalReport.SetParameters(param3);
                 this.ReportViewer1.LocalReport.SetParameters(param03);
@@ -542,6 +556,12 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                     else
                     {
+                        DataTable dtFechaV = cCuentaCorriente.getFechaVencByIdFactura( idFactura);
+
+                        if (dtFechaV != null && dtFechaV.Rows.Count > 0)
+                        {
+                            fechaV = Convert.ToDateTime(dtFechaV.Rows[0]["fechaVenc"]).ToString("dd/MM/yyyy");
+                        }
                         CodigoDoc = "Cod. 01";
                     }
                 }
@@ -1018,6 +1038,15 @@ namespace Gestion_Web.Formularios.Facturas
                 String fechaVto = String.Empty;
                 String cotizacionFecha = String.Empty;
 
+                //obtengo la fecha de vencimiento
+                string dMyFVenc = "";
+                DataTable dtFFVenc = cCuentaCorriente.getFechaVencByIdFactura(fact.id);
+                if (dtFFVenc != null && dtFFVenc.Rows.Count > 0)
+                {
+                    string[] fechaVenc = dtFFVenc.Rows[0]["fechaVenc"].ToString().Split(' ')[0].Split('/');
+                    dMyFVenc = fechaVenc[1] + "/" + fechaVenc[0] + "/" + fechaVenc[2];
+                }
+
                 foreach (DataRow row in dtEmpresa.Rows)
                 {
                     cuitEmpresa = row.ItemArray[1].ToString();
@@ -1334,6 +1363,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ReportParameter param40 = new ReportParameter("ParamNroPedido", nroPedido);
                 ReportParameter param41 = new ReportParameter("ParamNroRemito", nroRemito);
                 ReportParameter param42 = new ReportParameter("ParamCondicionPago", condicionPago);
+                ReportParameter param43 = new ReportParameter("fechaVenc", dMyFVenc);
 
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
@@ -1377,6 +1407,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.LocalReport.SetParameters(param40);
                 this.ReportViewer1.LocalReport.SetParameters(param41);
                 this.ReportViewer1.LocalReport.SetParameters(param42);
+                this.ReportViewer1.LocalReport.SetParameters(param43);
                 this.ReportViewer1.LocalReport.Refresh();
 
                 Warning[] warnings;

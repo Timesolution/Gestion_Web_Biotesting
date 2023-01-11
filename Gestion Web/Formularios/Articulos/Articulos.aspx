@@ -1688,12 +1688,12 @@
     <script src="../../Scripts/demo/notifications.js"></script>
 
     <!-- Page-Level Plugin Scripts - Tables -->
-    <script src="//cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/plug-ins/1.10.9/sorting/date-eu.js"></script>
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
 
     <link href="//cdn.datatables.net/1.10.2/css/jquery.dataTables.css" rel="stylesheet" />
-
+   
     <script>
         function mostrarMensaje(Boton) {
             $.msgbox("Are you sure that you want to permanently delete the selected element?", {
@@ -1724,6 +1724,10 @@
                     "bAutoWidth": false,
                     "bStateSave": true,
                     "columnDefs": [
+                        {
+                            target: 4,
+                            render: DataTable.render.date(),
+                        },
                         { type: 'date-eu', targets: 5 }
                     ]
                 });

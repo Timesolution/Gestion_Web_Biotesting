@@ -31,11 +31,11 @@ namespace Gestion_Web.Formularios.Facturas
                 buscarText = Request.QueryString["b"];
                 idSucursal = Convert.ToInt32(Request.QueryString["suc"]);
 
-                txtBuscarArticulos.Focus();                   
+                //txtBuscarArticulos.Focus();                   
                     
                 Buscar();                              
 
-                Form.DefaultButton = lbBuscarArticulos.UniqueID;
+                //Form.DefaultButton = lbBuscarArticulos.UniqueID;
 
                 if (accion == 1)
                     lbtnAgregarArticulosMultiples.Visible = true;
@@ -56,6 +56,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 List<Articulo> articulos = new List<Articulo>();
                 articulos = this.controlador.obtenerArticulosReduc();
+                //articulos = this.controlador.obtenerArticulosReduc2();
                 this.cargarArticulosTabla(articulos);
             }
             catch (Exception ex)
@@ -88,30 +89,31 @@ namespace Gestion_Web.Formularios.Facturas
                     //Celdas
                     TableCell celCodigo = new TableCell();
                     celCodigo.Text = art.codigo;
-                    //celCodigo.Width = Unit.Percentage(25);
+                    celCodigo.Width = Unit.Percentage(10);
                     celCodigo.VerticalAlign = VerticalAlign.Middle;
                     celCodigo.HorizontalAlign = HorizontalAlign.Left;
 
                     TableCell celDescripcion = new TableCell();
                     celDescripcion.Text = art.descripcion;
-                    //celDescripcion.Width = Unit.Percentage(40);
+                    celDescripcion.Width = Unit.Percentage(27);
                     celDescripcion.VerticalAlign = VerticalAlign.Middle;
                     celDescripcion.HorizontalAlign = HorizontalAlign.Left;
 
                     TableCell celStock = new TableCell();
                     celStock.Text = this.obtenerStockArticuloBySucursal(art.codigo).ToString();//traer el stock de ese articulo en esa sucursal
                     celStock.VerticalAlign = VerticalAlign.Middle;
+                    celStock.Width = Unit.Percentage(1);
                     celStock.HorizontalAlign = HorizontalAlign.Right;
 
                     TableCell celMoneda = new TableCell();
                     celMoneda.Text = art.monedaVenta.moneda;
-                    //celMoneda.Width = Unit.Percentage(10);
+                    celMoneda.Width = Unit.Percentage(7);
                     celMoneda.VerticalAlign = VerticalAlign.Middle;
                     celMoneda.HorizontalAlign = HorizontalAlign.Left;
 
                     TableCell celPrecio = new TableCell();
                     celPrecio.Text = "$" + art.precioVenta.ToString();
-                    //celPrecio.Width = Unit.Percentage(20);
+                    celPrecio.Width = Unit.Percentage(13);
                     celPrecio.VerticalAlign = VerticalAlign.Middle;
                     celPrecio.HorizontalAlign = HorizontalAlign.Right;
 
@@ -194,6 +196,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (String.IsNullOrEmpty(this.buscarText))
                 {
                     articulos = this.controlador.obtenerArticulosReduc();
+                    //articulos = this.controlador.obtenerArticulosReduc2();
                     //pregunta por la configuracion de si solo se quiere mostrar articulos en esa sucursal
                     if (configuracion.FiltroArticulosSucursal == "1")
                     {
@@ -227,6 +230,11 @@ namespace Gestion_Web.Formularios.Facturas
                 if (!String.IsNullOrEmpty(this.txtBuscarArticulos.Text))
                 {
                     Response.Redirect("BuscarArticulos.aspx?accion=" + accion + "&b=" + this.txtBuscarArticulos.Text + "&suc=" + idSucursal);
+                }
+                else
+                {
+                    this.buscarText = "";
+                    Buscar();
                 }
             }
             catch (Exception ex)

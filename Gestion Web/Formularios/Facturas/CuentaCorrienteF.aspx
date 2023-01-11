@@ -9,6 +9,9 @@
         .hRight{
             text-align:right;
         }
+        .fontSize-35{
+            font-size:35px;
+        }
     </style>
     <div class="main">
 
@@ -67,6 +70,27 @@
                                 <td>
                                     <div class="btn-group" style="height: 100%">
 
+                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="btnTipo" style="width: 100%">
+                                            Tipo <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <asp:LinkButton ID="tipoAmbos" runat="server" OnClick="tipoAmbos_Click">Ambos</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="tipoFC" runat="server" OnClick="tipoFC_Click">FC</asp:LinkButton>
+                                            </li>
+                                            <li>
+                                                <asp:LinkButton ID="tipoPRP" runat="server" OnClick="tipoPRP_Click">PRP</asp:LinkButton>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>&nbsp
+                                </td>
+                                <td>
+                                    <div class="btn-group" style="height: 100%">
+
                                         <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="btnVer" style="width: 100%">
                                             Ver <span class="caret"></span>
                                         </button>
@@ -110,26 +134,6 @@
                                     </div>
                                 </td>
 
-                                <%--<td>&nbsp
-                                </td>
-
-                                <td style="width: 95%">
-                                    <h5>
-                                        <asp:Label runat="server" ID="Label3" Text="" ForeColor="#cccccc"></asp:Label>
-                                    </h5>
-                                </td>--%>
-
-                                <%--                                <td style="width: 5%">
-                                    <div class="shortcuts" style="height: 100%">
-
-                                        <asp:LinkButton class="btn btn-primary" ToolTip="Exportar Reporte txt" ID="lbtnExportartxt" Style="width: 100%" runat="server" OnClick="lbtnExportartxt_Click"> 
-                                            <i ID="iconExportartxt" class="fa fa-print"></i>
-                                        </asp:LinkButton>
-
-                                    </div>
-
-                                </td>--%>
-
                                 <td>&nbsp
                                 </td>
 
@@ -156,14 +160,22 @@
                         <div id="big_stats" class="cf">
                             <div class="stat">
                                 <h4>Saldo Impagas</h4>
-                                <asp:Label ID="labelSaldo" runat="server" Text="" class="value" Visible="false"></asp:Label>
-                                <asp:Label ID="labelSaldoImp" runat="server" Text="" class="value"></asp:Label>
-                                <asp:Label ID="labelMov" runat="server" Text="" class="value"></asp:Label>
+                                <asp:Label ID="labelSaldo" runat="server" Text="$0.00" class="fontSize-35" Visible="false"></asp:Label>
+                                <asp:Label ID="labelSaldoImp" runat="server" Text="$0.00" class="fontSize-35"></asp:Label>
+                                <%--<asp:Label ID="labelMov" runat="server" Text="" class="fontSize-35"></asp:Label>--%>
                             </div>
                             <div class="stat">
                                 <h4>Saldo Vencidas</h4>
-                                <asp:Label ID="labelSaldoVenc" runat="server" Text="" class="value"></asp:Label>
-                                <asp:Label ID="labelMovVenc" runat="server" Text="" class="value"></asp:Label>
+                                <asp:Label ID="labelSaldoVenc" runat="server" Text="$0.00" class="fontSize-35"></asp:Label>
+                                <%--<asp:Label ID="labelMovVenc" runat="server" Text="" class="value"></asp:Label>--%>
+                            </div>
+                            <div class="stat">
+                                <h4>Saldo Máximo</h4>
+                                <asp:Label ID="lblSaldoMax" runat="server" Text="$0.00" class="fontSize-35"></asp:Label>
+                            </div>
+                            <div class="stat">
+                                <h4>Días Vencidos</h4>
+                                <asp:Label ID="lblDiasVenc" runat="server" Text="0" class="fontSize-35"></asp:Label>
                             </div>
                             <!-- .stat -->
                         </div>
@@ -336,7 +348,7 @@
                                                 <label class="col-md-4">Tipo</label>
                                                 <div class="col-md-6">
                                                     <asp:DropDownList ID="DropListTipo" runat="server" class="form-control">
-                                                        <asp:ListItem Value="-1">Ambos</asp:ListItem>
+                                                        <asp:ListItem Value="-1" Selected="True">Ambos</asp:ListItem>
                                                         <asp:ListItem Value="0">FC</asp:ListItem>
                                                         <asp:ListItem Value="1">PRP</asp:ListItem>
                                                     </asp:DropDownList>

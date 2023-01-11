@@ -1075,6 +1075,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celFecha.Text = Convert.ToDateTime(p["fecha"]).ToString("dd/MM/yyyy");
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 celFecha.VerticalAlign = VerticalAlign.Middle;
+                celFecha.Width = Unit.Percentage(5);
                 tr.Cells.Add(celFecha);
 
                 //if (p["codApp"].ToString() != "")
@@ -1086,13 +1087,14 @@ namespace Gestion_Web.Formularios.Facturas
                 celNumero.Text = p["numero"].ToString().PadLeft(8, '0') + codApp;
                 celNumero.HorizontalAlign = HorizontalAlign.Left;
                 celNumero.VerticalAlign = VerticalAlign.Middle;
-                celNumero.Width = Unit.Percentage(15);
+                celNumero.Width = Unit.Percentage(10);
                 tr.Cells.Add(celNumero);
 
                 TableCell celRazon = new TableCell();
                 celRazon.Text = p["razonSocial"].ToString();
                 celRazon.HorizontalAlign = HorizontalAlign.Left;
                 celRazon.VerticalAlign = VerticalAlign.Middle;
+                celRazon.Width = Unit.Percentage(20);
                 tr.Cells.Add(celRazon);
 
                 TableCell celTotal = new TableCell();
@@ -1110,6 +1112,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //}
                 celTotal.VerticalAlign = VerticalAlign.Middle;
                 celTotal.HorizontalAlign = HorizontalAlign.Right;
+                celTotal.Width = Unit.Percentage(10);
                 tr.Cells.Add(celTotal);
 
                 TableCell celTipo = new TableCell();
@@ -1117,6 +1120,7 @@ namespace Gestion_Web.Formularios.Facturas
                 celTipo.Text = estado.descripcion;
                 celTipo.HorizontalAlign = HorizontalAlign.Left;
                 celTipo.VerticalAlign = VerticalAlign.Middle;
+                celTipo.Width = Unit.Percentage(8);
                 tr.Cells.Add(celTipo);
 
                 if (accion == 5)

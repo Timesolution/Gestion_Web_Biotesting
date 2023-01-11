@@ -97,6 +97,7 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align: left">Fecha</th>
+                                            <th style="text-align: left">Fecha vencimiento</th>
                                             <th style="text-align: left">Numero</th>
                                             <th style="text-align: right">Debe</th>
                                             <th style="text-align: right">Haber</th>

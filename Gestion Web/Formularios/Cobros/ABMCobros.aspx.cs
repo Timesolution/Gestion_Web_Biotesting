@@ -76,7 +76,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 btnAtras.Attributes.Add("onclick", "history.back(); return false;");
                 this.obtenerNroRecibo();
-                
+
                 if (!IsPostBack)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", Request.Url.ToString());
@@ -115,7 +115,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarTiposRetencion();
                     this.cargarCuentas();
                     //si es un movimiento de cobro
-                    if(this.valor == 1)
+                    if (this.valor == 1)
                     {
                         this.CargarMovimientos(documentos);
                     }
@@ -124,18 +124,18 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         this.CargarPagoCuenta();
                     }
-                    if(this.tipoDoc == 2)
+                    if (this.tipoDoc == 2)
                     {
                         this.panelRetencion.Visible = false;
-                    }                    
+                    }
                 }
                 else
                 {
                     this.cargarTablaDocumentos();
                     this.cargarTablaPAgos();
                     this.cargarTablaCheques();
-                    this.actualizarTotales();                    
-                }                
+                    this.actualizarTotales();
+                }
             }
             catch (Exception ex)
             {
@@ -161,7 +161,7 @@ namespace Gestion_Web.Formularios.Facturas
                             Response.Redirect("/Default.aspx?m=1", false);
                         }
                     }
-                
+
                 }
             }
             catch
@@ -476,7 +476,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ViewState["ListaTarjetas"] = value;
             }
         }
-        
+
         #endregion
 
         #region cargas Iniciales
@@ -488,17 +488,17 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(this.monto == 0)
+                if (this.monto == 0)
                 {
                     List<MovimientoView> movimiento = this.controlador.obtenerListaMovimientos(doc);
                     decimal totalSaldo = 0;
                     foreach (MovimientoView m in movimiento)
                     {
-                            if(!m.tipo.tipo.Contains("Recibo de Cobro"))
-                            {
-                                totalSaldo += m.saldo;
-                            }
-                            this.cargarMovimientoDT(m, 0);  
+                        if (!m.tipo.tipo.Contains("Recibo de Cobro"))
+                        {
+                            totalSaldo += m.saldo;
+                        }
+                        this.cargarMovimientoDT(m, 0);
                     }
                     //txtSaldoDoc.Text = totalSaldo.ToString("0.00").Replace(',', '.');
                     txtSaldoDoc.Text = totalSaldo.ToString("N");
@@ -514,6 +514,21 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        public class MovConImputacion
+        {
+            public int id;
+            public DateTime fecha;
+            public int id_doc;
+            public TipoDocumento tipo = new TipoDocumento();
+            public string numero;
+            public decimal debe = default(decimal);
+            public decimal haber = default(decimal);
+            public decimal saldo = default(decimal);
+            public decimal saldoAcumulado = default(decimal);
+            public string fechaVenc = "";
+            public string imputacion;
+        }
+        
         public void CargarMovimientosMonto(string doc)
         {
             try
@@ -521,6 +536,10 @@ namespace Gestion_Web.Formularios.Facturas
                 List<MovimientoView> movimiento = this.controlador.obtenerListaMovimientos(doc);
                 decimal totalSaldo = 0;
                 decimal montoActual = monto;
+                List<MovConImputacion> movConImput = new List<MovConImputacion>();
+                //Ordenamos la lista de movimientos por fechaVenc (de la mas cercana a la fecha actual a la mas lejana)
+                //var sortedMovimiento = movimiento.OrderBy(m => Math.Abs((Convert.ToDateTime(m.fechaVenc) - DateTime.Now).TotalDays));
+
                 foreach (MovimientoView m in movimiento)
                 {
                     if (!m.tipo.tipo.Contains("Recibo de Cobro"))
@@ -528,7 +547,20 @@ namespace Gestion_Web.Formularios.Facturas
                         decimal imputacion = controlador.obtenerMontoImputar(m.saldo, montoActual);
                         montoActual -= imputacion;
                         totalSaldo += m.saldo;
-                        this.cargarMovimientoDT(m, imputacion);
+                        //this.cargarMovimientoDT(m, imputacion);
+                        movConImput.Add(new MovConImputacion { 
+                            id= m.id,
+                            fecha = m.fecha,
+                            id_doc = m.id_doc,
+                            tipo = m.tipo,
+                            numero = m.numero,
+                            debe = m.debe,
+                            haber = m.haber,
+                            saldo = m.saldo,
+                            saldoAcumulado = m.saldoAcumulado,
+                            fechaVenc = m.fechaVenc,
+                            imputacion = imputacion.ToString(),
+                        });
                     }
                     else
                     {
@@ -536,9 +568,31 @@ namespace Gestion_Web.Formularios.Facturas
                         montoActual -= m.saldo;
                         totalSaldo += m.saldo;
 
-                        this.cargarMovimientoDT(m, 0);
+                        //this.cargarMovimientoDT(m, 0);
+                        movConImput.Add(new MovConImputacion
+                        {
+                            id = m.id,
+                            fecha = m.fecha,
+                            id_doc = m.id_doc,
+                            tipo = m.tipo,
+                            numero = m.numero,
+                            debe = m.debe,
+                            haber = m.haber,
+                            saldo = m.saldo,
+                            saldoAcumulado = m.saldoAcumulado,
+                            fechaVenc = m.fechaVenc,
+                            imputacion = "0",
+                        });
                     }
                 }
+
+                var sortedMovimiento = movConImput.OrderBy(m => Math.Abs((Convert.ToDateTime(m.fechaVenc) - DateTime.Now).TotalDays));
+                
+                foreach (var item in sortedMovimiento)
+                {
+                    this.cargarMovimientoDT2(item);
+                }
+
                 totalSaldo += this.generarPagoCuenta(totalSaldo);
                 txtSaldoDoc.Text = totalSaldo.ToString();
 
@@ -570,7 +624,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarDocumentoEnPh(dr, pos);
                     lstDocumentos = dt;
 
-                    txtSaldoDoc.Text = monto.ToString("0.00").Replace(',','.');
+                    txtSaldoDoc.Text = monto.ToString("0.00").Replace(',', '.');
 
                 }
                 catch (Exception ex)
@@ -607,7 +661,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(this.monto > saldo)
+                if (this.monto > saldo)
                 {
                     DataTable dt = lstDocumentos;
 
@@ -629,7 +683,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return 0;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error generando Pago a Cuenta. " + ex.Message));
                 return 0;
@@ -660,8 +714,31 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando movimientos a DT. " + ex.Message));
             }
         }
+        public void cargarMovimientoDT2(MovConImputacion movV)
+        {
+            try
+            {
+                DataTable dt = lstDocumentos;
 
-        private void cargarDocumentoEnPh(DataRow dr,int pos)
+                DataRow dr = dt.NewRow();
+                dr["Id"] = movV.id;
+                dr["Tipo"] = movV.tipo.tipo;
+                dr["Numero"] = movV.numero;
+                dr["Saldo"] = movV.saldo;
+                dr["Imputar"] = movV.imputacion;
+
+                dt.Rows.Add(dr);
+                int pos = dt.Rows.IndexOf(dr);
+                this.cargarDocumentoEnPh(dr, pos);
+                lstDocumentos = dt;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando movimientos a DT. " + ex.Message));
+            }
+        }
+
+        private void cargarDocumentoEnPh(DataRow dr, int pos)
         {
             try
             {
@@ -672,10 +749,35 @@ namespace Gestion_Web.Formularios.Facturas
                 //Celdas
 
                 TableCell celNumero = new TableCell();
-                celNumero.Text = dr["Tipo"].ToString() + " " + dr["Numero"].ToString().PadLeft(8,'0'); 
+                celNumero.Text = dr["Tipo"].ToString() + " " + dr["Numero"].ToString().PadLeft(8, '0');
                 celNumero.VerticalAlign = VerticalAlign.Middle;
-                celNumero.Width = Unit.Percentage(70);
+                celNumero.Width = Unit.Percentage(50);
                 tr.Cells.Add(celNumero);
+
+                //obtenemos la fecha y fechaVenc del movimiento
+                string tipo = dr["Tipo"].ToString();
+                string fecha = "";
+                string fechaVenc = "";
+                if (!tipo.Contains("Pago a Cuenta N°"))
+                {
+                    Movimiento dtMov = controlador.obtenerMovimientoID(Convert.ToInt32(dr["Id"]));
+                    string[] fechaDMY = dtMov.fecha.ToString().Split(' ')[0].Split('/');
+                    string[] fechaDMYVenc = dtMov.fechaVenc.ToString().Split(' ')[0].Split('/');
+                    fecha = fechaDMY[1]+ "/"+fechaDMY[0]+ "/"+fechaDMY[2];
+                    fechaVenc = fechaDMYVenc[1] + "/" + fechaDMYVenc[0] + "/" + fechaDMYVenc[2];
+                }
+
+                TableCell celFecha = new TableCell();
+                celFecha.Text = fecha;
+                celFecha.VerticalAlign = VerticalAlign.Middle;
+                celFecha.Width = Unit.Percentage(10);
+                tr.Cells.Add(celFecha);
+
+                TableCell celFechaVenc = new TableCell();
+                celFechaVenc.Text = fechaVenc;
+                celFechaVenc.VerticalAlign = VerticalAlign.Middle;
+                celFechaVenc.Width = Unit.Percentage(10);
+                tr.Cells.Add(celFechaVenc);
 
                 TableCell celSaldo = new TableCell();
                 celSaldo.Text = "$ " + dr["Saldo"].ToString().Replace(',', '.');
@@ -734,8 +836,10 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phDocumentos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    TextBox txt = tr.Cells[2].Controls[0] as TextBox;
-                    decimal saldo = Convert.ToDecimal(tr.Cells[1].Text.Substring(1));
+                    //TextBox txt = tr.Cells[2].Controls[0] as TextBox;
+                    TextBox txt = tr.Cells[4].Controls[0] as TextBox;
+                    //decimal saldo = Convert.ToDecimal(tr.Cells[1].Text.Substring(1));
+                    decimal saldo = Convert.ToDecimal(tr.Cells[3].Text.Substring(1));
                     txt.Text = txt.Text.Replace('.', ',');
                     if (!String.IsNullOrEmpty(txt.Text))
                     {
@@ -982,7 +1086,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //decimal montoC = Convert.ToDecimal(dr[1]) * Convert.ToDecimal(dr[2]);
                 TableCell celTotal = new TableCell();
-                celTotal.Text = "$ " + dr["Total"].ToString().Replace(',','.');
+                celTotal.Text = "$ " + dr["Total"].ToString().Replace(',', '.');
                 celTotal.Width = Unit.Percentage(20);
                 celTotal.VerticalAlign = VerticalAlign.Middle;
                 celTotal.HorizontalAlign = HorizontalAlign.Right;
@@ -1028,7 +1132,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (dt.Rows.IndexOf(dr).ToString() == codigo[1])
                     {
-                        if(posCheques == Convert.ToInt32(codigo[1]))
+                        if (posCheques == Convert.ToInt32(codigo[1]))
                         {
                             //quito el registro cheques y los cheques
                             DataTable dtCheques = lstCheque;
@@ -1128,7 +1232,7 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celMoneda);
 
                 TableCell celMonto = new TableCell();
-                celMonto.Text = "$ " + dr["Importe"].ToString().Replace(',','.');
+                celMonto.Text = "$ " + dr["Importe"].ToString().Replace(',', '.');
                 celMonto.HorizontalAlign = HorizontalAlign.Right;
                 celMonto.VerticalAlign = VerticalAlign.Middle;
                 tr.Cells.Add(celMonto);
@@ -1209,14 +1313,14 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 int fila = 0;
-                if ((TotalDoc.Value != "0.00") || (TotalDoc.Value == "0.00" && Convert.ToDecimal(txtSaldoDoc.Text) >= Convert.ToDecimal("0.00") ))//Si es cancelacion de fact con NC o que la imputacion sea != 0.00
+                if ((TotalDoc.Value != "0.00") || (TotalDoc.Value == "0.00" && Convert.ToDecimal(txtSaldoDoc.Text) >= Convert.ToDecimal("0.00")))//Si es cancelacion de fact con NC o que la imputacion sea != 0.00
                 //if (TotalDoc.Value != "0.00")
                 {
                     //genero la clase
                     Pago_Contado p = new Pago_Contado();
                     p.moneda.id = Convert.ToInt32(this.DropListTipo.SelectedValue);
                     p.moneda.moneda = this.DropListTipo.SelectedItem.Text;
-                    decimal monto = Convert.ToDecimal(txtMonto.Text.ToString().Replace(',', '.'),CultureInfo.InvariantCulture);
+                    decimal monto = Convert.ToDecimal(txtMonto.Text.ToString().Replace(',', '.'), CultureInfo.InvariantCulture);
                     p.monto = decimal.Round(monto, 2);
                     p.moneda.cambio = Convert.ToDecimal(txtCotizacion.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
 
@@ -1402,7 +1506,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     lstTransferencia = dtTransferencia;
 
-                    
+
 
                     DataTable dt = lstPago;
                     DataRow dr = dt.NewRow();
@@ -1523,7 +1627,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                    this.lbtnAgregarPago.Attributes.Remove("Disabled");                    
+                    this.lbtnAgregarPago.Attributes.Remove("Disabled");
                 }
             }
             catch (Exception ex)
@@ -1553,7 +1657,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //drTransferencia["CBU"] = txtCbu.Text;
                     drRetencion["Monto"] = decimal.Round(monto, 2);
                     drRetencion["Origen"] = "C";
-                    
+
                     dtRetencion.Rows.Add(drRetencion);
 
                     //guardo la fila
@@ -1682,11 +1786,11 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 DataTable dt = lstPago;
                 decimal saldo = 0;
-                foreach(DataRow dr in dt.Rows)
+                foreach (DataRow dr in dt.Rows)
                 {
                     saldo += Convert.ToDecimal(dr["Total"]);
                 }
-                return "$ " + saldo.ToString(); 
+                return "$ " + saldo.ToString();
             }
             catch
             {
@@ -1708,7 +1812,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     int pos = dt.Rows.IndexOf(dr);
                     this.cargarEnPH(dr, pos);
-                } 
+                }
             }
             catch (Exception ex)
             {
@@ -1729,12 +1833,12 @@ namespace Gestion_Web.Formularios.Facturas
                 int pos = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if(!dr["Tipo"].ToString().Contains("Recibo de Cobro"))
+                    if (!dr["Tipo"].ToString().Contains("Recibo de Cobro"))
                     {
                         totalSaldo += Convert.ToDecimal(dr["Saldo"]);
                     }
                     pos = dt.Rows.IndexOf(dr);
-                    this.cargarDocumentoEnPh(dr,pos);
+                    this.cargarDocumentoEnPh(dr, pos);
                 }
 
                 txtSaldoDoc.Text = totalSaldo.ToString("0.00").Replace(',', '.');
@@ -1772,7 +1876,7 @@ namespace Gestion_Web.Formularios.Facturas
         }
 
         #endregion
-       
+
         private decimal actualizarTotalCheque()
         {
             try
@@ -1803,11 +1907,13 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     TableRow tr = c as TableRow;
                     Imputacion imp = new Imputacion();
-                    TextBox txt = tr.Cells[2].Controls[0] as TextBox;
+                    //TextBox txt = tr.Cells[2].Controls[0] as TextBox;
+                    TextBox txt = tr.Cells[4].Controls[0] as TextBox;
                     if (!tr.Cells[0].Text.Contains("Pago a Cuenta"))
                     {
                         imp.movimiento = controlador.obtenerMovimientoID(Convert.ToInt32(tr.ID));
-                        imp.total = Convert.ToDecimal(tr.Cells[1].Text.Substring(1).Replace(',', '.'), CultureInfo.InvariantCulture);
+                        //imp.total = Convert.ToDecimal(tr.Cells[1].Text.Substring(1).Replace(',', '.'), CultureInfo.InvariantCulture);
+                        imp.total = Convert.ToDecimal(tr.Cells[3].Text.Substring(1).Replace(',', '.'), CultureInfo.InvariantCulture);
                         if (!String.IsNullOrEmpty(txt.Text))
                         {
                             if (!tr.Cells[0].Text.Contains("Recibo de Cobro") && imp.movimiento.saldo > imp.total)
@@ -1827,7 +1933,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                         imputaciones.Add(imp);
                     }
-                    
+
                 }
                 return imputaciones;
             }
@@ -1844,7 +1950,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 txtCotizacion.Text = contCobranza.obtenerCotizacion(Convert.ToInt32(DropListTipo.SelectedValue)).ToString().Replace(',', '.');
                 txtMonto.Focus();
-                
+
             }
             catch (Exception ex)
             {
@@ -1950,6 +2056,8 @@ namespace Gestion_Web.Formularios.Facturas
                         {
                             int i = contCobranza.ProcesarCobro(cobro, -1, tipoDoc);
                             int idMov = contCobranza.transformarIdCobroEnIdMov(i);
+
+                            contCobranza.saveMovimiento_Cuenta_FechaVencimientos(idMov);
                             if (i > 0)
                             {
                                 //Verifico si se generó el cobro con algún cheque y lo guardo en la tabla Cheques_Datos
@@ -1979,9 +2087,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                                 //Verifico si hay que liquidar pagarés. Si no hay que liquidar, el entero es = 0
                                 int l = this.liquidarPagares(i);
-                               
+
                                 int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
-                                
+
                                 if (l > 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se liquidaron correctamente los pagarés en el cobro \", {type: \"info\"}); location.href = '../Valores/PagaresF.aspx';", true);
                                 if (l < 0)
@@ -1989,7 +2097,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
                                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
-                                mostrarMensaje(c, cobro.id,i);
+                                mostrarMensaje(c, cobro.id, i);
                             }
                             else
                             {
@@ -2026,7 +2134,7 @@ namespace Gestion_Web.Formularios.Facturas
          * procesaCobro devuelve > 0 tambien si pudo realizar correctamente el cobro
          * cobro es el numero id del cobro realizado
          * */
-        private void mostrarMensaje(int smsCorrecto,int idCobro, int cobroCorrecto)
+        private void mostrarMensaje(int smsCorrecto, int idCobro, int cobroCorrecto)
         {
             try
             {
@@ -2048,9 +2156,9 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Ocurrio un error en la funcion: mostrarMensaje. Ex: "+ex.Message+" \");", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Ocurrio un error en la funcion: mostrarMensaje. Ex: " + ex.Message + " \");", true);
             }
-            
+
         }
 
         private void hacerCobroPagoCuenta()
@@ -2123,6 +2231,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                             if (i > 0)
                             {
+                                contCobranza.saveMovimiento_Cuenta_FechaVencimientos(idMov);
                                 if (lstCheque.Rows.Count > 0)
                                 {
                                     var listCheques = this.contCobranzaEnt.obtenerChequesPorIdCobro(cobro.id);
@@ -2187,7 +2296,7 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 DataTable dt = lstPago;
                 decimal saldo = 0;
-                foreach(DataRow dr in dt.Rows)
+                foreach (DataRow dr in dt.Rows)
                 {
                     saldo += decimal.Round(Convert.ToDecimal(dr["Total"]), 2);
                 }
@@ -2203,11 +2312,11 @@ namespace Gestion_Web.Formularios.Facturas
                     else
                     {
                         lbRestan.Text = "Restan";
-                    }                      
+                    }
                     txtRestan.Text = decimal.Round(restan, 2).ToString().Replace(',', '.');
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error actualizando totales. " + ex.Message));
             }
@@ -2217,11 +2326,12 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(this.valor == 1)
+                if (this.valor == 1)
                 {
                     string posicion = (sender as TextBox).ID.ToString().Substring(5, (sender as TextBox).ID.Length - 5);
                     TableRow tr = this.phDocumentos.Controls[Convert.ToInt32(posicion)] as TableRow;
-                    TableCell c = tr.Cells[1] as TableCell;
+                    //TableCell c = tr.Cells[1] as TableCell;
+                    TableCell c = tr.Cells[3] as TableCell;
                     string saldoA = c.Text.Substring(1, c.Text.Length - 1);
                     decimal saldo = Convert.ToDecimal(saldoA.Replace(',', '.'), CultureInfo.InvariantCulture);
                     decimal imputado = Convert.ToDecimal((sender as TextBox).Text.Replace(',', '.'), CultureInfo.InvariantCulture);
@@ -2239,10 +2349,10 @@ namespace Gestion_Web.Formularios.Facturas
                             ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El importe a imputar no puede ser menor al saldo del documento o debe ser menor a cero. "));
                         }
                     }
-                    
+
 
                 }
-                if(this.valor == 2)
+                if (this.valor == 2)
                 {
                     string posicion = (sender as TextBox).ID.ToString().Substring(5, (sender as TextBox).ID.Length - 5);
                     TableRow tr = this.phDocumentos.Controls[Convert.ToInt32(posicion)] as TableRow;
@@ -2271,10 +2381,10 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if(this.monto != total)
+                if (this.monto != total)
                 {
                     DataTable dt = lstDocumentos;
-                    DataRow dr = lstDocumentos.Rows[Convert.ToInt32(lstDocumentos.Rows.Count -1)];
+                    DataRow dr = lstDocumentos.Rows[Convert.ToInt32(lstDocumentos.Rows.Count - 1)];
                     DataRow dr2 = dt.NewRow();
                     dr2["Id"] = dr["Id"];
                     dr2["Tipo"] = dr["Tipo"];
@@ -2284,7 +2394,7 @@ namespace Gestion_Web.Formularios.Facturas
                     dt.Rows.Remove(dr);
                     dt.Rows.Add(dr2);
                     lstDocumentos = dt;
-                    
+
                 }
             }
             catch
@@ -2302,15 +2412,16 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phDocumentos.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    TextBox txt = tr.Cells[2].Controls[0] as TextBox;
-                    if(tr.Cells[0].Text.Contains("Pago a Cuenta"))
+                    //TextBox txt = tr.Cells[2].Controls[0] as TextBox;
+                    TextBox txt = tr.Cells[4].Controls[0] as TextBox;
+                    if (tr.Cells[0].Text.Contains("Pago a Cuenta"))
                     {
                         i++;
                     }
                     if (!tr.Cells[0].Text.Contains("Recibo de Cobro") && !tr.Cells[0].Text.Contains("Pago a Cuenta"))
                     {
                         suma += Convert.ToDecimal(txt.Text.Replace(',', '.'), CultureInfo.InvariantCulture);
-                    }    
+                    }
                 }
 
 
@@ -2343,14 +2454,14 @@ namespace Gestion_Web.Formularios.Facturas
                 this.DropListBancoTransf.SelectedIndex = this.DropListBancoTransf.Items.IndexOf(this.DropListBancoTransf.Items.FindByText(info[1].Trim()));
                 //this.DropListBancoTransf.SelectedItem.Text = info[1].Trim();
                 this.txtCuentaTransf.Text = info[3].Trim();
-               
+
             }
-                catch (Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando datos de cuenta. " + ex.Message));
             }
         }
-                
+
         protected void txtCuentaCh_Disposed(object sender, EventArgs e)
         {
             obtenerCuitYCuenta();
@@ -2376,7 +2487,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 //this.txtCuitCh.Focus();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error en obtenerCuitYCuenta. " + ex.Message));
             }
@@ -2465,7 +2576,7 @@ namespace Gestion_Web.Formularios.Facturas
                     obtenerCuitYCuenta();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error en txtCodBarraCh_TextChanged. " + ex.Message));
             }
@@ -2492,7 +2603,7 @@ namespace Gestion_Web.Formularios.Facturas
                 return -1;
             }
         }
-        
+
         #endregion
 
 

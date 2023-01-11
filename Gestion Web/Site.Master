@@ -626,7 +626,7 @@
         <%--<div class="container body-content">--%>
 
         <!-- /footer -->
-        <div class="main">
+        <div class="main" style="margin-bottom:50px;">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
 

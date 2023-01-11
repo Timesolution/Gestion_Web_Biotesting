@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gestion_Web.Formularios.Facturas {
-    
-    
-    public partial class BuscarArticulos {
-        
+namespace Gestion_Web.Formularios.Facturas
+{
+
+
+    public partial class BuscarArticulos
+    {
+
         /// <summary>
         /// form1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// ScriptManager1 control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.ScriptManager ScriptManager1;
-        
+
         /// <summary>
         /// LabelInicio control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label LabelInicio;
-        
+
         /// <summary>
         /// txtBuscarArticulos control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtBuscarArticulos;
-        
+
         /// <summary>
         /// lbBuscarArticulos control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbBuscarArticulos;
-        
+
         /// <summary>
         /// phArticulos control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace Gestion_Web.Formularios.Facturas {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phArticulos;
-        
+
         /// <summary>
         /// lbtnAgregarArticulosMultiples control.
         /// </summary>

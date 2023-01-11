@@ -46,7 +46,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.idSucursal = Convert.ToInt32(Request.QueryString["sucursal"]);
                 this.puntoVenta = Convert.ToInt32(Request.QueryString["puntoVenta"]);
                 this.idTipo = Convert.ToInt32(Request.QueryString["tipo"]);
-                this.accion =  Convert.ToInt32(Request.QueryString["a"]);
+                this.accion = Convert.ToInt32(Request.QueryString["a"]);
 
                 if (!IsPostBack)
                 {
@@ -61,11 +61,11 @@ namespace Gestion_Web.Formularios.Facturas
                     if (idEmpresa == 0)
                     {
                         //this.idCliente = 1;
-                        this.idEmpresa =  (int)Session["Login_EmpUser"];
+                        this.idEmpresa = (int)Session["Login_EmpUser"];
                         //this.puntoVenta = this.contCobranza.obtenerPrimerPuntoVenta(idSucursal, idEmpresa);
                         //this.puntoVenta = 1;
                     }
-                    if(idSucursal == 0)
+                    if (idSucursal == 0)
                     {
                         this.idSucursal = (int)Session["Login_SucUser"];
                     }
@@ -86,7 +86,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.DropListTipo.SelectedValue = this.idTipo.ToString();
                 }
                 if (this.idCliente > 0)
-                {                    
+                {
                     this.cargarMovimientos();
                     this.txtImputar.Enabled = true;
                 }
@@ -96,7 +96,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 this.Form.DefaultButton = lbBuscar.UniqueID;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error " + ex.Message));
             }
@@ -256,7 +256,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.idSucursal = (int)Session["Login_SucUser"];
                     this.idEmpresa = (int)Session["Login_EmpUser"];
                     this.puntoVenta = Convert.ToInt32(DropListPuntoVta.SelectedValue);
-                    this.idTipo =   Convert.ToInt32(DropListTipo.SelectedValue);
+                    this.idTipo = Convert.ToInt32(DropListTipo.SelectedValue);
 
                     //cliente = this.contrCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                     //cuenta = this.contrCC.obtenerCuentaCorrienteCliente(Convert.ToInt32(DropListClientes.SelectedValue));
@@ -292,7 +292,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando movimientos. "  + ex.Message));
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando movimientos. " + ex.Message));
             }
         }
 
@@ -358,7 +358,7 @@ namespace Gestion_Web.Formularios.Facturas
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error cargando empresas. " + ex.Message));
             }
         }
-        
+
         public void cargarSucursal(int emp)
         {
             try
@@ -409,7 +409,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 this.DropListPuntoVta.DataSource = dt;
                 this.DropListPuntoVta.DataValueField = "Id";
-                this.DropListPuntoVta.DataTextField = "NombreFantasia";               
+                this.DropListPuntoVta.DataTextField = "NombreFantasia";
 
                 this.DropListPuntoVta.DataBind();
 
@@ -425,7 +425,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarEnPh(Movimiento m) 
+        private void cargarEnPh(Movimiento m)
         {
             MovimientoView movV = new MovimientoView();
             movV = m.ListarMovimiento();
@@ -442,6 +442,19 @@ namespace Gestion_Web.Formularios.Facturas
                 celFecha.VerticalAlign = VerticalAlign.Middle;
                 celFecha.HorizontalAlign = HorizontalAlign.Left;
                 tr.Cells.Add(celFecha);
+
+                string ddMMyyyyFV = "";
+                if (movV.fechaVenc != "")
+                {
+                    string[] fechaV = movV.fechaVenc.Split(' ')[0].Split('/');
+                    ddMMyyyyFV = fechaV[1] + "/" + fechaV[0] + "/" + fechaV[2];
+                }
+
+                TableCell celFechaV = new TableCell();
+                celFechaV.Text = ddMMyyyyFV;
+                celFechaV.VerticalAlign = VerticalAlign.Middle;
+                celFechaV.HorizontalAlign = HorizontalAlign.Left;
+                tr.Cells.Add(celFechaV);
 
                 TableCell celNumero = new TableCell();
                 celNumero.Text = movV.tipo.tipo + " " + movV.numero.ToString().PadLeft(8, '0');
@@ -476,7 +489,7 @@ namespace Gestion_Web.Formularios.Facturas
                 cbSeleccion.CssClass = "btn btn-info";
                 //cbSeleccion.Attributes.Add("onclick", "javascript:return updatebox(" + movV.saldo + "," + movV.id.ToString() + ");");
                 cbSeleccion.Attributes.Add("onchange", "javascript:return updatebox(" + movV.saldo + "," + movV.id.ToString() + ");");
-                
+
                 celSeleccion.Controls.Add(cbSeleccion);
                 celSeleccion.Width = Unit.Percentage(15);
                 //celSeleccion.VerticalAlign = VerticalAlign.Middle;
@@ -555,14 +568,14 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Response.Redirect("CobranzaF.aspx?cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue);    
+                Response.Redirect("CobranzaF.aspx?cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue);
                 //cargarMovimientos();
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ocurrio un error buscando movimientos. " + ex.Message));
             }
-            
+
         }
 
         protected void btnSiguiente_Click(object sender, EventArgs e)
@@ -580,12 +593,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
                 //Chequeo si se ingreso dinero a imputar
-                if(String.IsNullOrEmpty(this.txtImputar.Text) || this.txtImputar.Text == "0")
+                if (String.IsNullOrEmpty(this.txtImputar.Text) || this.txtImputar.Text == "0")
                 {
                     foreach (Control C in phCobranzas.Controls)
                     {
                         TableRow tr = C as TableRow;
-                        CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                        //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                        CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
                         if (ch.Checked == true)
                         {
                             idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -606,16 +620,50 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 else
                 {
-                        //Consulto si hay documentos para Imputar
-                        string movimientos = this.contrCC.obtenerMovimientosImputar(Convert.ToDecimal(this.txtImputar.Text.Replace(',', '.'), CultureInfo.InvariantCulture), this.idCliente, this.idSucursal, this.idEmpresa, this.puntoVenta, this.idTipo);
-                        if (!String.IsNullOrEmpty(movimientos))
+                    //Consulto si hay documentos para Imputar
+                    string movimientos = this.contrCC.obtenerMovimientosImputar(Convert.ToDecimal(this.txtImputar.Text.Replace(',', '.'), CultureInfo.InvariantCulture), this.idCliente, this.idSucursal, this.idEmpresa, this.puntoVenta, this.idTipo);
+
+                    if (!String.IsNullOrEmpty(movimientos))
+                    {
+                        //validamos que cada movimiento sea del tipo de doc que figura en la url (idTipo)
+
+                        string[] mov_temp = movimientos.Split(';');
+                        string mov_filtrados = "";
+                        foreach (var item in mov_temp)
                         {
-                            Response.Redirect("ABMCobros.aspx?documentos=" + movimientos + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
+                            if (item != "")
+                            {
+                                DataTable dtMov = contrCC.obtenerMovimientoByID(Convert.ToInt32(item));
+                                foreach (DataRow itemMov in dtMov.Rows)
+                                {
+                                    if (idTipo == 2)
+                                    {
+                                        if (itemMov["tipo_doc"].ToString() != "15")
+                                        {
+                                            mov_filtrados += item + ";";
+                                        }
+                                    }
+                                    else if (idTipo== 1)
+                                    {
+                                        if (itemMov["tipo_doc"].ToString() != "18")
+                                        {
+                                            mov_filtrados += item + ";";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mov_filtrados += item + ";";
+                                    }
+                                }
+                            }
                         }
-                        else
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El monto ingresado es menor al saldo de los documentos a imputar. "));
-                        }
+                        Response.Redirect("ABMCobros.aspx?documentos=" + mov_filtrados + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
+                        //Response.Redirect("ABMCobros.aspx?documentos=" + movimientos + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
+                    }
+                    else
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El monto ingresado es menor al saldo de los documentos a imputar. "));
+                    }
                 }
 
             }
@@ -730,7 +778,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error generando Pago a Cuenta. " + ex.Message));
 
@@ -776,14 +824,16 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
                     return;
                 }
-                
+
                 string facturas = "";
 
                 foreach (Control C in phCobranzas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    string tipoDoc = tr.Cells[1].Text;
-                    CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    //string tipoDoc = tr.Cells[1].Text;
+                    string tipoDoc = tr.Cells[2].Text;
+                    //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
                     if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto")))
                     {
                         facturas += tipoDoc + ";";
@@ -798,7 +848,7 @@ namespace Gestion_Web.Formularios.Facturas
                 decimal total = Convert.ToDecimal(this.txtFinal.Text);
                 if (total > 0)
                 {
-                    int i = this.contCobranza.GenerarNotaCreditoDescuento(null,this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, total, facturas);
+                    int i = this.contCobranza.GenerarNotaCreditoDescuento(null, this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, total, facturas);
 
                     if (i > 0)
                     {
@@ -817,7 +867,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-                ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxError("Error generando nota de credito. " + ex.Message), true);                
+                ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxError("Error generando nota de credito. " + ex.Message), true);
             }
         }
 
@@ -839,8 +889,10 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phCobranzas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    string tipoDoc = tr.Cells[1].Text;
-                    CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    //string tipoDoc = tr.Cells[1].Text;
+                    string tipoDoc = tr.Cells[2].Text;
+                    //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
                     if (ch.Checked == true && tipoDoc.Contains("Credito"))
                     {
                         idtildadoNC += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
@@ -856,7 +908,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (i > 0)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Proceso finalizado con exito!.",Request.Url.ToString()));
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Proceso finalizado con exito!.", Request.Url.ToString()));
                     }
                     else
                     {
@@ -946,12 +998,12 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                 }
-                if(script != "")
+                if (script != "")
                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel3, UpdatePanel3.GetType(), "alert", script, true);
 
             }
             catch (Exception ex)
-            {                
+            {
             }
         }
         private string verificarCobroLiquidacionPagares(string documentos)
@@ -1006,8 +1058,10 @@ namespace Gestion_Web.Formularios.Facturas
                 foreach (Control C in phCobranzas.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    string tipoDoc = tr.Cells[1].Text;
-                    CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    //string tipoDoc = tr.Cells[1].Text;
+                    string tipoDoc = tr.Cells[2].Text;
+                    //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
                     if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto")))
                     {
                         facturas += tipoDoc + ";";
@@ -1026,7 +1080,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string tipoNCND = drpNCND.SelectedValue;
                     string descripcionArt = txtDescripcionArt.Text;
 
-                    int i = this.contCobranza.GenerarNotaCreditoDebito(null,this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, importe, facturas, tipoNCND, descripcionArt);
+                    int i = this.contCobranza.GenerarNotaCreditoDebito(null, this.idEmpresa, this.idSucursal, this.puntoVenta, this.idTipo, this.idCliente, importe, facturas, tipoNCND, descripcionArt);
 
                     if (i > 0)
                     {
@@ -1051,6 +1105,6 @@ namespace Gestion_Web.Formularios.Facturas
         }
     }
 
-        
-        
+
+
 }

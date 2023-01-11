@@ -81,7 +81,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarSucursal();
                     this.cargarClientes(1);
                     DropListSucursal.SelectedValue = idSucursal.ToString();
-                    DropListTipo.SelectedValue = idTipo.ToString();
+                    //DropListTipo.SelectedValue = idTipo.ToString();
                     DropListClientes.SelectedValue = idCliente.ToString();
                     ListRazonSocial.SelectedValue = idCliente.ToString();
 
@@ -422,30 +422,66 @@ namespace Gestion_Web.Formularios.Facturas
 
                 DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta);
 
-                datos.DefaultView.Sort = "FechaVenc desc";
-                string tipoOrden = "FechaVenc desc";
-                //Session["fechaVenc_estado"] = "";
-                if (ordX == "1")
+                if (String.IsNullOrEmpty(ordX) || ordX == "3" || ordX == "4")
                 {
-                    datos.DefaultView.Sort = "fecha asc";
-                    tipoOrden = "Fecha asc";
-                }
-                else if (ordX == "2")
-                {
-                    datos.DefaultView.Sort = "fecha desc";
-                    tipoOrden = "Fecha desc";
-                }
-                else if (ordX == "3")
-                {
-                    datos.DefaultView.Sort = "fechaVenc asc";
-                    tipoOrden = "FechaVenc asc";
-                }
-                else if (ordX == "4")
-                {
-                    datos.DefaultView.Sort = "fechaVenc desc";
-                    tipoOrden = "FechaVenc desc";
+                    datos.DefaultView.Sort = "fechaVenc, id";
+                    DataTable tOrd = datos.DefaultView.ToTable();
+                    datos = tOrd.Copy();
                 }
 
+                decimal saldoAcumulado = 0;
+
+                foreach (DataRow row in datos.Rows)
+                {
+                    if (this.accion == 2)
+                    {
+                        if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                        {
+                            saldoAcumulado += Convert.ToDecimal(row["debe"]);
+                        }
+                        if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                        {
+                            saldoAcumulado -= Convert.ToDecimal(row["haber"]);
+                        }
+                    }
+                    else
+                    {
+                        saldoAcumulado += Convert.ToDecimal(row["saldo"]);
+                    }
+
+                    row["SaldoAcumulado"] = saldoAcumulado.ToString();
+                }
+
+                datos.DefaultView.Sort = "fechaVenc desc, id desc";
+                DataTable tablaOrd = datos.DefaultView.ToTable();
+                datos = tablaOrd.Copy();
+
+                string tipoOrden = "FechaVenc desc";
+                
+                switch (ordX)
+                {
+                    case "1":
+                        datos.DefaultView.Sort = "fecha asc, id";
+                        tipoOrden = "Fecha asc";
+                        break;
+                    case "2":
+                        datos.DefaultView.Sort = "fecha desc, id desc";
+                        tipoOrden = "Fecha desc";
+                        break;
+                    case "3":
+                        datos.DefaultView.Sort = "fechaVenc asc, id";
+                        tipoOrden = "FechaVenc asc";
+                        break;
+                    case "4":
+                        datos.DefaultView.Sort = "fechaVenc desc, id desc";
+                        tipoOrden = "FechaVenc desc";
+                        break;
+                }
+
+
+
+                DataTable sortedTable = datos.DefaultView.ToTable();
+                datos = sortedTable.Copy();
                 if (venc == "1")
                 {
                     DataTable datosVenc = datos.Clone();
@@ -487,28 +523,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
 
-                decimal saldoAcumulado = 0;
-
-                foreach (DataRow row in datos.Rows)
-                {
-                    if (this.accion == 2)
-                    {
-                        if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
-                        {
-                            saldoAcumulado += Convert.ToDecimal(row["debe"]);
-                        }
-                        if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
-                        {
-                            saldoAcumulado -= Convert.ToDecimal(row["haber"]);
-                        }
-                    }
-                    else
-                    {
-                        saldoAcumulado += Convert.ToDecimal(row["saldo"]);
-                    }
-
-                    row["SaldoAcumulado"] = saldoAcumulado.ToString();
-                }
+                
 
                 this.GridCtaCte.DataBind();
 
@@ -516,7 +531,7 @@ namespace Gestion_Web.Formularios.Facturas
                 this.labelSaldo.Text = saldoAcumulado.ToString("C");
                 this.cargarLabel(idCliente, idSucursal, idTipo);
                 cargarLabelSaldos();
-                lblParametros.Text += "Ordenado por " + tipoOrden;
+                lblParametros.Text += " Ordenado por " + tipoOrden;
             }
             catch (Exception ex)
             {
@@ -548,6 +563,39 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
+                #region Ordenamos los movimientos
+
+                dtImpagas.DefaultView.Sort = "fechaVenc desc";
+
+                string tipoOrden = "FechaVenc desc";
+                //Session["fechaVenc_estado"] = "";
+                if (ordX == "1")
+                {
+                    dtImpagas.DefaultView.Sort = "fecha asc";
+                    tipoOrden = "Fecha asc";
+                }
+                else if (ordX == "2")
+                {
+                    dtImpagas.DefaultView.Sort = "fecha desc";
+                    tipoOrden = "Fecha desc";
+                }
+                else if (ordX == "3")
+                {
+                    dtImpagas.DefaultView.Sort = "fechaVenc asc";
+                    tipoOrden = "FechaVenc asc";
+                }
+                else if (ordX == "4")
+                {
+                    dtImpagas.DefaultView.Sort = "fechaVenc desc";
+                    tipoOrden = "FechaVenc desc";
+                }
+
+
+                DataTable sortedTable = dtImpagas.DefaultView.ToTable();
+                dtImpagas = sortedTable.Copy();
+
+                #endregion
+
                 foreach (DataRow row in dtImpagas.Rows)
                 {
                     if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
@@ -560,14 +608,96 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
-                this.labelSaldoVenc.Text = saldoAcumuladoVenc.ToString("C");
                 this.labelSaldoImp.Text = saldoAcumuladoImp.ToString("C");
+                this.labelSaldoVenc.Text = saldoAcumuladoVenc.ToString("C");
 
+                Cliente client = contrCliente.obtenerClienteID(idCliente);
+                //decimal saldoOperativo = ObtenerSaldoOperativo();
+                int maxCantDias = obtenerMaxCantDias(idCliente, idSucursal);
+                string saldoMax = Convert.ToDecimal(client.saldoMax) < saldoAcumuladoImp ? "danger" : "success";
+                string diasVenc = Convert.ToInt32(client.vencFC) < maxCantDias ? "danger" : "success";
+                lblSaldoMax.Text = "<span class=\"text-"+ saldoMax + "\">$ " + client.saldoMax.ToString("N", new CultureInfo("is-IS")) + "</span>";
+                lblDiasVenc.Text = "<span class=\"text-" + diasVenc + "\">" + client.vencFC + "</span>";
 
+                Session.Add("saldoVenc", saldoAcumuladoVenc.ToString("C"));
+                Session.Add("saldoMax", client.saldoMax.ToString("N", new CultureInfo("is-IS")));
+                Session.Add("diasVenc", client.vencFC.ToString());
             }
             catch (Exception ex)
             {
 
+            }
+        }
+
+        private decimal ObtenerSaldoOperativo()
+        {
+            DataTable datos = controlador.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today);
+            decimal saldoOperativo;
+            decimal saldoAcumulado = 0;
+
+            foreach (DataRow row in datos.Rows)
+            {
+                if (this.accion == 2)
+                {
+                    if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                    {
+                        saldoAcumulado += Convert.ToDecimal(row["debe"]);
+                    }
+                    if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                    {
+                        saldoAcumulado -= Convert.ToDecimal(row["haber"]);
+                    }
+                }
+                else
+                {
+                    saldoAcumulado += Convert.ToDecimal(row["saldo"]);
+                }
+
+                row["SaldoAcumulado"] = saldoAcumulado.ToString();
+            }
+
+            //saldoOperativo = cliente.saldoMax - saldoAcumulado;
+            saldoOperativo = saldoAcumulado;
+            return saldoOperativo;
+        }
+
+        private int obtenerMaxCantDias(int idCliente, int idSucursal)
+        {
+            try
+            {
+                DateTime fdesde = Convert.ToDateTime("2000/01/01", new CultureInfo("es-AR"));
+                DateTime fhasta = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
+
+                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta);
+                int maxCantDias = 0;
+                bool primerValor = true;
+                foreach (DataRow item in datos.Rows)
+                {
+                    if (Convert.ToInt32(item["saldo"]) > 0)
+                    {
+                        //guardo el primer "diasVencidos" como el mas alto
+                        if (primerValor)
+                        {
+                            if (!String.IsNullOrEmpty(item["diasVencidos"].ToString()))
+                            {
+                                maxCantDias = Convert.ToInt32(item["diasVencidos"]);
+                                primerValor = false;
+                            }
+                        }
+                        else
+                        {
+                            if (!String.IsNullOrEmpty(item["diasVencidos"].ToString()) && Convert.ToInt32(item["diasVencidos"]) > maxCantDias)
+                            {
+                                maxCantDias = Convert.ToInt32(item["diasVencidos"]);
+                            }
+                        }
+                    }
+                }
+                return maxCantDias;
+            }
+            catch (Exception ex)
+            {
+                return -1;
             }
         }
 
@@ -783,33 +913,75 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 DataTable dtDatos = (DataTable)this.GridCtaCte.DataSource;
 
-                DataView dtV = dtDatos.DefaultView;
+                if (String.IsNullOrEmpty(ordX) || ordX == "3" || ordX == "4")
+                {
+                    dtDatos.DefaultView.Sort = "fechaVenc, id";
+                    DataTable tOrd = dtDatos.DefaultView.ToTable();
+                    dtDatos = tOrd.Copy();
+                }else if (ordX == "1" || ordX == "2")
+                {
+                    dtDatos.DefaultView.Sort = "fecha, id";
+                    DataTable tOrd = dtDatos.DefaultView.ToTable();
+                    dtDatos = tOrd.Copy();
+                }
 
-                dtV.Sort = "FechaVenc desc";
+                decimal saldoAcumulado = 0;
+
+                foreach (DataRow row in dtDatos.Rows)
+                {
+                    if (this.accion == 2)
+                    {
+                        if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                        {
+                            saldoAcumulado += Convert.ToDecimal(row["debe"]);
+                        }
+                        if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                        {
+                            saldoAcumulado -= Convert.ToDecimal(row["haber"]);
+                        }
+                    }
+                    else
+                    {
+                        saldoAcumulado += Convert.ToDecimal(row["saldo"]);
+                    }
+
+                    row["SaldoAcumulado"] = saldoAcumulado.ToString();
+                }
+
+                //DataView dtV = dtDatos.DefaultView;
+
+                dtDatos.DefaultView.Sort = "fechaVenc desc, id desc";
+                DataTable tablaOrd = dtDatos.DefaultView.ToTable();
+                dtDatos = tablaOrd.Copy();
+
                 string tipoOrden = "FechaVenc desc";
-                //Session["fechaVenc_estado"] = "";
+
+
+                //dtV.Sort = "FechaVenc desc";
+                //string tipoOrden = "FechaVenc desc";
+
                 if (ordX == "1")
                 {
-                    dtV.Sort = "fecha asc";
+                    dtDatos.DefaultView.Sort = "fecha asc, id";
                     tipoOrden = "Fecha asc";
                 }
                 else if (ordX == "2")
                 {
-                    dtV.Sort = "fecha desc";
+                    dtDatos.DefaultView.Sort = "fecha desc, id desc";
                     tipoOrden = "Fecha desc";
                 }
                 else if (ordX == "3")
                 {
-                    dtV.Sort = "fechaVenc asc";
+                    dtDatos.DefaultView.Sort = "fechaVenc asc, id";
                     tipoOrden = "FechaVenc asc";
                 }
                 else if (ordX == "4")
                 {
-                    dtV.Sort = "fechaVenc desc";
+                    dtDatos.DefaultView.Sort = "fechaVenc desc, id desc";
                     tipoOrden = "FechaVenc desc";
                 }
 
-                dtDatos = dtV.ToTable();
+                dtDatos = dtDatos.DefaultView.ToTable();
 
                 if (venc == "1")
                 {
@@ -846,10 +1018,10 @@ namespace Gestion_Web.Formularios.Facturas
                     }
                 }
 
-
+                Cliente clientImpReport = contrCliente.obtenerClienteID(idCliente);
                 Session.Add("datosMov", dtDatos);
                 Session.Add("saldoMov", labelSaldo.Text);
-
+                
                 //Response.Redirect("ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion);
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion+"','_blank')", true);
 
@@ -1198,6 +1370,21 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnFVDesc_Click(object sender, EventArgs e)
         {
             Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&ordX=4");
+        }
+
+        protected void tipoAmbos_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=-1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc="+venc);
+        }
+
+        protected void tipoFC_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=0&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc="+venc);
+        }
+
+        protected void tipoPRP_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc="+venc);
         }
     }
 }

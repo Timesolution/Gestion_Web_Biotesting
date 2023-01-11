@@ -1019,8 +1019,6 @@ namespace Gestion_Web.Formularios.Clientes
                 this.DropListClientes.DataBind();
                 this.DropListClientes.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
-                
-
             }
             catch (Exception ex)
             {
@@ -1033,11 +1031,7 @@ namespace Gestion_Web.Formularios.Clientes
             try
             {
                 var dtCli = controlador.getCliente_ImputadoCtaCte(idCliente);
-                foreach (var item in dtCli.Rows)
-                {
-
-                }
-                DropListClientes.SelectedValue = dtCli.Rows[0].ItemArray[2].ToString();
+                this.DropListClientes.SelectedValue = dtCli.Rows[0].ItemArray[2].ToString();
             }
             catch (Exception ex)
             {
