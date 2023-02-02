@@ -1142,11 +1142,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Tipo cambio U$D: </Value>
-                                  <Style />
-                                </TextRun>
-                                <TextRun>
-                                  <Value>=Parameters!ParamCambioDolar.Value</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>

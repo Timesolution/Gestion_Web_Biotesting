@@ -8,7 +8,7 @@
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
-                        <h5><i class="icon-map-marker"></i> Ventas > Cobros</h5>
+                        <h5><i class="icon-map-marker"></i>Ventas > Cobros</h5>
                     </div>
                     <div class="widget-header">
                         <i class="icon-wrench"></i>
@@ -132,23 +132,57 @@
                 </div>
             </div>
 
+            <div class="row" style="margin: 0 10px;">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <asp:Button ID="btnSiguiente" runat="server" Text="Siguiente" class="btn btn-success" OnClick="btnSiguiente_Click" />
+                            </td>
+                            <td>
+                                &nbsp
+                            </td>
+                            <td>
+                                <asp:Button ID="btnPagoCuenta" runat="server" Text="Pago a Cuenta" class="btn btn-info" Visible="true" OnClick="btnPagoCuenta_Click" />
+                            </td>
+                            <td>
+                                &nbsp
+                            </td>
+                            <td>
+                                <asp:Button ID="btnGenerarDto" runat="server" Text="Generar Dto" class="btn btn-info" data-toggle="modal" href="#modalDescuento" />
+                            </td>
+                            <td>
+                                &nbsp
+                            </td>
+                            <td>
+                                <asp:Button ID="btnGenerarNCND" runat="server" Text="Generar NC/ND" class="btn btn-info" data-toggle="modal" href="#modalNCND" />
+                            </td>
+                            <td>
+                                &nbsp
+                            </td>
+                            <td>
+                                <asp:Button ID="btnImputar" runat="server" Text="Imputar doc. a favor" class="btn btn-info" OnClick="btnImputar_Click" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-
-            <div class="col-lg-1">
+            <%--<div class="col-lg-1">
                 <asp:Button ID="btnSiguiente" runat="server" Text="Siguiente" class="btn btn-success" OnClick="btnSiguiente_Click" />
             </div>
-            <div class="col-lg-2" style="width:10%;">
+            <div class="col-lg-2" style="width: 10%;">
                 <asp:Button ID="btnPagoCuenta" runat="server" Text="Pago a Cuenta" class="btn btn-info" Visible="true" OnClick="btnPagoCuenta_Click" />
             </div>
-            <div class="col-lg-2" style="width:10%;">
-                <asp:Button ID="btnGenerarDto" runat="server" Text="Generar Dto" class="btn btn-info" data-toggle="modal" href="#modalDescuento" />                
+            <div class="col-lg-2" style="width: 10%;">
+                <asp:Button ID="btnGenerarDto" runat="server" Text="Generar Dto" class="btn btn-info" data-toggle="modal" href="#modalDescuento" />
             </div>
-            <div class="col-lg-2" style="width:10%;">
-                <asp:Button ID="btnGenerarNCND" runat="server" Text="Generar NC/ND" class="btn btn-info" data-toggle="modal" href="#modalNCND" />                
+            <div class="col-lg-2" style="width: 10%;">
+                <asp:Button ID="btnGenerarNCND" runat="server" Text="Generar NC/ND" class="btn btn-info" data-toggle="modal" href="#modalNCND" />
             </div>
-            <div class="col-lg-2" style="width:10%;">
-                <asp:Button ID="btnImputar" runat="server" Text="Imputar" class="btn btn-info" OnClick="btnImputar_Click"   />
-            </div>
+            <div class="col-lg-2" style="width: 10%;">
+                <asp:Button ID="btnImputar" runat="server" Text="Imputar" class="btn btn-info" OnClick="btnImputar_Click" />
+            </div>--%>
         </div>
         <%--Fin modalGrupo--%>
     </div>
@@ -334,10 +368,10 @@
 
             </div>
         </div>
-    </div>   
+    </div>
 
 
-        <div id="modalNCND" class="modal fade" tabindex="-1" role="dialog">
+    <div id="modalNCND" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -391,35 +425,35 @@
 
             </div>
         </div>
-    </div>  
+    </div>
 
     <div id="modalComentarios" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <asp:UpdatePanel ID="UpdatePanel6" runat="server" UpdateMode="Always">
-                            <ContentTemplate>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <asp:UpdatePanel ID="UpdatePanel6" runat="server" UpdateMode="Always">
+                    <ContentTemplate>
 
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                    <h4 class="modal-title">Observaciones</h4>
-                                </div>
-                                <div class="modal-body">                                   
-                                    <div role="form" class="form-horizontal col-md-12">
-                                        <div class="form-group">
-                                            <div class="col-md-12">
-                                                <asp:TextBox ID="txtComentario" runat="server" class="form-control" disabled TextMode="MultiLine" Rows="4"/>
-                                            </div>
-                                        </div>                                                  
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Observaciones</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div role="form" class="form-horizontal col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <asp:TextBox ID="txtComentario" runat="server" class="form-control" disabled TextMode="MultiLine" Rows="4" />
                                     </div>
                                 </div>
-                            </ContentTemplate>
-                        </asp:UpdatePanel>
-                    </div>
+                            </div>
+                        </div>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
 
-                </div>
-            </div> 
+        </div>
+    </div>
 
-    
+
     <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
     <!-- Core Scripts - Include with every page -->
@@ -464,28 +498,27 @@
             if (key < 48 || key > 57) {
                 if (key == 46 || key == 8 || key == 44) // Detectar . (punto) , backspace (retroceso) y , (coma)
                 { return true; }
-                else
-                { return false; }
+                else { return false; }
             }
             return true;
         }
     </script>
-    <script >
-        
+    <script>
+
         function updatebox(valor, id) {
             var textbox = document.getElementById("<%=txtTotalFC.ClientID%>");
             var lblSeleccion = document.getElementById("<%= labelSeleccion.ClientID %>");
 
             var chk1 = document.getElementById("cbSeleccion_" + id);
-            
+
             if (chk1.checked) {
                 textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
-                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2);                
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2);
             }
             else {
                 textbox.value = parseFloat(parseFloat(textbox.value) - parseFloat(valor)).toFixed(2)
                 lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2);
-            }           
+            }
 
         }
         function openModalComentario() {

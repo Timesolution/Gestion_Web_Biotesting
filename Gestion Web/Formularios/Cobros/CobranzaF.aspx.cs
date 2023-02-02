@@ -1,4 +1,5 @@
 ﻿using Disipar.Models;
+using Estetica_Api.Entity;
 using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
@@ -9,6 +10,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Transactions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -26,7 +28,9 @@ namespace Gestion_Web.Formularios.Facturas
         controladorUsuario contUser = new controladorUsuario();
         controladorFactEntity contFactEnt = new controladorFactEntity();
         Cliente cliente = new Cliente();
-        CuentaCorriente cuenta = new CuentaCorriente();
+        //CuentaCorriente cuenta = new CuentaCorriente();
+        Configuracion config = new Configuracion();
+
         Mensajes mje = new Mensajes();
         private int idCliente;
         private int idEmpresa;
@@ -35,6 +39,7 @@ namespace Gestion_Web.Formularios.Facturas
         private int idTipo;
         private int accion;
         private String senia;
+        private string txtNumeroCobro;
         //int accion;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -463,19 +468,22 @@ namespace Gestion_Web.Formularios.Facturas
                 tr.Cells.Add(celNumero);
 
                 TableCell celDebe = new TableCell();
-                celDebe.Text = "$" + movV.debe.ToString().Replace(',', '.');
+                //celDebe.Text = "$" + movV.debe.ToString().Replace(',', '.');
+                celDebe.Text = "$" + movV.debe.ToString("#,##0.00");
                 celDebe.VerticalAlign = VerticalAlign.Middle;
                 celDebe.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celDebe);
 
                 TableCell celHaber = new TableCell();
-                celHaber.Text = "$" + movV.haber.ToString().Replace(',', '.');
+                //celHaber.Text = "$" + movV.haber.ToString().Replace(',', '.');
+                celHaber.Text = "$" + movV.haber.ToString("#,##0.00");
                 celHaber.VerticalAlign = VerticalAlign.Middle;
                 celHaber.HorizontalAlign = HorizontalAlign.Right;
                 tr.Cells.Add(celHaber);
 
                 TableCell celSaldo = new TableCell();
-                celSaldo.Text = "$" + movV.saldo.ToString().Replace(',', '.');
+                //celSaldo.Text = "$" + movV.saldo.ToString().Replace(',', '.');
+                celSaldo.Text = "$" + movV.saldo.ToString("#,##0.00");
                 celSaldo.VerticalAlign = VerticalAlign.Middle;
                 celSaldo.HorizontalAlign = HorizontalAlign.Right;
                 //celSaldo.Width = Unit.Percentage(20);
@@ -643,7 +651,7 @@ namespace Gestion_Web.Formularios.Facturas
                                             mov_filtrados += item + ";";
                                         }
                                     }
-                                    else if (idTipo== 1)
+                                    else if (idTipo == 1)
                                     {
                                         if (itemMov["tipo_doc"].ToString() != "18")
                                         {
@@ -893,7 +901,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string tipoDoc = tr.Cells[2].Text;
                     //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
                     CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
-                    if (ch.Checked == true && tipoDoc.Contains("Credito"))
+                    if (ch.Checked == true && tipoDoc.Contains("Credito") || tipoDoc.Contains("Recibo"))
                     {
                         idtildadoNC += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                     }
@@ -904,20 +912,24 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (!String.IsNullOrEmpty(idtildadoNC) && !String.IsNullOrEmpty(idtildadoFC))
                 {
-                    int i = this.contCobranza.imputarNotaCreditoAFactura(idtildadoNC, idtildadoFC);
+                    List<MovimientoView> movimientosNC = contrCC.obtenerListaMovimientos(idtildadoNC);
+                    List<MovimientoView> movimientosFC = contrCC.obtenerListaMovimientos(idtildadoFC);
+                    hacerCobro();
 
-                    if (i > 0)
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Proceso finalizado con exito!.", Request.Url.ToString()));
-                    }
-                    else
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Ocurrio un error imputando Nota/s de Credito a Factura/s."));
-                    }
+                    this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
+                    //int i = this.contCobranza.imputarNotaCreditoAFactura(idtildadoNC, idtildadoFC);
+                    //if (i > 0)
+                    //{
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Proceso finalizado con exito!.", Request.Url.ToString()));
+                    //}
+                    //else
+                    //{
+                    //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Ocurrio un error imputando Nota/s de Credito a Factura/s."));
+                    //}
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento"));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento nota de credito y una factura o presupuesto."));
                 }
 
             }
@@ -926,6 +938,251 @@ namespace Gestion_Web.Formularios.Facturas
 
             }
         }
+
+        private void hacerCobro()
+        {
+            try
+            {
+                //obtengo las imputaciones
+                //string imputado = TotalDoc;
+                string imputado = "0";
+                List<Imputacion> imputaciones = obtenerImputaciones();
+                //Configuracion config = new Configuracion();
+                if (imputaciones != null)
+                {
+                    //si hay imputaciones ingreso los pagos
+                    DataTable dtRecCobro = getRecibosDeCobro();
+                    DataTable dtNotaCredito = getNotaDeCredito();
+                    List<Pago> listPago = contCobranza.obtenerPagosRC_NC_desdeDT(dtRecCobro, dtNotaCredito);
+
+                    if (listPago.Count > 0 & listPago != null)
+                    {
+                        Cobro cobro = new Cobro();
+                        //cobro.fecha = Convert.ToDateTime(DateTime.Now.ToString(new CultureInfo("es-AR")).Split(' ')[0]);
+                        cobro.fecha = DateTime.Now;
+                        cobro.cliente.id = this.idCliente;
+                        cobro.Doc_imputar = imputaciones;
+                        cobro.pagos = listPago;
+                        cobro.empresa.id = this.idEmpresa;
+                        cobro.sucursal.id = this.idSucursal;
+                        cobro.puntoVenta = contSucursal.obtenerPtoVentaId(this.puntoVenta);
+                        //cobro.total = Convert.ToDecimal(txtTotalIngresado.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        decimal txtTotalIngresado = 0;
+                        foreach (DataRow dataRow in dtRecCobro.Rows)
+                        {
+                            txtTotalIngresado += Convert.ToDecimal(dataRow["monto"]);
+                        }
+                        foreach (DataRow dataRow2 in dtNotaCredito.Rows)
+                        {
+                            txtTotalIngresado += Convert.ToDecimal(dataRow2["monto"]);
+                        }
+                        cobro.ingresado = Math.Abs(txtTotalIngresado);
+                        foreach (var items in imputaciones)
+                        {
+                            txtTotalIngresado += Convert.ToDecimal(items.total);
+                        }
+                        cobro.total = txtTotalIngresado;
+                        //cobro.imputado = Convert.ToDecimal(imputado.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        cobro.imputado = Convert.ToDecimal(imputaciones[0].imputar);
+                        //cobro.ingresado = Convert.ToDecimal(txtTotalIngresado.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        //cobro.ingresado = txtTotalIngresado;
+                        cobro.comentarios = "";
+                        obtenerNroRecibo();
+                        //if (this.config.numeracionCobros == "0")
+                        //{
+                        cobro.numero = txtNumeroCobro;
+                        //}
+
+                        //agrego el tipo de documento que se imputa                        
+                        if (this.idTipo == 1)
+                        {
+                            cobro.tipoDocumento.tipo = "Factura";
+                        }
+                        if (this.idTipo == 2)
+                        {
+                            cobro.tipoDocumento.tipo = "Presupuesto";
+                        }
+
+                        int i = 0;
+                        if (Math.Abs(cobro.ingresado) >= cobro.imputado)
+                        {
+                            //var idRecCobro = cobro.pagos[0].idReciboCobro;
+                            i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
+
+                            
+                        }
+                        else
+                        {
+                            i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
+
+                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"El cobro es mayor a lo imputado. \");", true);
+                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El cobro es mayor a lo imputado"));
+                        }
+                        if (i > 0)
+                        {
+                            int idMov = contCobranza.transformarIdCobroEnIdMov(i);
+
+                            if (idMov > 0)
+                            {
+                                contCobranza.saveMovimiento_Cuenta_FechaVencimientos(idMov);
+
+                                contCobranza.modificarMovimientoCuenta_Haber(idMov);
+
+                                ScriptManager.RegisterClientScriptBlock(this.Page, Page.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se cargaron pagos. \");", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se cargaron pagos. "));
+                    }
+                }
+                else
+                {
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudo obtener imputaciones. \");", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se pudo cargaron imputaciones "));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        
+
+        public List<Imputacion> obtenerImputaciones()
+        {
+            try
+            {
+                List<Imputacion> imputaciones = new List<Imputacion>();
+                foreach (Control c in phCobranzas.Controls)
+                {
+                    TableRow tr1 = c as TableRow;
+                    string tipoDoc = tr1.Cells[2].Text;
+                    CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto")))
+                    {
+                        Imputacion imp = new Imputacion();
+                        string txt = tr1.Cells[5].Text.TrimStart('$');
+
+                        imp.movimiento = contrCC.obtenerMovimientoID(Convert.ToInt32(ch.ID.Substring(12, ch.ID.Length - 12)));
+
+                        imp.total = Convert.ToDecimal(tr1.Cells[5].Text.Substring(1), CultureInfo.InvariantCulture);
+
+                        if (!String.IsNullOrEmpty(txt))
+                        {
+                            decimal resto = imp.movimiento.saldo - imp.total;
+                            imp.imputar = resto + Convert.ToDecimal(txt, CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            imp.imputar = 0;
+                        }
+
+                        imputaciones.Add(imp);
+                    }
+                }
+                return imputaciones;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ha ocurrido un error obteniendo Lista de Imputaciones. " + ex.Message));
+                return null;
+            }
+        }
+
+        public DataTable getRecibosDeCobro()
+        {
+            try
+            {
+                DataTable dtPagos = new DataTable();
+                dtPagos.Columns.Add("id");
+                dtPagos.Columns.Add("monto");
+                dtPagos.Columns.Add("idRecCobro");
+
+                foreach (Control c in phCobranzas.Controls)
+                {
+
+
+                    TableRow tr1 = c as TableRow;
+                    string tipoDoc = tr1.Cells[2].Text;
+                    CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true && tipoDoc.Contains("Recibo"))
+                    {
+                        string txt = tr1.Cells[5].Text.TrimStart('$');
+
+                        DataRow dr = dtPagos.NewRow();
+                        dr["monto"] = txt;
+                        dr["idRecCobro"] = ch.ID.Substring(12, ch.ID.Length - 12);
+                        dtPagos.Rows.Add(dr);
+                    }
+
+
+                }
+                return dtPagos;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        public DataTable getNotaDeCredito()
+        {
+            try
+            {
+                DataTable dtPagos = new DataTable();
+                dtPagos.Columns.Add("id");
+                dtPagos.Columns.Add("monto");
+                dtPagos.Columns.Add("idNotaCredito");
+
+                foreach (Control c in phCobranzas.Controls)
+                {
+                    TableRow tr1 = c as TableRow;
+                    string tipoDoc = tr1.Cells[2].Text;
+                    CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true && tipoDoc.Contains("Credito"))
+                    {
+                        string txt = tr1.Cells[5].Text.TrimStart('$');
+
+                        DataRow dr = dtPagos.NewRow();
+                        dr["monto"] = txt;
+                        dr["idNotaCredito"] = ch.ID.Substring(12, ch.ID.Length - 12);
+                        dtPagos.Rows.Add(dr);
+                    }
+
+                }
+                return dtPagos;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        private void obtenerNroRecibo()
+        {
+            try
+            {
+                //como estoy en cotizacion pido el ultimo numero de este documento
+                PuntoVenta pv = contSucursal.obtenerPtoVentaId(this.puntoVenta);
+                int nro = this.contCobranza.obtenerReciboNumero(this.puntoVenta, "Recibo de Cobro - FC");
+                if (this.config.numeracionCobros != "0")
+                {
+                    txtNumeroCobro = pv.puntoVenta + "-" + nro.ToString().PadLeft(8, '0');
+                }
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error obteniendo numero de Cobro. " + ex.Message));
+            }
+        }
+
         private void ComentariosDocumento(object sender, EventArgs e)
         {
             try

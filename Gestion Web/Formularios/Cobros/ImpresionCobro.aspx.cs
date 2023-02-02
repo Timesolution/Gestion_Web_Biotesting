@@ -215,6 +215,30 @@ namespace Gestion_Web.Formularios.Cobros
                 }
                 catch { }
 
+                try
+                {
+                    foreach (DataRow dr in dtDetalle.Rows)
+                    {
+                        if (dr["tipo"].ToString() == "Recibo de Cobro")
+                        {
+                            string[] splitComment = dr["comentario"].ToString().Split('|');
+                            dr["tipo"] = "Recibo de Cobro " + splitComment[0];
+                            dr["monto"] = splitComment[1];
+                        }
+                        if (dr["tipo"].ToString() == "Nota de Credito")
+                        {
+                            string[] splitComment = dr["comentario"].ToString().Split('|');
+                            dr["tipo"] = "Nota de Credito " + splitComment[0];
+                            dr["monto"] = splitComment[1];
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+
                 //datos empresa emisora
                 DataRow drEmpresa = dtDatos.Rows[0];
                 ControladorEmpresa controlEmpresa = new ControladorEmpresa();

@@ -509,30 +509,24 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (dtClientes.Rows.Count > 0)
                 {
+                    string idClienteSelected = DropListClientes.SelectedValue;
                     DropListClientes.Items.Clear();
                     DropListClientes.DataSource = dtClientes;
                     DropListClientes.DataValueField = "id";
                     DropListClientes.DataTextField = "alias";
-                    DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
                     DropListClientes.DataBind();
 
-                    //_idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
-
-                    //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
-                    //var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), _idCliente);
-
-                    //if (usuario_cliente.IdCliente > 0)
-                    //    cargarClienteDesdeModal();
-
+                    string idCliente = DropListClientes.SelectedValue;
                     if (!string.IsNullOrEmpty(DropListClientes.SelectedValue))
                     {
-                        this.cargarClienteEnLista(Convert.ToInt32(DropListClientes.SelectedValue));
+                        this.cargarClienteEnLista(Convert.ToInt32(idCliente));
                         this.cargarCliente(Convert.ToInt32(DropListClientes.SelectedValue));
 
                         CargarDropList_DireccionesDeEntregaDelCliente(Convert.ToInt32(DropListClientes.SelectedValue));
 
                     }
 
+                    DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
                     this.obtenerNroFactura();
                 }
                 else
@@ -2112,7 +2106,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                     {
-                        if (dtCli.Rows.Count>0 && Convert.ToInt32(dtCli.Rows[0].ItemArray[2]) > 0)
+                        if (dtCli.Rows.Count > 0 && Convert.ToInt32(dtCli.Rows[0].ItemArray[2]) > 0)
                         {
                             Cliente clienteImp = contCliente.obtenerClienteID(Convert.ToInt32(dtCli.Rows[0].ItemArray[2]));
                             if (clienteImp != null)
@@ -2589,10 +2583,17 @@ namespace Gestion_Web.Formularios.Facturas
 
         private void cargarClienteEnLista(int idCliente)
         {
-            var c = contCliente.obtenerClienteID(idCliente);
-            if (c != null)
+            if (this.DropListClientes.Items.FindByValue(idCliente.ToString()) == null)
             {
-                this.DropListClientes.Items.Add(new ListItem { Value = idCliente.ToString(), Text = c.alias });
+                var c = contCliente.obtenerClienteID(idCliente);
+                if (c != null)
+                {
+                    this.DropListClientes.Items.Add(new ListItem { Value = idCliente.ToString(), Text = c.alias });
+                    this.DropListClientes.SelectedValue = idCliente.ToString();
+                }
+            }
+            else
+            {
                 this.DropListClientes.SelectedValue = idCliente.ToString();
             }
         }
@@ -2720,7 +2721,7 @@ namespace Gestion_Web.Formularios.Facturas
                 if (this.accion != 9 && this.accion != 13 && this.accion != 6 && c.siemprePRP == "1")//no es refact
                 {
                     var dtCli = controladorCliente.getCliente_ImputadoCtaCte(this.cliente.id);
-                    if (dtCli.Rows.Count>0 && Convert.ToInt32(dtCli.Rows[0].ItemArray[2]) > 0)
+                    if (dtCli.Rows.Count > 0 && Convert.ToInt32(dtCli.Rows[0].ItemArray[2]) > 0)
                     {
                         Cliente clienteImp = contCliente.obtenerClienteID(Convert.ToInt32(dtCli.Rows[0].ItemArray[2]));
                         if (clienteImp != null)
@@ -5274,7 +5275,7 @@ namespace Gestion_Web.Formularios.Facturas
                         "]" +
                         "}, function(result) {" +
                         "   if(result == \"Si\"){";
-                        if (cantArtBloquea > 0) 
+                        if (cantArtBloquea > 0)
                         {
                             // funcion que solo confirma.
                             script += "       ConfirmarFacturarArts(0)";
@@ -8790,7 +8791,7 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     //obtengo id empresa para buscar el logo correspondiente
-                    int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);                
+                    int idEmpresa = Convert.ToInt32(drDatosFactura["Empresa"]);
                     string logo = Server.MapPath("../../Facturas/" + idEmpresa + "/" + pv.id_suc + "/" + pv.id + "/Logo.jpg");
                     Log.EscribirSQL(1, "INFO", "Ruta Logo " + logo);
                     BarcodeProfessional bcp = new BarcodeProfessional();
@@ -8863,7 +8864,7 @@ namespace Gestion_Web.Formularios.Facturas
                                                                                                               //ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///C:\Imagen\Logo.jpg");
                     ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
 
-                    Log.EscribirSQL(1, "INFO", @"Asigno Ruta file:///" + logo);                                  
+                    Log.EscribirSQL(1, "INFO", @"Asigno Ruta file:///" + logo);
 
                     ReportParameter param3b = new ReportParameter("Subtotal2", subtotal2.ToString("C"));
                     ReportParameter param4b = new ReportParameter("Iva", iva.ToString("C"));
@@ -9575,7 +9576,7 @@ namespace Gestion_Web.Formularios.Facturas
                     //}
                     //else
                     //{
-                        textoDolares = "ESTA FACTURA EQUIVALE A USD $ DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
+                    textoDolares = "ESTA FACTURA EQUIVALE A USD $ DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
                     //}
 
                     //Condición de Pago
