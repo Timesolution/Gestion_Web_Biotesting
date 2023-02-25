@@ -12,6 +12,10 @@
         .fontSize-35{
             font-size:35px;
         }
+
+        .vAlign{
+            vertical-align:middle;
+        }
     </style>
     <div class="main">
 

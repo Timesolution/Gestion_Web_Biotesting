@@ -893,7 +893,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                 string idtildadoNC = "";
                 string idtildadoFC = "";
-
+                string idDocTildados = "";
                 foreach (Control C in phCobranzas.Controls)
                 {
                     TableRow tr = C as TableRow;
@@ -905,31 +905,32 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         idtildadoNC += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                     }
-                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto")))
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("Debito")))
                     {
                         idtildadoFC += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                    }
+                    if (ch.Checked)
+                    {
+                        idDocTildados += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                     }
                 }
                 if (!String.IsNullOrEmpty(idtildadoNC) && !String.IsNullOrEmpty(idtildadoFC))
                 {
                     List<MovimientoView> movimientosNC = contrCC.obtenerListaMovimientos(idtildadoNC);
                     List<MovimientoView> movimientosFC = contrCC.obtenerListaMovimientos(idtildadoFC);
+                    List<MovimientoView> movDocTildados = contrCC.obtenerListaMovimientos(idDocTildados);
                     hacerCobro();
 
                     this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
-                    //int i = this.contCobranza.imputarNotaCreditoAFactura(idtildadoNC, idtildadoFC);
-                    //if (i > 0)
-                    //{
-                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Proceso finalizado con exito!.", Request.Url.ToString()));
-                    //}
-                    //else
-                    //{
-                    //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Ocurrio un error imputando Nota/s de Credito a Factura/s."));
-                    //}
+
+                    sadoDeTodosLosDocEn0(movDocTildados);
+
+                    actualizarSaldoImputado(movDocTildados);
+                    
                 }
                 else
                 {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento nota de credito y una factura o presupuesto."));
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento nota de credito y una factura, nota de debito o presupuesto."));
                 }
 
             }
@@ -1004,20 +1005,14 @@ namespace Gestion_Web.Formularios.Facturas
                         }
 
                         int i = 0;
-                        if (Math.Abs(cobro.ingresado) >= cobro.imputado)
-                        {
+                        //if (Math.Abs(cobro.ingresado) >= cobro.imputado)
+                        //{
                             //var idRecCobro = cobro.pagos[0].idReciboCobro;
-                            i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
-
-                            
-                        }
-                        else
-                        {
-                            i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
+                        i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
 
                             //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"El cobro es mayor a lo imputado. \");", true);
                             //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El cobro es mayor a lo imputado"));
-                        }
+                        //}
                         if (i > 0)
                         {
                             int idMov = contCobranza.transformarIdCobroEnIdMov(i);
@@ -1051,7 +1046,44 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        
+        private void sadoDeTodosLosDocEn0(List<MovimientoView> movs)
+        {
+            try
+            {
+                foreach (var mov in movs) 
+                {
+                    contCobranza.actualizarSaldoNC(mov.id,0);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        private void actualizarSaldoImputado(List<MovimientoView> movs)
+        {
+            try
+            {
+                decimal saldoSum = movs.Sum(x => x.saldo);
+                
+                if (saldoSum < 0)
+                {
+                    int idMovMenorA0 = movs.Where(x => x.saldo < 0).FirstOrDefault().id;
+                    contCobranza.actualizarSaldoNC(idMovMenorA0, saldoSum);
+                }
+                else if (saldoSum > 0)
+                {
+                    int idMovMayorA0 = movs.Where(x => x.saldo > 0).FirstOrDefault().id;
+                    contCobranza.actualizarSaldoNC(idMovMayorA0, saldoSum);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
 
         public List<Imputacion> obtenerImputaciones()
         {
@@ -1064,7 +1096,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string tipoDoc = tr1.Cells[2].Text;
                     CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
 
-                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto")))
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("Debito")))
                     {
                         Imputacion imp = new Imputacion();
                         string txt = tr1.Cells[5].Text.TrimStart('$');

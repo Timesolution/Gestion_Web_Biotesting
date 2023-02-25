@@ -513,11 +513,11 @@
 
             if (chk1.checked) {
                 textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
-                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2);
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
             }
             else {
                 textbox.value = parseFloat(parseFloat(textbox.value) - parseFloat(valor)).toFixed(2)
-                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2);
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
             }
 
         }
