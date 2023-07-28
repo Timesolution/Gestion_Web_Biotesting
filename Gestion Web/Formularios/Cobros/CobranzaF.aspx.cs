@@ -89,6 +89,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.cargarPuntoVta(Convert.ToInt32(this.DropListSucursal.SelectedValue));
                     this.DropListPuntoVta.SelectedValue = this.puntoVenta.ToString();
                     this.DropListTipo.SelectedValue = this.idTipo.ToString();
+
                 }
                 if (this.idCliente > 0)
                 {
@@ -251,6 +252,10 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+        private void CargarDocSaldoMenorACero()
+        {
+
+        }
         private void cargarMovimientos()
         {
             try
@@ -289,6 +294,11 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         saldo += m.saldo;
                         this.cargarEnPh(m);
+
+                        //Esta funcion carga los documentos con saldo negativo en el modalInputar
+                        this.cargarEnPHSaldoMenorACero(m);
+
+                        this.cargarEnPHSaldoMayorACero(m);
                     }
                     this.labelSaldo.Text = saldo.ToString("C");
                     //this.lblSaldo.Text = "Saldo $ " + saldo.ToString();
@@ -301,6 +311,193 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+
+        public void cargarEnPHSaldoMayorACero(Movimiento m)
+        {
+            MovimientoView movV = new MovimientoView();
+            movV = m.ListarMovimiento();
+
+            try
+            {
+                if (movV.saldo > 0)
+                {
+                    TableRow tr = new TableRow();
+                    //Le puse esta nombre al id ya que cada fila representa un documento con saldo mayor a cero
+                    tr.ID = "saldoMayorAcero_" + movV.id.ToString();
+
+                    //Celdas
+
+                    TableCell celFecha = new TableCell();
+                    celFecha.Text = movV.fecha.ToString("dd/MM/yyyy");
+                    celFecha.VerticalAlign = VerticalAlign.Middle;
+                    celFecha.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celFecha);
+
+                    string ddMMyyyyFV = "";
+                    if (movV.fechaVenc != "")
+                    {
+                        string[] fechaV = movV.fechaVenc.Split(' ')[0].Split('/');
+                        ddMMyyyyFV = fechaV[1] + "/" + fechaV[0] + "/" + fechaV[2];
+                    }
+
+                    TableCell celFechaV = new TableCell();
+                    celFechaV.Text = ddMMyyyyFV;
+                    celFechaV.VerticalAlign = VerticalAlign.Middle;
+                    celFechaV.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celFechaV);
+
+                    TableCell celNumero = new TableCell();
+                    celNumero.Text = movV.tipo.tipo + " " + movV.numero.ToString().PadLeft(8, '0');
+                    celNumero.VerticalAlign = VerticalAlign.Middle;
+                    celNumero.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celNumero);
+
+                    TableCell celDebe = new TableCell();
+                    //celDebe.Text = "$" + movV.debe.ToString().Replace(',', '.');
+                    celDebe.Text = "$" + movV.debe.ToString("#,##0.00");
+                    celDebe.VerticalAlign = VerticalAlign.Middle;
+                    celDebe.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celDebe);
+
+                    TableCell celHaber = new TableCell();
+                    //celHaber.Text = "$" + movV.haber.ToString().Replace(',', '.');
+                    celHaber.Text = "$" + movV.haber.ToString("#,##0.00");
+                    celHaber.VerticalAlign = VerticalAlign.Middle;
+                    celHaber.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celHaber);
+
+                    TableCell celSaldo = new TableCell();
+                    //celSaldo.Text = "$" + movV.saldo.ToString().Replace(',', '.');
+                    celSaldo.Text = "$" + movV.saldo.ToString("#,##0.00");
+                    celSaldo.VerticalAlign = VerticalAlign.Middle;
+                    celSaldo.HorizontalAlign = HorizontalAlign.Right;
+                    //celSaldo.Width = Unit.Percentage(20);
+                    tr.Cells.Add(celSaldo);
+
+                    TableCell celSeleccion = new TableCell();
+                    CheckBox cbSeleccion = new CheckBox();
+                    //cbSeleccion.Text = "&nbsp;Imputar";
+                    //Le puse este nombre de id porque este checkbox pertece a documentos
+                    //con saldo mayor a cero
+                    cbSeleccion.ID = "cbSeleccionSaldoMayorACero_" + movV.id;
+                    cbSeleccion.ClientIDMode = System.Web.UI.ClientIDMode.Static;
+                    cbSeleccion.CssClass = "btn btn-info";
+                    //cbSeleccion.Attributes.Add("onclick", "javascript:return updatebox(" + movV.saldo + "," + movV.id.ToString() + ");");
+                    cbSeleccion.Attributes.Add("onchange", "javascript:return updateboxSaldoMayorACero(" + movV.saldo + "," + movV.id.ToString() + ");");
+
+                    celSeleccion.Controls.Add(cbSeleccion);
+                    celSeleccion.Width = Unit.Percentage(15);
+                    //celSeleccion.VerticalAlign = VerticalAlign.Middle;
+                    celSeleccion.HorizontalAlign = HorizontalAlign.Center;
+
+                    Literal l2 = new Literal();
+                    l2.Text = "&nbsp";
+                    celSeleccion.Controls.Add(l2);
+
+                    tr.Cells.Add(celSeleccion);
+
+                    PlaceHolderSaldoPositivo.Controls.Add(tr);
+                }
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+        }
+        public void cargarEnPHSaldoMenorACero(Movimiento m)
+        {
+            MovimientoView movV = new MovimientoView();
+            movV = m.ListarMovimiento();
+            try
+            {
+                if (movV.saldo < 0)
+                {
+                    TableRow tr = new TableRow();
+                    //Le puse esta nombre al id ya que cada fila representa un documento con saldo menor a cero
+                    tr.ID = "SalgoMenorAcero_" + movV.id.ToString();
+
+                    //Celdas
+
+                    TableCell celFecha = new TableCell();
+                    celFecha.Text = movV.fecha.ToString("dd/MM/yyyy");
+                    celFecha.VerticalAlign = VerticalAlign.Middle;
+                    celFecha.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celFecha);
+
+                    string ddMMyyyyFV = "";
+                    if (movV.fechaVenc != "")
+                    {
+                        string[] fechaV = movV.fechaVenc.Split(' ')[0].Split('/');
+                        ddMMyyyyFV = fechaV[1] + "/" + fechaV[0] + "/" + fechaV[2];
+                    }
+
+                    TableCell celFechaV = new TableCell();
+                    celFechaV.Text = ddMMyyyyFV;
+                    celFechaV.VerticalAlign = VerticalAlign.Middle;
+                    celFechaV.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celFechaV);
+
+                    TableCell celNumero = new TableCell();
+                    celNumero.Text = movV.tipo.tipo + " " + movV.numero.ToString().PadLeft(8, '0');
+                    celNumero.VerticalAlign = VerticalAlign.Middle;
+                    celNumero.HorizontalAlign = HorizontalAlign.Left;
+                    tr.Cells.Add(celNumero);
+
+                    TableCell celDebe = new TableCell();
+                    //celDebe.Text = "$" + movV.debe.ToString().Replace(',', '.');
+                    celDebe.Text = "$" + movV.debe.ToString("#,##0.00");
+                    celDebe.VerticalAlign = VerticalAlign.Middle;
+                    celDebe.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celDebe);
+
+                    TableCell celHaber = new TableCell();
+                    //celHaber.Text = "$" + movV.haber.ToString().Replace(',', '.');
+                    celHaber.Text = "$" + movV.haber.ToString("#,##0.00");
+                    celHaber.VerticalAlign = VerticalAlign.Middle;
+                    celHaber.HorizontalAlign = HorizontalAlign.Right;
+                    tr.Cells.Add(celHaber);
+
+                    TableCell celSaldo = new TableCell();
+                    //celSaldo.Text = "$" + movV.saldo.ToString().Replace(',', '.');
+                    celSaldo.Text = "$" + movV.saldo.ToString("#,##0.00");
+                    celSaldo.VerticalAlign = VerticalAlign.Middle;
+                    celSaldo.HorizontalAlign = HorizontalAlign.Right;
+                    //celSaldo.Width = Unit.Percentage(20);
+                    tr.Cells.Add(celSaldo);
+
+                    TableCell celSeleccion = new TableCell();
+                    CheckBox cbSeleccion = new CheckBox();
+                    //cbSeleccion.Text = "&nbsp;Imputar";
+                    //Le puse este nombre de id porque este checkbox pertece a documentos
+                    //con saldo menor a cero
+                    cbSeleccion.ID = "cbSeleccionSaldoMenorACero_" + movV.id;
+                    cbSeleccion.ClientIDMode = System.Web.UI.ClientIDMode.Static;
+                    cbSeleccion.CssClass = "btn btn-info";
+                    //cbSeleccion.Attributes.Add("onclick", "javascript:return updatebox(" + movV.saldo + "," + movV.id.ToString() + ");");
+                    cbSeleccion.Attributes.Add("onchange", "javascript:return updateboxSaldoMenorACero(" + movV.saldo + "," + movV.id.ToString() + ");");
+
+                    celSeleccion.Controls.Add(cbSeleccion);
+                    celSeleccion.Width = Unit.Percentage(15);
+                    //celSeleccion.VerticalAlign = VerticalAlign.Middle;
+                    celSeleccion.HorizontalAlign = HorizontalAlign.Center;
+
+                    Literal l2 = new Literal();
+                    l2.Text = "&nbsp";
+                    celSeleccion.Controls.Add(l2);
+
+                    tr.Cells.Add(celSeleccion);
+
+                    phDocSaldoMenorACero.Controls.Add(tr);
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+        }
         private void cargarLabel(int idCliente, int idPuntoVenta, int idEmpresa, int idSucursal, int idTipo)
         {
             try
@@ -919,14 +1116,24 @@ namespace Gestion_Web.Formularios.Facturas
                     List<MovimientoView> movimientosNC = contrCC.obtenerListaMovimientos(idtildadoNC);
                     List<MovimientoView> movimientosFC = contrCC.obtenerListaMovimientos(idtildadoFC);
                     List<MovimientoView> movDocTildados = contrCC.obtenerListaMovimientos(idDocTildados);
-                    hacerCobro();
 
-                    this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
 
-                    sadoDeTodosLosDocEn0(movDocTildados);
-
-                    actualizarSaldoImputado(movDocTildados);
-                    
+                    /*Si esta variable es mayor a 1, quiere decir se usaron movimientos con
+                      saldos positivos de mas*/
+                    int movimientosPositivosDeMas = validarSaldo(movimientosNC, movimientosFC);
+                    if (movimientosPositivosDeMas > 1)
+                    {
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion
+                            ("Ha seleccionado una factura o presupesto de mas, para un saldo que ya se encuentra pagado, " +
+                            "quite las facturas o presupuestos de mas"));
+                    }
+                    else
+                    {
+                        hacerCobro();
+                        this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
+                        sadoDeTodosLosDocEn0(movDocTildados);
+                        actualizarSaldoImputado(movDocTildados);
+                    }
                 }
                 else
                 {
@@ -1007,11 +1214,11 @@ namespace Gestion_Web.Formularios.Facturas
                         int i = 0;
                         //if (Math.Abs(cobro.ingresado) >= cobro.imputado)
                         //{
-                            //var idRecCobro = cobro.pagos[0].idReciboCobro;
+                        //var idRecCobro = cobro.pagos[0].idReciboCobro;
                         i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
 
-                            //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"El cobro es mayor a lo imputado. \");", true);
-                            //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El cobro es mayor a lo imputado"));
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"El cobro es mayor a lo imputado. \");", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El cobro es mayor a lo imputado"));
                         //}
                         if (i > 0)
                         {
@@ -1050,9 +1257,9 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                foreach (var mov in movs) 
+                foreach (var mov in movs)
                 {
-                    contCobranza.actualizarSaldoNC(mov.id,0);
+                    contCobranza.actualizarSaldoNC(mov.id, 0);
                 }
 
             }
@@ -1067,7 +1274,7 @@ namespace Gestion_Web.Formularios.Facturas
             try
             {
                 decimal saldoSum = movs.Sum(x => x.saldo);
-                
+
                 if (saldoSum < 0)
                 {
                     int idMovMenorA0 = movs.Where(x => x.saldo < 0).FirstOrDefault().id;
@@ -1391,6 +1598,32 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 ScriptManager.RegisterStartupScript(UpdatePanel2, UpdatePanel2.GetType(), "alert", mje.mensajeBoxError("Error generando nota de credito. " + ex.Message), true);
             }
+        }
+
+
+        public int validarSaldo(List<MovimientoView> movimientosNC, List<MovimientoView> movimientosFC)
+        {
+            decimal ImporteNegativo = 0;
+            foreach (var item in movimientosNC)
+            {
+                ImporteNegativo += item.saldo;
+            }
+
+            int movimientosPositivosDeMas = 0;
+
+            movimientosFC = movimientosFC.OrderByDescending(m => m.saldo).ToList();
+            foreach (var item in movimientosFC)
+            {
+                ImporteNegativo = ImporteNegativo + item.saldo;
+                //Esta variable sirve para saber si hay algun movimiento 
+                //positivo de mas                         
+                if (ImporteNegativo >= 0)
+                {
+                    movimientosPositivosDeMas++;
+                }
+            }
+
+            return movimientosPositivosDeMas;
         }
     }
 

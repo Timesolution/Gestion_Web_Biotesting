@@ -48,9 +48,7 @@
                 <!-- /widget -->
             </div>
             <div class="col-md-12">
-
                 <div class="widget big-stats-container stacked">
-
                     <div class="widget-content">
                         <asp:UpdatePanel ID="UpdatePanel5" runat="server" UpdateMode="Always">
                             <ContentTemplate>
@@ -61,24 +59,20 @@
                                     </div>
                                     <div class="stat">
                                         <h4>Documentos Seleccionados:</h4>
-                                        <asp:Label ID="lblsimbolo" runat="server" Text="$" class="value"></asp:Label><asp:Label ID="labelSeleccion" runat="server" Text="0" class="value"></asp:Label>
+                                        <asp:Label ID="lblsimbolo" runat="server" Text="$" class="value"></asp:Label>
+                                        <asp:Label ID="labelSeleccion" runat="server" Text="0" class="value"></asp:Label>
                                     </div>
                                     <!-- .stat -->
                                 </div>
                             </ContentTemplate>
                         </asp:UpdatePanel>
-
-
                     </div>
                     <!-- /widget-content -->
-
                 </div>
                 <!-- /widget -->
-
             </div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget widget-table">
-
                     <div class="widget-header">
                         <i class="icon-th-list" style="width: 2%"></i>
                         <h3 style="width: 75%">Documentos Impagos
@@ -88,11 +82,9 @@
                         </h3>
                     </div>
                     <div class="widget-content">
-
                         <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
                             <ContentTemplate>
                                 <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalFacturaDetalle">Agregar Tipo Cliente</a>
-
                                 <table class="table table-bordered table-striped" id="dataTables-example">
                                     <thead>
                                         <tr>
@@ -104,7 +96,6 @@
                                             <th style="text-align: right">Saldo</th>
                                             <th>Seleccionar</th>
                                         </tr>
-
                                     </thead>
                                     <tbody>
                                         <asp:PlaceHolder ID="phCobranzas" runat="server"></asp:PlaceHolder>
@@ -127,7 +118,6 @@
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
-
                     </div>
                 </div>
             </div>
@@ -139,29 +129,31 @@
                             <td>
                                 <asp:Button ID="btnSiguiente" runat="server" Text="Siguiente" class="btn btn-success" OnClick="btnSiguiente_Click" />
                             </td>
-                            <td>
-                                &nbsp
+                            <td>&nbsp
                             </td>
                             <td>
                                 <asp:Button ID="btnPagoCuenta" runat="server" Text="Pago a Cuenta" class="btn btn-info" Visible="true" OnClick="btnPagoCuenta_Click" />
                             </td>
-                            <td>
-                                &nbsp
+                            <td>&nbsp
                             </td>
                             <td>
                                 <asp:Button ID="btnGenerarDto" runat="server" Text="Generar Dto" class="btn btn-info" data-toggle="modal" href="#modalDescuento" />
                             </td>
-                            <td>
-                                &nbsp
+                            <td>&nbsp
                             </td>
                             <td>
                                 <asp:Button ID="btnGenerarNCND" runat="server" Text="Generar NC/ND" class="btn btn-info" data-toggle="modal" href="#modalNCND" />
                             </td>
-                            <td>
-                                &nbsp
+                            <td>&nbsp
                             </td>
                             <td>
                                 <asp:Button ID="btnImputar" runat="server" Text="Imputar doc. a favor" class="btn btn-info" OnClick="btnImputar_Click" />
+                            </td>
+                            <td>
+                            &nbsp
+                            <td>
+                                <asp:LinkButton ID="BtnImputarModal" runat="server" Text="Autoimputar Documento" class="btn btn-info"
+                                    OnClientClick="AbrirModalImputar(); return false;"></asp:LinkButton>
                             </td>
                         </tr>
                     </tbody>
@@ -279,18 +271,183 @@
                             <Triggers>
                             </Triggers>
                         </asp:UpdatePanel>
-
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbBuscar" runat="server" Text="<span class='shortcut-icon icon-ok'></span>" class="btn btn-success" OnClick="btnBuscar_Click" ValidationGroup="BusquedaGroup" />
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
+    <div id="modalImputacion" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" style="width: 80%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Imputar</h4>
+                </div>
+                <div class="modal-body">
+                    <div role="form" class="form-horizontal col-md-12">
+                        <div class="widget stacked">
+                            <div class="widget-content">
+                                <div class="bs-example">
+                                    <ul id="myTab" class="nav nav-tabs">
+                                        <li class="active"><a href="#home" data-toggle="tab" visible="true">Credito</a></li>
+                                        <li class=""><a href="#DocsSaldoPositivo" data-toggle="tab" runat="server" id="linkArt" visible="true">Pestaña2</a></li>
+                                    </ul>
+                                    <div id="tabContent" class="tab-content">
+
+                                        <div class="tab-pane fade active in" id="home">
+                                            <contenttemplate>
+                                                <div id="validation-form" role="form" class="form-horizontal col-md-10">
+                                                    <fieldset>
+                                                        <div class="col-md-12">
+                                                            <div class="widget big-stats-container stacked">
+                                                                <div class="widget-content">
+                                                                    <asp:UpdatePanel ID="UpdatePanel8" runat="server" UpdateMode="Always">
+                                                                        <ContentTemplate>
+                                                                            <div id="big_stats" class="cf">
+                                                                                <div class="stat">
+                                                                                    <h4>Saldo</h4>
+                                                                                    <asp:Label ID="label1" runat="server" Text="" class="value"></asp:Label>
+                                                                                </div>
+                                                                                <div class="stat">
+                                                                                    <h4>Documentos Seleccionados:</h4>
+                                                                                    <asp:Label ID="labelPesos" runat="server" Text="$" class="value"></asp:Label>
+                                                                                    <asp:Label ID="lblDocumentosSaldoNegativo" runat="server" Text="0" class="value"></asp:Label>
+                                                                                </div>
+                                                                                <!-- .stat -->
+                                                                            </div>
+                                                                        </ContentTemplate>
+                                                                    </asp:UpdatePanel>
+                                                                </div>
+                                                                <!-- /widget-content -->
+                                                            </div>
+                                                            <!-- /widget -->
+                                                        </div>
+                                                        <div class="table-responsive d-flex align-items-center justify-content-center" style="height: 100%;">
+                                                            <table class="table table-bordered table-striped" id="dataTables-example" style="margin: 0 auto;">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="text-align: left">Fecha</th>
+                                                                        <th style="text-align: left">Fecha vencimiento</th>
+                                                                        <th style="text-align: left">Numero</th>
+                                                                        <th style="text-align: right">Debe</th>
+                                                                        <th style="text-align: right">Haber</th>
+                                                                        <th style="text-align: right">Saldo</th>
+                                                                        <th>Seleccionar</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <asp:PlaceHolder ID="phDocSaldoMenorACero" runat="server"></asp:PlaceHolder>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th style="width: 20%">
+                                                                        <div class="col-lg-8">
+                                                                            <div class="input-group">
+                                                                                <span class="input-group-addon">$</span>
+                                                                                <asp:TextBox ID="TextBox1" runat="server" class="form-control" Text="0" Style="text-align: right"></asp:TextBox>
+                                                                            </div>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th></th>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </contenttemplate>
+                                        </div>
+
+                                        <div class="tab-pane fade" id="DocsSaldoPositivo">
+                                            <contenttemplate>
+                                                <div class="widget-content">
+                                                    <div id="validation-form2" role="form" class="form-horizontal col-md-10">
+                                                        <fieldset>
+                                                            <div class="table-responsive d-flex align-items-center justify-content-center" style="height: 100%;">
+                                                                <table class="table table-bordered table-striped" id="dataTables-example2" style="margin: 0 auto;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="text-align: left">Fecha</th>
+                                                                            <th style="text-align: left">Fecha vencimiento</th>
+                                                                            <th style="text-align: left">Numero</th>
+                                                                            <th style="text-align: right">Debe</th>
+                                                                            <th style="text-align: right">Haber</th>
+                                                                            <th style="text-align: right">Saldo</th>
+                                                                            <th>Seleccionar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <asp:PlaceHolder ID="PlaceHolderSaldoPositivo" runat="server"></asp:PlaceHolder>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th style="width: 20%">
+                                                                            <div class="col-lg-8">
+                                                                                <div class="input-group">
+                                                                                    <span class="input-group-addon">$</span>
+                                                                                    <asp:TextBox ID="TextBox2" runat="server" class="form-control" Text="0" Style="text-align: right"></asp:TextBox>
+                                                                                </div>
+                                                                            </div>
+                                                                        </th>
+                                                                        <th></th>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <%-- Aca comienza la segunda tabla --%>
+                                                            <div class="table-responsive d-flex align-items-center justify-content-center" style="height: 100%; margin-top: 20px;">
+                                                                <table class="table table-bordered table-striped" id="dataTables-example3" style="margin: 0 auto;">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="text-align: left">Fecha</th>
+                                                                            <th style="text-align: left">Fecha vencimiento</th>
+                                                                            <th style="text-align: left">Numero</th>
+                                                                            <th style="text-align: right">Debe</th>
+                                                                            <th style="text-align: right">Haber</th>
+                                                                            <th style="text-align: right">Saldo</th>
+                                                                            <th>Seleccionar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <%--<asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder>--%>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th style="width: 20%">
+                                                                            <div class="col-lg-8">
+                                                                                <div class="input-group">
+                                                                                    <span class="input-group-addon">$</span>
+                                                                                    <asp:TextBox ID="TextBox3" runat="server" class="form-control" Text="0" Style="text-align: right"></asp:TextBox>
+                                                                                </div>
+                                                                            </div>
+                                                                        </th>
+                                                                        <th></th>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                            </contenttemplate>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:LinkButton ID="LinkButtonImputar" runat="server" Text="Siguiente" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div id="modalDescuento" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -359,8 +516,6 @@
                         </asp:UpdatePanel>
 
                     </div>
-
-
                     <div class="modal-footer">
                         <asp:LinkButton ID="lbtnGenerarNC" runat="server" Text="Generar" class="btn btn-success" ValidationGroup="DtoGroup" OnClick="lbtnGenerarNC_Click" />
                     </div>
@@ -521,9 +676,241 @@
             }
 
         }
+
+        function AbrirModalImputar() {
+            $('#modalImputacion').modal('show');
+            return false;
+            // $('#modalComentarios').modal('show');
+        }
+
+        function updateboxSaldoMenorACero(valor, id) {
+            //let textbox = document.getElementById("<%//=txtTotalFC.ClientID%>");
+            let lblSeleccion = document.getElementById("<%= lblDocumentosSaldoNegativo.ClientID %>");
+
+            let chk1 = document.getElementById("cbSeleccionSaldoMenorACero_" + id);
+
+            if (chk1.checked) {
+                //textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
+            }
+            else {
+                //textbox.value = parseFloat(parseFloat(textbox.value) - parseFloat(valor)).toFixed(2)
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
+            }
+
+        }
+
+        function updateboxSaldoMayorACero(valor, id) {
+            //let textbox = document.getElementById("<%//=txtTotalFC.ClientID%>");
+            let lblSeleccion = document.getElementById("<%= lblDocumentosSaldoNegativo.ClientID %>");
+            let chk2 = document.getElementById("cbSeleccionSaldoMayorACero_" + id);
+
+            if (chk2.checked == true) {
+                //textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
+                let tabla = document.getElementById("dataTables-example2");
+
+                //El codigo de la segunda tabla iria aca, creo
+                //CargarSegundaTabla(tabla)
+                //let Segundatabla = document.getElementById("dataTables-example2");
+                //if (Segundatabla != null) {
+                //    let Segundafilas = Segundatabla.getElementsByTagName("tr");
+                //    for (let i = 1; i <= Segundafilas.length; i++) {
+                //        let SegundaFilas = Segundafilas[i];
+                //        let checkbox = SegundaFilas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
+
+                //        if (checkbox) {
+                //            // El checkbox existe, ahora puedes continuar con tu código
+
+                //        } else {
+                //            console.log("El checkbox no fue encontrado en la fila " + i);
+                //        }
+
+
+
+                //        //Si la checkBox esta checkeada, quiere decir que tiene que agregar esa fila
+                //        //A la segunda tabla 
+                //        /* if (checkbox.checked) {*/
+                //        //let Fecha = Filas.getElementsByTagName("td")[0].textContent;
+                //        //let FechaVencimiento = Filas.getElementsByTagName("td")[1].textContent;
+                //        //let Numero = Filas.getElementsByTagName("td")[2].textContent;
+                //        //let Debe = Filas.getElementsByTagName("td")[3].textContent;
+                //        //let Haber = Filas.getElementsByTagName("td")[4].textContent;
+                //        //let Saldo = Filas.getElementsByTagName("td")[5].textContent;
+
+                //        //console.log(Fecha)
+                //        //console.log(FechaVencimiento)
+                //        //console.log(Numero)
+                //        //console.log(Debe)
+                //        //console.log(Haber)
+                //        //console.log(Saldo)
+
+                //        //    let FechaSegundaTabla = "<td> " + Fecha + "</td>";
+                //        //    let FechaVencimientoSegundaTabla = "<td> " + FechaVencimiento + "</td>";
+                //        //    let NumeroSegundaTabla = "<td> " + Numero + "</td>";
+                //        //    let DebeSegundaTabla = "<td style=\" text-align: right\"> " + Debe + "</td>";
+                //        //    let HaberSegundaTabla = "<td style=\" text-align: right\"> " + Haber + "</td>";
+                //        //    let SaldoSegundaTabla = "<td style=\" text-align: right\"> " + Saldo + "</td>";
+
+
+                //        //    let appendfinal = "<tr>" +
+                //        //        FechaSegundaTabla +
+                //        //        FechaVencimientoSegundaTabla +
+                //        //        NumeroSegundaTabla +
+                //        //        DebeSegundaTabla +
+                //        //        HaberSegundaTabla +
+                //        //        SaldoSegundaTabla +                        
+                //        //        "</tr>"
+                //        //$('#dataTables-example3').append(appendfinal);
+                //        //}
+                //    }
+
+                //}
+
+                //A partir de aca es mi codigo
+                // Obtener el texto de la etiqueta lblSeleccion
+                let textoEtiqueta = lblSeleccion.textContent;
+                // Convertir el texto a un número
+                let numeroEtiqueta = parseFloat(textoEtiqueta);
+                if (numeroEtiqueta >= 0) {
+                    // Obtener la tabla dentro del PlaceHolder por su ID
+                    if (tabla != null) {
+                        // Obtener todas las filas de la tabla
+                        let filas = tabla.getElementsByTagName("tr");
+
+                        // Iterar sobre las filas y hacer lo que necesites con ellas
+                        for (let i = 1; i <= filas.length; i++) {
+                            let Filas = filas[i];
+                            let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
+
+                            if (!checkbox.checked) {
+                                checkbox.disabled = true;
+                            }
+                        }
+                    }
+                    else {
+                        console.log("No se encontró la tabla con ID 'miTabla' dentro del PlaceHolder.");
+                    }
+                }
+            }
+            else {
+                //textbox.value = parseFloat(parseFloat(textbox.value) - parseFloat(valor)).toFixed(2)
+                lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
+                //Se llama Menos porque el numero disminuye cuando el usario quitar el checkmark en la checkbox
+
+                let textoEtiquetaMenos = lblSeleccion.textContent;
+                let numeroEtiquetaMenos = parseFloat(textoEtiquetaMenos);
+
+                console.log(numeroEtiquetaMenos)
+                let tablaMenos = document.getElementById("dataTables-example2");
+                let filasMenos = tablaMenos.getElementsByTagName("tr");
+                if (numeroEtiquetaMenos < 0) {
+                    for (let i = 0; i < filasMenos.length; i++) {
+                        let Filas = filasMenos[i + 1];
+                        let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
+
+                        if (!checkbox.checked) {
+                            console.log("Hola");
+                            checkbox.disabled = false;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        function CargarSegundaTabla(tabla) {
+            if (tabla != null) {
+                // Obtener todas las filas de la tabla
+                let filas = tabla.getElementsByTagName("tr");
+
+                // Iterar sobre las filas y hacer lo que necesites con ellas
+                for (let i = 1; i <= filas.length; i++) {
+                    let Filas = filas[i];
+                    let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
+
+                    if (checkbox) {
+                        console.log("hola")
+
+                    } else {
+                        console.log("El checkbox no fue encontrado en la fila " + i);
+                    }
+
+
+
+                    //Si la checkBox esta checkeada, quiere decir que tiene que agregar esa fila
+                    //A la segunda tabla 
+                    if (checkbox.checked) {
+                        let Fecha = Filas.getElementsByTagName("td")[0].textContent;
+                        let FechaVencimiento = Filas.getElementsByTagName("td")[1].textContent;
+                        let Numero = Filas.getElementsByTagName("td")[2].textContent;
+                        let Debe = Filas.getElementsByTagName("td")[3].textContent;
+                        let Haber = Filas.getElementsByTagName("td")[4].textContent;
+                        let Saldo = Filas.getElementsByTagName("td")[5].textContent;
+
+                        console.log(Fecha)
+                        console.log(FechaVencimiento)
+                        console.log(Numero)
+                        console.log(Debe)
+                        console.log(Haber)
+                        console.log(Saldo)
+
+                        let FechaSegundaTabla = "<td> " + Fecha + "</td>";
+                        let FechaVencimientoSegundaTabla = "<td> " + FechaVencimiento + "</td>";
+                        let NumeroSegundaTabla = "<td> " + Numero + "</td>";
+                        let DebeSegundaTabla = "<td style=\" text-align: right\"> " + Debe + "</td>";
+                        let HaberSegundaTabla = "<td style=\" text-align: right\"> " + Haber + "</td>";
+                        let SaldoSegundaTabla = "<td style=\" text-align: right\"> " + Saldo + "</td>";
+
+
+                        let appendfinal = "<tr>" +
+                            FechaSegundaTabla +
+                            FechaVencimientoSegundaTabla +
+                            NumeroSegundaTabla +
+                            DebeSegundaTabla +
+                            HaberSegundaTabla +
+                            SaldoSegundaTabla +
+                            "</tr>"
+                        $('#dataTables-example3').append(appendfinal);
+
+                        let textoEtiqueta = lblSeleccion.textContent;
+                        // Convertir el texto a un número
+                        let numeroEtiqueta = parseFloat(textoEtiqueta);
+                        if (numeroEtiqueta >= 0) {
+                            // Obtener la tabla dentro del PlaceHolder por su ID
+                            if (tabla != null) {
+                                // Obtener todas las filas de la tabla
+                                let filas = tabla.getElementsByTagName("tr");
+
+                                // Iterar sobre las filas y hacer lo que necesites con ellas
+                                for (let i = 1; i <= filas.length; i++) {
+                                    let Filas = filas[i];
+                                    let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
+
+                                    if (!checkbox.checked) {
+                                        checkbox.disabled = true;
+                                    }
+                                }
+                            }
+                            else {
+                                console.log("No se encontró la tabla con ID 'miTabla' dentro del PlaceHolder.");
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                console.log("No se encontró la tabla con ID 'miTabla' dentro del PlaceHolder.");
+            }
+        }
+
+
+
         function openModalComentario() {
             $('#modalComentarios').modal('show');
         }
+
+
     </script>
     <script>
         function TotalDescuento() {

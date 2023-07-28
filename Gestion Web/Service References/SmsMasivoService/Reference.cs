@@ -30,8 +30,8 @@ namespace Gestion_Web.SmsMasivoService {
         System.Threading.Tasks.Task<Gestion_Web.SmsMasivoService.clsRespuesta[]> RecibirSMSAsync(string usuario, string clave, string origen, bool solonoleidos, bool marcarcomoleidos);
     }
     
-    /// <comentarios/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.6.1055.0")]
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9037.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -48,7 +48,7 @@ namespace Gestion_Web.SmsMasivoService {
         
         private string idinternoField;
         
-        /// <comentarios/>
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
         public long numero {
             get {
@@ -60,7 +60,7 @@ namespace Gestion_Web.SmsMasivoService {
             }
         }
         
-        /// <comentarios/>
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=1)]
         public string texto {
             get {
@@ -72,7 +72,7 @@ namespace Gestion_Web.SmsMasivoService {
             }
         }
         
-        /// <comentarios/>
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=2)]
         public System.DateTime fecha {
             get {
@@ -84,7 +84,7 @@ namespace Gestion_Web.SmsMasivoService {
             }
         }
         
-        /// <comentarios/>
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=3)]
         public long idsms {
             get {
@@ -96,7 +96,7 @@ namespace Gestion_Web.SmsMasivoService {
             }
         }
         
-        /// <comentarios/>
+        /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
         public string idinterno {
             get {
