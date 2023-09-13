@@ -104,7 +104,8 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (idCliente > 0)
                 {
-                    GridCtaCte.PageSize = Convert.ToInt32(configuracion.PageSizeGridView);
+                    //GridCtaCte.PageSize = Convert.ToInt32(configuracion.PageSizeGridView);
+                    GridCtaCte.PageSize = Convert.ToInt32(11);
                     this.cargarMovimientos(idCliente, idSucursal, idTipo);
                 }
                 if (accion > 0)
@@ -135,11 +136,11 @@ namespace Gestion_Web.Formularios.Facturas
                     ScriptManager.RegisterStartupScript(this, GetType(), "cambiarIcono", "cambiarIcono('fa fa-toggle-on','Ventas > Cuentas Corrientes');", true);
                 }
                 this.Form.DefaultButton = lbtnBuscar.UniqueID;
-
+                
 
             }
-            catch
-            {
+            catch (Exception ex)
+			{
 
             }
         }

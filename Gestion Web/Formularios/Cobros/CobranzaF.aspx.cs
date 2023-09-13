@@ -4,9 +4,11 @@ using Gestion_Api.Controladores;
 using Gestion_Api.Modelo;
 using Gestor_Solution.Controladores;
 using Gestor_Solution.Modelo;
+using Microsoft.ReportingServices.ReportProcessing.OnDemandReportObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.EnterpriseServices;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -384,6 +386,7 @@ namespace Gestion_Web.Formularios.Facturas
                     cbSeleccion.CssClass = "btn btn-info";
                     //cbSeleccion.Attributes.Add("onclick", "javascript:return updatebox(" + movV.saldo + "," + movV.id.ToString() + ");");
                     cbSeleccion.Attributes.Add("onchange", "javascript:return updateboxSaldoMayorACero(" + movV.saldo + "," + movV.id.ToString() + ");");
+                    cbSeleccion.Enabled = false;
 
                     celSeleccion.Controls.Add(cbSeleccion);
                     celSeleccion.Width = Unit.Percentage(15);
@@ -1076,6 +1079,150 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+
+        protected void btnImputarModal_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //verifico cierre caja
+                int cierreOK = this.verificarCierreCaja();
+                if (cierreOK < 0)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
+                    return;
+                }
+
+                string idtildadoNC = "";
+                string idtildadoFC = "";
+                string idDocTildados = "";
+
+                foreach (Control C in phDocSaldoMenorACero.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    //string tipoDoc = tr.Cells[1].Text;
+                    string tipoDoc = tr.Cells[2].Text;
+                    //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
+                    if (ch.Checked == true && (tipoDoc.Contains("Credito") || tipoDoc.Contains("Recibo")))
+                    {
+                        idtildadoNC += ch.ID.Substring(27, ch.ID.Length - 27) + ";";
+                    }
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("Debito")))
+                    {
+                        idtildadoFC += ch.ID.Substring(27, ch.ID.Length - 27) + ";";
+                    }
+                    if (ch.Checked)
+                    {
+                        idDocTildados += ch.ID.Substring(27, ch.ID.Length - 27) + ";";
+                    }
+                }
+
+                foreach (Control C in PlaceHolderSaldoPositivo.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    //string tipoDoc = tr.Cells[1].Text;
+                    string tipoDoc = tr.Cells[2].Text;
+                    //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                    CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
+                    if (ch.Checked == true && (tipoDoc.Contains("Credito") || tipoDoc.Contains("Recibo")))
+                    {
+                        idtildadoNC += ch.ID.Substring(27, ch.ID.Length - 27) + ";";
+                    }
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("Debito")))
+                    {
+                        idtildadoFC += ch.ID.Substring(27, ch.ID.Length - 27) + ";";
+                    }
+                    if (ch.Checked)
+                    {
+                        idDocTildados += ch.ID.Substring(27, ch.ID.Length - 27) + ";";
+                    }
+                }
+
+                if (!String.IsNullOrEmpty(idtildadoNC) && !String.IsNullOrEmpty(idtildadoFC))
+                {
+                    List<MovimientoView> movimientosNC = contrCC.obtenerListaMovimientos(idtildadoNC);
+                    List<MovimientoView> movimientosFC = contrCC.obtenerListaMovimientos(idtildadoFC);
+                    List<MovimientoView> movDocTildados = contrCC.obtenerListaMovimientos(idDocTildados);
+
+
+
+                    hacerCobroAutoimputarModal();
+                    this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
+                    sadoDeTodosLosDocEn0(movDocTildados);
+                    // this variable contains the id of the documents, in the order they were clicked
+                    string movDocTildadosEnOrden = TxtIDDocumentos.Text;                                                         
+                    //This function sorts the documents in the order they were clicked
+                    var listaFinal = orderDocumentosByID(movDocTildadosEnOrden, movDocTildados);
+                    actualizarSaldoImputadoModal(listaFinal);
+                    RecargarLaPagina();
+                }
+
+                else
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento nota de credito y una factura, nota de debito o presupuesto."));
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+        }
+
+
+        private void actualizarSaldoImputadoModal(List<MovimientoView> movs)
+        {
+            try
+            {
+                decimal saldoSum = movs.Sum(x => x.saldo);
+
+                if (saldoSum < 0)
+                {
+                    int idMovMenorA0 = movs.Where(x => x.saldo < 0).FirstOrDefault().id;
+                    contCobranza.actualizarSaldoNC(idMovMenorA0, saldoSum);
+                }
+                else if (saldoSum > 0)
+                {
+                    int idMovMayorA0 = movs
+                     .Where(x => x.saldo > 0)
+                     .LastOrDefault() // Obtener el último elemento
+                      ?.id ?? default(int);
+                    //int idMovMayorA0 = movs.Where(x => x.saldo > 0).FirstOrDefault().id;
+                    contCobranza.actualizarSaldoNC(idMovMayorA0, saldoSum);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
+        //This function sorts the documents in the order they were clicked
+        private List<MovimientoView> orderDocumentosByID(String movDocTildadosEnOrden, List<MovimientoView> movDocTildados)
+        {
+           
+                string[] idsOrdenados = movDocTildadosEnOrden.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                Dictionary<int, int> indicePorId = new Dictionary<int, int>();
+                for (int i = 0; i < idsOrdenados.Length; i++)
+                {
+                    int id = int.Parse(idsOrdenados[i]);
+                    indicePorId[id] = i;
+                }
+
+                var movimientosPositivos = movDocTildados.Where(m => m.saldo >= 0).ToList();
+                var movimientosNegativos = movDocTildados.Where(m => m.saldo < 0).ToList();
+
+                var movimientosPositivosOrdenados = movimientosPositivos
+                .OrderBy(m => indicePorId.ContainsKey(m.id) ? indicePorId[m.id] : int.MaxValue)
+                .ToList();
+
+
+                var listaFinal = movimientosNegativos.Concat(movimientosPositivosOrdenados).ToList();
+                return listaFinal;                   
+        }
+
         protected void btnImputar_Click(object sender, EventArgs e)
         {
             try
@@ -1098,7 +1245,7 @@ namespace Gestion_Web.Formularios.Facturas
                     string tipoDoc = tr.Cells[2].Text;
                     //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
                     CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
-                    if (ch.Checked == true && tipoDoc.Contains("Credito") || tipoDoc.Contains("Recibo"))
+                    if (ch.Checked == true && (tipoDoc.Contains("Credito") || tipoDoc.Contains("Recibo")))
                     {
                         idtildadoNC += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
                     }
@@ -1120,19 +1267,21 @@ namespace Gestion_Web.Formularios.Facturas
 
                     /*Si esta variable es mayor a 1, quiere decir se usaron movimientos con
                       saldos positivos de mas*/
-                    int movimientosPositivosDeMas = validarSaldo(movimientosNC, movimientosFC);
+                    int movimientosPositivosDeMas = validarSaldo(movimientosNC, movimientosFC);             
                     if (movimientosPositivosDeMas > 1)
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo
                             ("Ha seleccionado una factura o presupesto de mas, para un saldo que ya se encuentra pagado, " +
-                            "quite las facturas o presupuestos de mas"));
+                            "quite las facturas o presupuestos de mas", "CobranzaF.aspx?cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue));
                     }
                     else
                     {
+                        //Esta funcion hace lo mismo que hacerCobro solo que adaptada al modal para atuimputar 
                         hacerCobro();
                         this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
                         sadoDeTodosLosDocEn0(movDocTildados);
                         actualizarSaldoImputado(movDocTildados);
+                        RecargarLaPagina();
                     }
                 }
                 else
@@ -1147,6 +1296,232 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
+
+        public void hacerCobroAutoimputarModal()
+        {
+            try
+            {
+                //obtengo las imputaciones
+                //string imputado = TotalDoc;
+                string imputado = "0";
+                List<Imputacion> imputaciones = obtenerImputacionesModalAutoImputar();
+                //Configuracion config = new Configuracion();
+                if (imputaciones != null)
+                {
+                    //si hay imputaciones ingreso los pagos
+                    DataTable dtRecCobro = getRecibosDeCobroModalAutoImputar();
+                    DataTable dtNotaCredito = getNotaDeCreditoModalAutoImputar();
+                    List<Pago> listPago = contCobranza.obtenerPagosRC_NC_desdeDT(dtRecCobro, dtNotaCredito);
+
+                    if (listPago.Count > 0 & listPago != null)
+                    {
+                        Cobro cobro = new Cobro();
+                        //cobro.fecha = Convert.ToDateTime(DateTime.Now.ToString(new CultureInfo("es-AR")).Split(' ')[0]);
+                        cobro.fecha = DateTime.Now;
+                        cobro.cliente.id = this.idCliente;
+                        cobro.Doc_imputar = imputaciones;
+                        cobro.pagos = listPago;
+                        cobro.empresa.id = this.idEmpresa;
+                        cobro.sucursal.id = this.idSucursal;
+                        cobro.puntoVenta = contSucursal.obtenerPtoVentaId(this.puntoVenta);
+                        //cobro.total = Convert.ToDecimal(txtTotalIngresado.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        decimal txtTotalIngresado = 0;
+                        foreach (DataRow dataRow in dtRecCobro.Rows)
+                        {
+                            txtTotalIngresado += Convert.ToDecimal(dataRow["monto"]);
+                        }
+                        foreach (DataRow dataRow2 in dtNotaCredito.Rows)
+                        {
+                            txtTotalIngresado += Convert.ToDecimal(dataRow2["monto"]);
+                        }
+                        cobro.ingresado = Math.Abs(txtTotalIngresado);
+                        foreach (var items in imputaciones)
+                        {
+                            txtTotalIngresado += Convert.ToDecimal(items.total);
+                        }
+                        cobro.total = txtTotalIngresado;
+                        //cobro.imputado = Convert.ToDecimal(imputado.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        cobro.imputado = Convert.ToDecimal(imputaciones[0].imputar);
+                        //cobro.ingresado = Convert.ToDecimal(txtTotalIngresado.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        //cobro.ingresado = txtTotalIngresado;
+                        cobro.comentarios = "";
+                        obtenerNroRecibo();
+                        //if (this.config.numeracionCobros == "0")
+                        //{
+                        cobro.numero = txtNumeroCobro;
+                        //}
+
+                        //agrego el tipo de documento que se imputa                        
+                        if (this.idTipo == 1)
+                        {
+                            cobro.tipoDocumento.tipo = "Factura";
+                        }
+                        if (this.idTipo == 2)
+                        {
+                            cobro.tipoDocumento.tipo = "Presupuesto";
+                        }
+
+                        int i = 0;
+                        //if (Math.Abs(cobro.ingresado) >= cobro.imputado)
+                        //{
+                        //var idRecCobro = cobro.pagos[0].idReciboCobro;
+                        i = contCobranza.ProcesarCobro(cobro, -1, this.idTipo);
+
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"El cobro es mayor a lo imputado. \");", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El cobro es mayor a lo imputado"));
+                        //}
+                        if (i > 0)
+                        {
+                            int idMov = contCobranza.transformarIdCobroEnIdMov(i);
+
+                            if (idMov > 0)
+                            {
+                                contCobranza.saveMovimiento_Cuenta_FechaVencimientos(idMov);
+
+                                contCobranza.modificarMovimientoCuenta_Haber(idMov);
+
+                                ScriptManager.RegisterClientScriptBlock(this.Page, Page.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se cargaron pagos. \");", true);
+                        //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se cargaron pagos. "));
+                    }
+                }
+                else
+                {
+                    //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudo obtener imputaciones. \");", true);
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se pudo cargaron imputaciones "));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+        }
+
+
+        public DataTable getNotaDeCreditoModalAutoImputar()
+        {
+            try
+            {
+                DataTable dtPagos = new DataTable();
+                dtPagos.Columns.Add("id");
+                dtPagos.Columns.Add("monto");
+                dtPagos.Columns.Add("idNotaCredito");
+
+                foreach (Control c in phDocSaldoMenorACero.Controls)
+                {
+                    TableRow tr1 = c as TableRow;
+                    string tipoDoc = tr1.Cells[2].Text;
+                    CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true && tipoDoc.Contains("Credito"))
+                    {
+                        string txt = tr1.Cells[5].Text.TrimStart('$');
+                        DataRow dr = dtPagos.NewRow();
+                        dr["monto"] = txt;
+                        dr["idNotaCredito"] = ch.ID.Substring(27, ch.ID.Length - 27);
+                        dtPagos.Rows.Add(dr);
+                    }
+                }
+                return dtPagos;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public DataTable getRecibosDeCobroModalAutoImputar()
+        {
+            try
+            {
+                DataTable dtPagos = new DataTable();
+                dtPagos.Columns.Add("id");
+                dtPagos.Columns.Add("monto");
+                dtPagos.Columns.Add("idRecCobro");
+
+                foreach (Control c in phDocSaldoMenorACero.Controls)
+                {
+                    TableRow tr1 = c as TableRow;
+                    string tipoDoc = tr1.Cells[2].Text;
+                    CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true && tipoDoc.Contains("Recibo"))
+                    {
+                        string txt = tr1.Cells[5].Text.TrimStart('$');
+
+                        DataRow dr = dtPagos.NewRow();
+                        dr["monto"] = txt;
+                        dr["idRecCobro"] = ch.ID.Substring(27, ch.ID.Length - 27);
+                        dtPagos.Rows.Add(dr);
+                    }
+                }
+                return dtPagos;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        //Esta funcion hace lo mismo que la funcion obtenerImputaciones pero adaptada al modal de autoimputar 
+        public List<Imputacion> obtenerImputacionesModalAutoImputar()
+        {
+
+            try
+            {
+                List<Imputacion> imputaciones = new List<Imputacion>();
+                foreach (Control c in PlaceHolderSaldoPositivo.Controls)
+                {
+                    TableRow tr1 = c as TableRow;
+                    string tipoDoc = tr1.Cells[2].Text;
+                    CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;
+
+                    if (ch.Checked == true && (tipoDoc.Contains("Factura") || tipoDoc.Contains("Presupuesto") || tipoDoc.Contains("Debito")))
+                    {
+                        Imputacion imp = new Imputacion();
+                        string txt = tr1.Cells[5].Text.TrimStart('$');
+
+                        imp.movimiento = contrCC.obtenerMovimientoID(Convert.ToInt32(ch.ID.Substring(27, ch.ID.Length - 27)));
+
+                        imp.total = Convert.ToDecimal(tr1.Cells[5].Text.Substring(1), CultureInfo.InvariantCulture);
+
+                        if (!String.IsNullOrEmpty(txt))
+                        {
+                            decimal resto = imp.movimiento.saldo - imp.total;
+                            imp.imputar = resto + Convert.ToDecimal(txt, CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            imp.imputar = 0;
+                        }
+
+                        imputaciones.Add(imp);
+                    }
+                }
+
+
+
+                return imputaciones;
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Ha ocurrido un error obteniendo Lista de Imputaciones. " + ex.Message));
+                return null;
+            }
+        }
+
+        public void RecargarLaPagina()
+        {
+            Response.Redirect("CobranzaF.aspx?cliente=" + DropListClientes.SelectedValue + "&empresa=" + DropListEmpresa.SelectedValue + "&sucursal=" + DropListSucursal.SelectedValue + "&puntoVenta=" + DropListPuntoVta.SelectedValue + "&tipo=" + DropListTipo.SelectedValue);
+        }
         private void hacerCobro()
         {
             try
@@ -1283,6 +1658,7 @@ namespace Gestion_Web.Formularios.Facturas
                 else if (saldoSum > 0)
                 {
                     int idMovMayorA0 = movs.Where(x => x.saldo > 0).FirstOrDefault().id;
+                    //int idMovMayorA0 = movs.Where(x => x.saldo > 0).FirstOrDefault().id;
                     contCobranza.actualizarSaldoNC(idMovMayorA0, saldoSum);
                 }
             }
@@ -1345,8 +1721,6 @@ namespace Gestion_Web.Formularios.Facturas
 
                 foreach (Control c in phCobranzas.Controls)
                 {
-
-
                     TableRow tr1 = c as TableRow;
                     string tipoDoc = tr1.Cells[2].Text;
                     CheckBox ch = tr1.Cells[6].Controls[0] as CheckBox;

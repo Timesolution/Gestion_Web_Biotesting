@@ -303,15 +303,6 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.LinkButton lbBuscar;
 
         /// <summary>
-        /// Control linkArt.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor linkArt;
-
-        /// <summary>
         /// Control UpdatePanel8.
         /// </summary>
         /// <remarks>
@@ -348,6 +339,24 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.Label lblDocumentosSaldoNegativo;
 
         /// <summary>
+        /// Control TxtIDDocumentos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtIDDocumentos;
+
+        /// <summary>
+        /// Control linkArt.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor linkArt;
+
+        /// <summary>
         /// Control phDocSaldoMenorACero.
         /// </summary>
         /// <remarks>
@@ -357,13 +366,13 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.PlaceHolder phDocSaldoMenorACero;
 
         /// <summary>
-        /// Control TextBox1.
+        /// Control LinkButtonImputar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.LinkButton LinkButtonImputar;
 
         /// <summary>
         /// Control PlaceHolderSaldoPositivo.
@@ -375,31 +384,13 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.PlaceHolder PlaceHolderSaldoPositivo;
 
         /// <summary>
-        /// Control TextBox2.
+        /// Control Button1.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox2;
-
-        /// <summary>
-        /// Control TextBox3.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox3;
-
-        /// <summary>
-        /// Control LinkButtonImputar.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButtonImputar;
+        protected global::System.Web.UI.WebControls.Button Button1;
 
         /// <summary>
         /// Control UpdatePanel2.
@@ -580,5 +571,14 @@ namespace Gestion_Web.Formularios.Facturas
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtComentario;
+
+        /// <summary>
+        /// Control TxtIDSDocumentos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox TxtIDSDocumentos;
     }
 }

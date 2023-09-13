@@ -1,10 +1,20 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CobranzaF.aspx.cs" Inherits="Gestion_Web.Formularios.Facturas.CobranzaF" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        .widget.stacked::after {
+            display: none;
+        }
+
+        .widget.stacked::before {
+            display: none;
+        }
+    </style>
+
+
     <div class="main">
-
-        <%--<div class="container">--%><div>
-
+        <%--<div class="container">--%>
+        <div>
             <div class="col-md-12 col-xs-12">
                 <div class="widget stacked">
                     <div class="stat">
@@ -36,7 +46,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
                             </ContentTemplate>
                             <Triggers>
                             </Triggers>
@@ -289,45 +298,49 @@
                 </div>
                 <div class="modal-body">
                     <div role="form" class="form-horizontal col-md-12">
-                        <div class="widget stacked">
-                            <div class="widget-content">
-                                <div class="bs-example">
+                        <div class="col-md-12">
+                            <div class="widget big-stats-container stacked">
+                                <div class="widget-content">
+                                    <asp:UpdatePanel ID="UpdatePanel8" runat="server" UpdateMode="Always">
+                                        <ContentTemplate>
+                                            <div id="big_stats" class="cf">
+                                                <div class="stat">
+                                                    <h4>Saldo</h4>
+                                                    <asp:Label ID="label1" runat="server" Text="" class="value"></asp:Label>
+                                                </div>
+                                                <div class="stat">
+                                                    <h4>Documentos Seleccionados:</h4>
+                                                    <asp:Label ID="labelPesos" runat="server" Text="$" class="value"></asp:Label>
+                                                    <asp:Label ID="lblDocumentosSaldoNegativo" runat="server" Text="0" class="value"></asp:Label>
+                                                    <div>
+                                                        <%-- Esta txt oculta contiene los ids de todos los documentos a los que se les haya hecho
+                                                            click en su respectivo orden--%>
+                                                        <asp:TextBox ID="TxtIDDocumentos"  runat="server" Style="display: none;"></asp:TextBox>
+                                                    </div>
+                                                </div>
+                                                <!-- .stat -->
+                                            </div>
+                                        </ContentTemplate>
+                                    </asp:UpdatePanel>
+                                </div>
+                                <!-- /widget-content -->
+                            </div>
+                            <!-- /widget -->
+                        </div>
+                        <div class="widget stacked" style="border: none !important;">
+                            <div class="widget-content" style="border: none !important;">
+                                <div class="bs-example" style="border: none !important;">
                                     <ul id="myTab" class="nav nav-tabs">
                                         <li class="active"><a href="#home" data-toggle="tab" visible="true">Credito</a></li>
-                                        <li class=""><a href="#DocsSaldoPositivo" data-toggle="tab" runat="server" id="linkArt" visible="true">Pestaña2</a></li>
+                                        <li class=""><a href="#DocsSaldoPositivo" data-toggle="tab" runat="server" id="linkArt" visible="true">Debito</a></li>
                                     </ul>
                                     <div id="tabContent" class="tab-content">
-
                                         <div class="tab-pane fade active in" id="home">
                                             <contenttemplate>
-                                                <div id="validation-form" role="form" class="form-horizontal col-md-10">
+                                                <div id="validation-form" role="form" class="form-horizontal col-md-12">
                                                     <fieldset>
-                                                        <div class="col-md-12">
-                                                            <div class="widget big-stats-container stacked">
-                                                                <div class="widget-content">
-                                                                    <asp:UpdatePanel ID="UpdatePanel8" runat="server" UpdateMode="Always">
-                                                                        <ContentTemplate>
-                                                                            <div id="big_stats" class="cf">
-                                                                                <div class="stat">
-                                                                                    <h4>Saldo</h4>
-                                                                                    <asp:Label ID="label1" runat="server" Text="" class="value"></asp:Label>
-                                                                                </div>
-                                                                                <div class="stat">
-                                                                                    <h4>Documentos Seleccionados:</h4>
-                                                                                    <asp:Label ID="labelPesos" runat="server" Text="$" class="value"></asp:Label>
-                                                                                    <asp:Label ID="lblDocumentosSaldoNegativo" runat="server" Text="0" class="value"></asp:Label>
-                                                                                </div>
-                                                                                <!-- .stat -->
-                                                                            </div>
-                                                                        </ContentTemplate>
-                                                                    </asp:UpdatePanel>
-                                                                </div>
-                                                                <!-- /widget-content -->
-                                                            </div>
-                                                            <!-- /widget -->
-                                                        </div>
                                                         <div class="table-responsive d-flex align-items-center justify-content-center" style="height: 100%;">
-                                                            <table class="table table-bordered table-striped" id="dataTables-example" style="margin: 0 auto;">
+                                                            <table class="table table-bordered table-striped" id="docsNegativos" style="margin: 0 auto;">
                                                                 <thead>
                                                                     <tr>
                                                                         <th style="text-align: left">Fecha</th>
@@ -341,31 +354,21 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <asp:PlaceHolder ID="phDocSaldoMenorACero" runat="server"></asp:PlaceHolder>
-                                                                    <th></th>
-                                                                    <th></th>
-                                                                    <th></th>
-                                                                    <th></th>
-                                                                    <th style="width: 20%">
-                                                                        <div class="col-lg-8">
-                                                                            <div class="input-group">
-                                                                                <span class="input-group-addon">$</span>
-                                                                                <asp:TextBox ID="TextBox1" runat="server" class="form-control" Text="0" Style="text-align: right"></asp:TextBox>
-                                                                            </div>
-                                                                        </div>
-                                                                    </th>
-                                                                    <th></th>
                                                                 </tbody>
                                                             </table>
+                                                        </div>
+                                                        <div style="text-align: right;">
+                                                            <asp:LinkButton ID="LinkButtonImputar" runat="server" Text="Siguiente" class="btn btn-success"
+                                                                Style="margin-top: 20px; float: right;" OnClientClick="siguienteClick(); return false;" />
                                                         </div>
                                                     </fieldset>
                                                 </div>
                                             </contenttemplate>
                                         </div>
-
                                         <div class="tab-pane fade" id="DocsSaldoPositivo">
                                             <contenttemplate>
-                                                <div class="widget-content">
-                                                    <div id="validation-form2" role="form" class="form-horizontal col-md-10">
+                                                <div class="widget-content" style="border: none !important;">
+                                                    <div id="validation-form2" role="form" class="form-horizontal col-md-12">
                                                         <fieldset>
                                                             <div class="table-responsive d-flex align-items-center justify-content-center" style="height: 100%;">
                                                                 <table class="table table-bordered table-striped" id="dataTables-example2" style="margin: 0 auto;">
@@ -382,19 +385,6 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <asp:PlaceHolder ID="PlaceHolderSaldoPositivo" runat="server"></asp:PlaceHolder>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th style="width: 20%">
-                                                                            <div class="col-lg-8">
-                                                                                <div class="input-group">
-                                                                                    <span class="input-group-addon">$</span>
-                                                                                    <asp:TextBox ID="TextBox2" runat="server" class="form-control" Text="0" Style="text-align: right"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
-                                                                        </th>
-                                                                        <th></th>
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -414,21 +404,13 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <%--<asp:PlaceHolder ID="PlaceHolder1" runat="server"></asp:PlaceHolder>--%>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                        <th style="width: 20%">
-                                                                            <div class="col-lg-8">
-                                                                                <div class="input-group">
-                                                                                    <span class="input-group-addon">$</span>
-                                                                                    <asp:TextBox ID="TextBox3" runat="server" class="form-control" Text="0" Style="text-align: right"></asp:TextBox>
-                                                                                </div>
-                                                                            </div>
-                                                                        </th>
-                                                                        <th></th>
                                                                     </tbody>
                                                                 </table>
+                                                            </div>
+                                                            <div style="text-align: right;">
+                                                                <asp:Button ID="Button1" runat="server" Text="Imputar doc. a favor"
+                                                                    class="btn btn-info" OnClick="btnImputarModal_Click"
+                                                                    Style="margin-top: 20px; float: right;" />
                                                             </div>
                                                         </fieldset>
                                                     </div>
@@ -441,7 +423,6 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <asp:LinkButton ID="LinkButtonImputar" runat="server" Text="Siguiente" class="btn btn-success" />
                     </div>
                 </div>
             </div>
@@ -587,7 +568,6 @@
             <div class="modal-content">
                 <asp:UpdatePanel ID="UpdatePanel6" runat="server" UpdateMode="Always">
                     <ContentTemplate>
-
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                             <h4 class="modal-title">Observaciones</h4>
@@ -660,11 +640,26 @@
     </script>
     <script>
 
+        function siguienteClick() {
+            // Cambiamos la pestaña activa a la segunda pestaña (DocsSaldoPositivo)
+            // Cambiar la clase "active" para resaltar la segunda pestaña
+            document.querySelector('ul.nav-tabs li.active').classList.remove('active');
+            document.querySelector('ul.nav-tabs li:nth-child(2)').classList.add('active');
+
+            // Cambiar el contenido visible a la segunda pestaña
+            document.getElementById("home").classList.remove("active", "in");
+            document.getElementById("DocsSaldoPositivo").classList.add("active", "in");
+
+            // Opcional: Actualizar la URL para que refleje la segunda pestaña (utiliza el atributo "href" de la segunda pestaña)
+            window.history.pushState('', '', document.querySelector('ul.nav-tabs li:nth-child(2) a').getAttribute('href'));
+        }
+
         function updatebox(valor, id) {
             var textbox = document.getElementById("<%=txtTotalFC.ClientID%>");
             var lblSeleccion = document.getElementById("<%= labelSeleccion.ClientID %>");
 
             var chk1 = document.getElementById("cbSeleccion_" + id);
+
 
             if (chk1.checked) {
                 textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
@@ -688,12 +683,34 @@
             let lblSeleccion = document.getElementById("<%= lblDocumentosSaldoNegativo.ClientID %>");
 
             let chk1 = document.getElementById("cbSeleccionSaldoMenorACero_" + id);
-
+            let tabla = document.getElementById("dataTables-example2");
+            let tablaDocsNegativos = document.getElementById("docsNegativos");
+            let checkboxesDocsNegativos = tablaDocsNegativos.querySelectorAll("tr input[type='checkbox']");
+            let checkboxes = tabla.querySelectorAll("tr input[type='checkbox']");
+            let HayOtroDocumentoNegativo = 0;
             if (chk1.checked) {
+
+                for (let i = 0; i < checkboxes.length; i++) {
+                    checkboxes[i].disabled = false;
+                }
                 //textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
                 lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
             }
             else {
+
+                for (let i = 0; i < checkboxesDocsNegativos.length; i++) {
+                    if (checkboxesDocsNegativos[i].checked == true && checkboxesDocsNegativos[i].id != chk1.id) {
+                        HayOtroDocumentoNegativo++;
+                    }
+                }
+
+                if (HayOtroDocumentoNegativo === 0) {
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        checkboxes[i].disabled = true;
+                    }
+                }
+
+
                 //textbox.value = parseFloat(parseFloat(textbox.value) - parseFloat(valor)).toFixed(2)
                 lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
             }
@@ -705,67 +722,31 @@
             let lblSeleccion = document.getElementById("<%= lblDocumentosSaldoNegativo.ClientID %>");
             let chk2 = document.getElementById("cbSeleccionSaldoMayorACero_" + id);
 
+            let Rta = ValdidarCheckBoxesNegativos()
+
+
             if (chk2.checked == true) {
-                //textbox.value = parseFloat(parseFloat(textbox.value) + parseFloat(valor)).toFixed(2);
+                
                 lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) + parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
                 let tabla = document.getElementById("dataTables-example2");
+                console.log(chk2)
 
+                //<asp:TextBox ID="TxtIDSDocumentos" Text="0" runat="server" Style="display: none;"></asp:TextBox>
                 //El codigo de la segunda tabla iria aca, creo
-                //CargarSegundaTabla(tabla)
-                //let Segundatabla = document.getElementById("dataTables-example2");
-                //if (Segundatabla != null) {
-                //    let Segundafilas = Segundatabla.getElementsByTagName("tr");
-                //    for (let i = 1; i <= Segundafilas.length; i++) {
-                //        let SegundaFilas = Segundafilas[i];
-                //        let checkbox = SegundaFilas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
+                let idCheckBox = chk2.id
+                let idCheckBoxFiltrado = idCheckBox.slice(27);
+                console.log(idCheckBoxFiltrado);    
 
-                //        if (checkbox) {
-                //            // El checkbox existe, ahora puedes continuar con tu código
+                let textBox = document.getElementById("<%= TxtIDDocumentos.ClientID %>").value;
+                console.log(textBox)
+                if (textBox.value == "") {
+                    document.getElementById("<%= TxtIDDocumentos.ClientID %>").value = idCheckBoxFiltrado + ";";
+                }
 
-                //        } else {
-                //            console.log("El checkbox no fue encontrado en la fila " + i);
-                //        }
-
-
-
-                //        //Si la checkBox esta checkeada, quiere decir que tiene que agregar esa fila
-                //        //A la segunda tabla 
-                //        /* if (checkbox.checked) {*/
-                //        //let Fecha = Filas.getElementsByTagName("td")[0].textContent;
-                //        //let FechaVencimiento = Filas.getElementsByTagName("td")[1].textContent;
-                //        //let Numero = Filas.getElementsByTagName("td")[2].textContent;
-                //        //let Debe = Filas.getElementsByTagName("td")[3].textContent;
-                //        //let Haber = Filas.getElementsByTagName("td")[4].textContent;
-                //        //let Saldo = Filas.getElementsByTagName("td")[5].textContent;
-
-                //        //console.log(Fecha)
-                //        //console.log(FechaVencimiento)
-                //        //console.log(Numero)
-                //        //console.log(Debe)
-                //        //console.log(Haber)
-                //        //console.log(Saldo)
-
-                //        //    let FechaSegundaTabla = "<td> " + Fecha + "</td>";
-                //        //    let FechaVencimientoSegundaTabla = "<td> " + FechaVencimiento + "</td>";
-                //        //    let NumeroSegundaTabla = "<td> " + Numero + "</td>";
-                //        //    let DebeSegundaTabla = "<td style=\" text-align: right\"> " + Debe + "</td>";
-                //        //    let HaberSegundaTabla = "<td style=\" text-align: right\"> " + Haber + "</td>";
-                //        //    let SaldoSegundaTabla = "<td style=\" text-align: right\"> " + Saldo + "</td>";
-
-
-                //        //    let appendfinal = "<tr>" +
-                //        //        FechaSegundaTabla +
-                //        //        FechaVencimientoSegundaTabla +
-                //        //        NumeroSegundaTabla +
-                //        //        DebeSegundaTabla +
-                //        //        HaberSegundaTabla +
-                //        //        SaldoSegundaTabla +                        
-                //        //        "</tr>"
-                //        //$('#dataTables-example3').append(appendfinal);
-                //        //}
-                //    }
-
-                //}
+                else {
+                    document.getElementById("<%= TxtIDDocumentos.ClientID %>").value += idCheckBoxFiltrado + ";";
+                }
+                CargarSegundaTabla(tabla, chk2)
 
                 //A partir de aca es mi codigo
                 // Obtener el texto de la etiqueta lblSeleccion
@@ -773,18 +754,22 @@
                 // Convertir el texto a un número
                 let numeroEtiqueta = parseFloat(textoEtiqueta);
                 if (numeroEtiqueta >= 0) {
+
+                    //Aca valido cuando hay mas de dos checkboxes
+                    //validarCheckBoxes(tabla, numeroEtiqueta);
+
                     // Obtener la tabla dentro del PlaceHolder por su ID
                     if (tabla != null) {
                         // Obtener todas las filas de la tabla
                         let filas = tabla.getElementsByTagName("tr");
 
                         // Iterar sobre las filas y hacer lo que necesites con ellas
-                        for (let i = 1; i <= filas.length; i++) {
-                            let Filas = filas[i];
-                            let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
-
-                            if (!checkbox.checked) {
-                                checkbox.disabled = true;
+                        let checkboxes = tabla.querySelectorAll("tr input[type='checkbox']");
+                        if (!checkboxes != null) {
+                            for (let i = 0; i < checkboxes.length; i++) {
+                                if (!checkboxes[i].checked) {
+                                    checkboxes[i].disabled = true;
+                                }
                             }
                         }
                     }
@@ -792,76 +777,151 @@
                         console.log("No se encontró la tabla con ID 'miTabla' dentro del PlaceHolder.");
                     }
                 }
+                //}
+
             }
             else {
+
+                //if (Rta === 1) {
+
                 //textbox.value = parseFloat(parseFloat(textbox.value) - parseFloat(valor)).toFixed(2)
                 lblSeleccion.textContent = parseFloat(parseFloat(lblSeleccion.textContent) - parseFloat(valor)).toFixed(2).toLocaleString("es-ES");
-                //Se llama Menos porque el numero disminuye cuando el usario quitar el checkmark en la checkbox
+                let tabla = document.getElementById("dataTables-example3");
+
+
+
+                let idCheckBox = chk2.id
+                let idCheckBoxFiltrado = idCheckBox.slice(27);
+                let idTextBoxValue = document.getElementById("<%= TxtIDDocumentos.ClientID %>").value;
+                //console.log(idCheckBoxFiltrado);
+
+                let idArray = idTextBoxValue.split(';').map(id => id.trim());
+
+                // Encuentra y elimina el ID si existe en el arreglo
+                let indexOfIdToRemove = idArray.indexOf(idCheckBoxFiltrado);
+                if (indexOfIdToRemove !== -1) {
+                    idArray.splice(indexOfIdToRemove, 1);
+                }
+
+                // Reconstruye la cadena de IDs actualizada
+                let updatedIdTextBoxValue = idArray.join(';');                
+                document.getElementById("<%= TxtIDDocumentos.ClientID %>").value = updatedIdTextBoxValue;
+                console.log(document.getElementById("<%= TxtIDDocumentos.ClientID %>").value)
+                //Esta funcion quita un documento de la segunda lista si este se deselecciona de la primera lista
+                QuitarFilaSegundaTabla(tabla, chk2)
 
                 let textoEtiquetaMenos = lblSeleccion.textContent;
                 let numeroEtiquetaMenos = parseFloat(textoEtiquetaMenos);
 
-                console.log(numeroEtiquetaMenos)
                 let tablaMenos = document.getElementById("dataTables-example2");
-                let filasMenos = tablaMenos.getElementsByTagName("tr");
                 if (numeroEtiquetaMenos < 0) {
-                    for (let i = 0; i < filasMenos.length; i++) {
-                        let Filas = filasMenos[i + 1];
-                        let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
 
-                        if (!checkbox.checked) {
-                            console.log("Hola");
-                            checkbox.disabled = false;
+
+                    let checkboxes = tablaMenos.querySelectorAll("tr input[type='checkbox']");
+                    if (!checkboxes != null) {
+                        for (let i = 0; i < checkboxes.length; i++) {
+                            if (!checkboxes[i].checked) {
+                                checkboxes[i].disabled = false;
+                            }
+                        }
+                    }
+                } else if (numeroEtiquetaMenos >= 0) {
+                    // Iterar sobre las filas y hacer lo que necesites con ellas
+                    let checkboxes = tablaMenos.querySelectorAll("tr input[type='checkbox']");
+                    if (checkboxes != null) {
+                        for (let i = 0; i < checkboxes.length; i++) {
+                            if (!checkboxes[i].checked) {
+                                checkboxes[i].disabled = true;
+                            }
                         }
                     }
                 }
+                //}
             }
         }
 
+        function ValdidarCheckBoxesNegativos() {
+            let HayUnCheckNativo = -1;
+            let tabla = document.getElementById("docsNegativos");
+            let checkboxes = tabla.querySelectorAll("tr input[type='checkbox']");
+            if (checkboxes != null) {
+                for (let i = 0; i < checkboxes.length; i++) {
+                    if (!checkboxes[i].checked) {
+                        HayUnCheckNativo = 1;
+                    }
+                }
+            }
+            else {
 
-        function CargarSegundaTabla(tabla) {
+            }
+            return HayUnCheckNativo;
+        }
+
+
+        function borrarDocumentoSelect(Id) {
+
+            let tabla = document.getElementById("dataTables-example3");
+            let checkboxes = tabla.querySelectorAll("tr input[type='checkbox']");
+
+            let SeElimino = 0
+            for (let i = 0; i < checkboxes.length; i++) {
+                //Hago i + 1 para que no tenga en cuenta la fila de la cabecera
+
+                if (checkboxes[i].id == Id) {
+                    tabla.deleteRow(i + 1);
+                    SeElimino++
+                }
+            }
+
+            if (SeElimino > 0) {
+                console.log(Id)
+                document.getElementById(Id).checked = false;
+                let Saldo = document.getElementById(Id).parentNode.parentNode.parentNode.cells[5].childNodes[0].nodeValue
+                updateboxSaldoMayorACero(Saldo.substr(1, Saldo.length).replace(',', ''), Id.split('_')[1])
+            }
+        }
+
+        function CargarSegundaTabla(tabla, chk2) {
             if (tabla != null) {
                 // Obtener todas las filas de la tabla
                 let filas = tabla.getElementsByTagName("tr");
+                let checkboxes = tabla.querySelectorAll("tr input[type='checkbox']");
+
 
                 // Iterar sobre las filas y hacer lo que necesites con ellas
-                for (let i = 1; i <= filas.length; i++) {
-                    let Filas = filas[i];
-                    let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
-
-                    if (checkbox) {
-                        console.log("hola")
-
-                    } else {
-                        console.log("El checkbox no fue encontrado en la fila " + i);
-                    }
-
-
-
+                for (let i = 0; i < checkboxes.length; i++) {
+                    //Hago i + 1 para que no tenga en cuenta la fila de la cabecera
+                    let Filas = filas[i + 1];
                     //Si la checkBox esta checkeada, quiere decir que tiene que agregar esa fila
                     //A la segunda tabla 
-                    if (checkbox.checked) {
+                    if (checkboxes[i].checked == true && chk2.id == checkboxes[i].id) {
                         let Fecha = Filas.getElementsByTagName("td")[0].textContent;
                         let FechaVencimiento = Filas.getElementsByTagName("td")[1].textContent;
                         let Numero = Filas.getElementsByTagName("td")[2].textContent;
                         let Debe = Filas.getElementsByTagName("td")[3].textContent;
                         let Haber = Filas.getElementsByTagName("td")[4].textContent;
                         let Saldo = Filas.getElementsByTagName("td")[5].textContent;
+                        //let CheckBox = Filas.querySelectorAll("tr input[type='checkbox']");
+                        let CheckBox = checkboxes[i];
 
-                        console.log(Fecha)
-                        console.log(FechaVencimiento)
-                        console.log(Numero)
-                        console.log(Debe)
-                        console.log(Haber)
-                        console.log(Saldo)
 
+                        //// Iterar y mostrar cada checkbox                
                         let FechaSegundaTabla = "<td> " + Fecha + "</td>";
                         let FechaVencimientoSegundaTabla = "<td> " + FechaVencimiento + "</td>";
                         let NumeroSegundaTabla = "<td> " + Numero + "</td>";
                         let DebeSegundaTabla = "<td style=\" text-align: right\"> " + Debe + "</td>";
                         let HaberSegundaTabla = "<td style=\" text-align: right\"> " + Haber + "</td>";
                         let SaldoSegundaTabla = "<td style=\" text-align: right\"> " + Saldo + "</td>";
+                        let CheckBoxSegundaTabla = "<input type=\"checkbox\" name=\"nombreCheckbox\" id=\"" + CheckBox.id + "\" value=\"valorCheckbox\" style=\"display: none;\">";
 
+                        let styleCorrect = "";
+                        let btnrec = "";
+
+                        let btneliminar = "<div style=\"display: flex; align-items: center;\">" +
+                            " <a class=\"btn btn-danger\" onclick=\"javascript: return borrarDocumentoSelect('" + CheckBox.id + "');\" title=\"Eliminar\">" +
+                            "<i class=\"fa fa-trash-o\"></i> </a> " +
+                            CheckBoxSegundaTabla +
+                            "</div>";
 
                         let appendfinal = "<tr>" +
                             FechaSegundaTabla +
@@ -870,32 +930,10 @@
                             DebeSegundaTabla +
                             HaberSegundaTabla +
                             SaldoSegundaTabla +
-                            "</tr>"
+                            "<td style=\"text-align: center\">" + btneliminar + "</td>" + // Se colocó el contenido de btneliminar dentro de una celda <td>
+                            "</tr>";
+
                         $('#dataTables-example3').append(appendfinal);
-
-                        let textoEtiqueta = lblSeleccion.textContent;
-                        // Convertir el texto a un número
-                        let numeroEtiqueta = parseFloat(textoEtiqueta);
-                        if (numeroEtiqueta >= 0) {
-                            // Obtener la tabla dentro del PlaceHolder por su ID
-                            if (tabla != null) {
-                                // Obtener todas las filas de la tabla
-                                let filas = tabla.getElementsByTagName("tr");
-
-                                // Iterar sobre las filas y hacer lo que necesites con ellas
-                                for (let i = 1; i <= filas.length; i++) {
-                                    let Filas = filas[i];
-                                    let checkbox = Filas.getElementsByTagName("td")[6].querySelector("input[type='checkbox']");
-
-                                    if (!checkbox.checked) {
-                                        checkbox.disabled = true;
-                                    }
-                                }
-                            }
-                            else {
-                                console.log("No se encontró la tabla con ID 'miTabla' dentro del PlaceHolder.");
-                            }
-                        }
                     }
                 }
             }
@@ -905,6 +943,23 @@
         }
 
 
+        function QuitarFilaSegundaTabla(tabla, chk2) {
+            if (tabla != null) {
+                // Obtener todas las filas de la tabla
+                let checkboxes = tabla.querySelectorAll("tr input[type='checkbox']");
+
+                // Iterar sobre las filas y hacer lo que necesites con ellas
+                for (let i = 0; i < checkboxes.length; i++) {
+                    //Hago i + 1 para que no tenga en cuenta la fila de la cabecera
+                    if (checkboxes[i].id == chk2.id) {
+                        tabla.deleteRow(i + 1);
+                    }
+                }
+            }
+            else {
+                console.log("No se encontró la tabla con ID 'miTabla' dentro del PlaceHolder.");
+            }
+        }
 
         function openModalComentario() {
             $('#modalComentarios').modal('show');
