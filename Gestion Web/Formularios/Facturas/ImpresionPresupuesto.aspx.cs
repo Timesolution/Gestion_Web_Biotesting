@@ -1585,6 +1585,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("RemitoR.rdlc");
                 this.ReportViewer1.LocalReport.EnableExternalImages = true;
+                this.ReportViewer1.LocalReport.SetParameters(new ReportParameter("pPageSize", "Oficio", false));
+
                 ReportDataSource rds = new ReportDataSource("DetallePresupuesto", dtDetalle);
                 ReportDataSource rds2 = new ReportDataSource("DatosPresupuesto", dtDatos);
                 ReportDataSource rds3 = new ReportDataSource("DetalleComentarios", dtComentarios);

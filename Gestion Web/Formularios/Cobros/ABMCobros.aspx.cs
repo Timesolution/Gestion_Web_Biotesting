@@ -2093,9 +2093,9 @@ namespace Gestion_Web.Formularios.Facturas
                                 if (l > 0)
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se liquidaron correctamente los pagarés en el cobro \", {type: \"info\"}); location.href = '../Valores/PagaresF.aspx';", true);
                                 if (l < 0)
-                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudieron liquidar los pagarés en el cobro. \", {type: \"alert\"}); window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2');location.href = 'CobranzaF.aspx';", true);
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"No se pudieron liquidar los pagarés en el cobro. \", {type: \"alert\"}); window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2');location.href = 'CobranzaF.aspx?cliente="+idCliente+"&empresa="+idEmpresa+"&sucursal="+idSucursal+"&puntoVenta="+puntoVenta+"&tipo="+tipoDoc+"';", true);
 
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
                                 //ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. \", {type: \"info\"}); window.open('ImpresionCobro.aspx?Cobro=" + i + "&valor=2');location.href = 'CobranzaF.aspx';", true);
                                 mostrarMensaje(c, cobro.id, i);
                             }
@@ -2142,16 +2142,16 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     if (smsCorrecto > 0)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se ha enviado correctamente el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx';", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Se ha enviado correctamente el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
                     }
                     else
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Ocurrió un error enviando el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx';", true);
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro agregado. Ocurrió un error enviando el sms \", {type: \"info\"}); location.href = 'CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
                     }
                 }
                 else
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro no realizado. \", {type: \"info\"})');location.href = 'CobranzaF.aspx';", true);
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Cobro no realizado. \", {type: \"info\"})');location.href = 'CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
                 }
             }
             catch (Exception ex)
@@ -2222,7 +2222,7 @@ namespace Gestion_Web.Formularios.Facturas
                         if (this.anticipo > 0)
                         {
                             Session["CobroAnticipo"] = cobro;
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Anticipo agregado. \", {type: \"info\"});location.href = 'CobranzaF.aspx';", true);
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", " $.msgbox(\"Anticipo agregado. \", {type: \"info\"});location.href = 'CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
                         }
                         else
                         {
@@ -2257,7 +2257,7 @@ namespace Gestion_Web.Formularios.Facturas
                                 Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Genero el Recibo de Cobro N°" + this.txtNumeroCobro.Text);
 
                                 int c = contCobranza.enviarSmsCobro(idCliente, (int)Session["Login_IdUser"], cobro);
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx';", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanelAgregar, UpdatePanelAgregar.GetType(), "alert", "window.open('ImpresionCobro.aspx?Cobro=" + idMov + "&valor=2', 'fullscreen', 'top=0,left=0,width=' + (screen.availWidth) + ',height =' + (screen.availHeight) + ',fullscreen=yes,toolbar=0 ,location=0,directories=0,status=0,menubar=0,resiz able=0,scrolling=0,scrollbars=0'); location.href = 'CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
                                 this.mostrarMensaje(c, cobro.id, i);
                             }
                             else
@@ -2328,27 +2328,35 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 if (this.valor == 1)
                 {
-                    string posicion = (sender as TextBox).ID.ToString().Substring(5, (sender as TextBox).ID.Length - 5);
-                    TableRow tr = this.phDocumentos.Controls[Convert.ToInt32(posicion)] as TableRow;
-                    //TableCell c = tr.Cells[1] as TableCell;
-                    TableCell c = tr.Cells[3] as TableCell;
-                    string saldoA = c.Text.Substring(1, c.Text.Length - 1);
-                    decimal saldo = Convert.ToDecimal(saldoA.Replace(',', '.'), CultureInfo.InvariantCulture);
-                    decimal imputado = Convert.ToDecimal((sender as TextBox).Text.Replace(',', '.'), CultureInfo.InvariantCulture);
-                    if (saldo > 0)
+                    if(!String.IsNullOrEmpty((sender as TextBox).Text))
                     {
-                        if (imputado > saldo)
+                        string posicion = (sender as TextBox).ID.ToString().Substring(5, (sender as TextBox).ID.Length - 5);
+                        TableRow tr = this.phDocumentos.Controls[Convert.ToInt32(posicion)] as TableRow;
+                        //TableCell c = tr.Cells[1] as TableCell;
+                        TableCell c = tr.Cells[3] as TableCell;
+                        string saldoA = c.Text.Substring(1, c.Text.Length - 1);
+                        decimal saldo = Convert.ToDecimal(saldoA.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        decimal imputado = Convert.ToDecimal((sender as TextBox).Text.Replace(',', '.'), CultureInfo.InvariantCulture);
+                        if (saldo > 0)
                         {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El importe a imputar no puede ser mayor al saldo del documento. "));
+                            if (imputado > saldo)
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El importe a imputar no puede ser mayor al saldo del documento. "));
+                            }
+                        }
+                        if (saldo < 0)
+                        {
+                            if (saldo > imputado & imputado > 0)
+                            {
+                                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El importe a imputar no puede ser menor al saldo del documento o debe ser menor a cero. "));
+                            }
                         }
                     }
-                    if (saldo < 0)
+                    else
                     {
-                        if (saldo > imputado & imputado > 0)
-                        {
-                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El importe a imputar no puede ser menor al saldo del documento o debe ser menor a cero. "));
-                        }
+                        (sender as TextBox).Text = "0";
                     }
+                    
 
 
                 }
@@ -2437,7 +2445,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Response.Redirect("CobranzaF.aspx");
+                Response.Redirect("CobranzaF.aspx?cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&tipo=" + tipoDoc + "';", true);
             }
             catch
             {

@@ -386,7 +386,7 @@
                                                     <div class="form-group">
                                                         <label class="col-md-4">Imputado CtaCte</label>
                                                         <div class="col-md-4">
-                                                            <asp:DropDownList ID="DropListClientes" runat="server" class="form-control"></asp:DropDownList>
+                                                            <asp:DropDownList ID="DropListClientes" runat="server" class="form-control" AutoPostBack="true"></asp:DropDownList>
                                                         </div>
 
                                                         <%--<div class="col-md-4">

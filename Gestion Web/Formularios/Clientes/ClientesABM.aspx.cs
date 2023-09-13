@@ -1015,7 +1015,7 @@ namespace Gestion_Web.Formularios.Clientes
 
                 this.DropListClientes.DataSource = dt;
                 this.DropListClientes.DataValueField = "id";
-                this.DropListClientes.DataTextField = "alias";
+                this.DropListClientes.DataTextField = "razonSocial";
                 this.DropListClientes.DataBind();
                 this.DropListClientes.Items.Insert(0, new ListItem("Seleccione...", "-1"));
 
@@ -1030,8 +1030,28 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
-                var dtCli = controlador.getCliente_ImputadoCtaCte(idCliente);
-                this.DropListClientes.SelectedValue = dtCli.Rows[0].ItemArray[2].ToString();
+                DataTable dtCli = controlador.getCliente_ImputadoCtaCte(idCliente);
+                //this.DropListClientes.SelectedValue = "196";
+                this.cargarClientesImputados();
+                //this.DropListClientes.ClearSelection();
+
+                foreach (DataRow drClienteImputado in dtCli.Rows)
+                {
+                    string idClienteImputado = drClienteImputado["idClienteImputado"].ToString();
+                    this.DropListClientes.SelectedValue = idClienteImputado;
+
+                    if(idClienteImputado == "-1" && DropListClientes.SelectedValue != "-1")
+                    {
+                        this.DropListClientes.Items.Insert(0, new ListItem("Seleccione...", "-1"));
+                        this.DropListClientes.SelectedValue = idClienteImputado;
+                    }
+                }
+
+                //foreach (DataRow drClienteImputado in dtCli.Rows)
+                //{
+                //    this.DropListClientes.SelectedValue = drClienteImputado["idClienteImputado"].ToString();
+                //}
+
             }
             catch (Exception ex)
             {
@@ -1137,7 +1157,8 @@ namespace Gestion_Web.Formularios.Clientes
                     this.cargarEmpleadoCliente();
                     //cargo clientes referidos del cliente
                     this.cargarReferidosCliente();
-
+                    //Cargo cliente imputado
+                    this.selectClienteImputado(cl.id);
                     //Si es iva cliente del exterior
                     if (cl.iva.Contains("Exterior") == true)
                     {

@@ -52,11 +52,13 @@
       <HintPath>..\packages\CrystalDecisions.Web.1.0.1\lib\CrystalDecisions.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Estetica Api">
-      <HintPath>..\..\Biotesting_API\Gestion Api\bin\Debug\Estetica Api.dll</HintPath>
+    <Reference Include="Estetica Api, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Gestion Api\Gestion Api\bin\Debug\Estetica Api.dll</HintPath>
     </Reference>
-    <Reference Include="Gestion Api">
-      <HintPath>..\..\Biotesting_API\Gestion Api\bin\Debug\Gestion Api.dll</HintPath>
+    <Reference Include="Gestion Api, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Bio_Testing Api\Gestion Api\bin\Release\Gestion Api.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\packages\Unofficial.Ionic.Zip.1.9.1.8\lib\Ionic.Zip.dll</HintPath>
@@ -106,7 +108,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Millas_Api">
-      <HintPath>..\..\..\Dlls\Millas_Api.dll</HintPath>
+      <HintPath>..\..\Gestion Web\Gestion Web\bin\Millas_Api.dll</HintPath>
     </Reference>
     <Reference Include="Neodynamic.WebControls.BarcodeProfessional">
       <HintPath>Auxiliar\Neodynamic.WebControls.BarcodeProfessional.dll</HintPath>
@@ -115,7 +117,7 @@
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Planario_Api">
-      <HintPath>..\..\Biotesting_API\Gestion Api\bin\Debug\Planario_Api.dll</HintPath>
+      <HintPath>..\..\Gestion Web\Gestion Web\bin\Planario_Api.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -129,7 +131,7 @@
       <HintPath>..\..\..\Dlls\Report_Api.dll</HintPath>
     </Reference>
     <Reference Include="Store_Api">
-      <HintPath>..\..\..\Dlls\Store_Api.dll</HintPath>
+      <HintPath>..\..\Gestion Web\Gestion Web\bin\Store_Api.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
@@ -196,7 +198,7 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Task_Api">
-      <HintPath>..\..\..\Dlls\Task_Api.dll</HintPath>
+      <HintPath>..\..\Gestion Web\Gestion Web\bin\Task_Api.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
