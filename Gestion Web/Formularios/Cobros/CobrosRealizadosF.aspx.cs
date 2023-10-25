@@ -270,7 +270,13 @@ namespace Gestion_Web.Formularios.Cobros
                     //if (dtMovimiento != null && dtMovimiento.Rows.Count <= 2000)
                     //{
 
-                    saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+                    //saldo += dtMovimiento.AsEnumerable().Sum(row => row.Field<decimal>("total"));
+
+                    foreach(DataRow dr in dtMovimiento.Rows)
+                    {
+                        saldo += Convert.ToDecimal(dr["haber"]);
+                    }
+
                     this.cargarEnPh(dtMovimiento);
 
                     this.cargarLabel(txtFechaDesde.Text, txtFechaHasta.Text, idCliente, Convert.ToInt32(DropListPuntoVta.SelectedValue), idEmpresa, idSucursal, Convert.ToInt32(DropListTipo.SelectedValue));
@@ -1042,7 +1048,7 @@ namespace Gestion_Web.Formularios.Cobros
                 foreach (Control C in phCobrosRealizados.Controls)
                 {
                     TableRow tr = C as TableRow;
-                    LinkButton lbtn = tr.Cells[5].Controls[0] as LinkButton;
+                    LinkButton lbtn = tr.Cells[6].Controls[0] as LinkButton;
                     listaCobros += lbtn.ID.Split('_')[1] + ",";
                 }
 

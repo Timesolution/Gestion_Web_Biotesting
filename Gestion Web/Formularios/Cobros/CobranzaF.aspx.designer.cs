@@ -123,33 +123,6 @@ namespace Gestion_Web.Formularios.Facturas
         protected global::System.Web.UI.WebControls.Button btnPagoCuenta;
 
         /// <summary>
-        /// Control btnGenerarDto.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGenerarDto;
-
-        /// <summary>
-        /// Control btnGenerarNCND.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGenerarNCND;
-
-        /// <summary>
-        /// Control btnImputar.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnImputar;
-
-        /// <summary>
         /// Control BtnImputarModal.
         /// </summary>
         /// <remarks>

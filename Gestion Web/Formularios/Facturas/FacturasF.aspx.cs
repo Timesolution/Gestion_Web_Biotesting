@@ -31,6 +31,7 @@ namespace Gestion_Web.Formularios.Facturas
         controladorDocumentos contDocumentos = new controladorDocumentos();
         controladorUsuario contUser = new controladorUsuario();
         controladorRemitos contRemito = new controladorRemitos();
+        controladorCobranza contCobranza = new controladorCobranza();
         controladorCliente contCliente = new controladorCliente();
         controladorFactEntity contFactEntity = new controladorFactEntity();
         controladorSucursal cs = new controladorSucursal();
@@ -39,6 +40,8 @@ namespace Gestion_Web.Formularios.Facturas
         ControladorFormasPago contFormPago = new ControladorFormasPago();
         controladorCompraEntity controladorCompraEntity = new controladorCompraEntity();
         ControladorClienteEntity controladorClienteEntity = new ControladorClienteEntity();
+        ControladorPedido contPedidos = new ControladorPedido();
+        controladorCuentaCorriente cCuentaCorriente = new controladorCuentaCorriente();
 
         Mensajes m = new Mensajes();
         private int accion;
@@ -2357,11 +2360,18 @@ namespace Gestion_Web.Formularios.Facturas
 
         public void BorrarPDFS(string path)
         {
-            string[] pdfs = Directory.GetFiles(path);
-
-            foreach (string filePath in pdfs)
+            try
             {
-                File.Delete(filePath);
+                string[] pdfs = Directory.GetFiles(path);
+
+                foreach (string filePath in pdfs)
+                {
+                    File.Delete(filePath);
+                }
+            }
+            catch(Exception ex)
+            {
+
             }
         }
 
@@ -2608,7 +2618,8 @@ namespace Gestion_Web.Formularios.Facturas
                 HttpContext.Current.Response.ContentType = "application/octet-stream";
                 //HttpContext.Current.Response.ContentType = "application/vnd.ms-excel";
                 HttpContext.Current.Response.WriteFile(path);
-                HttpContext.Current.Response.End();
+                //HttpContext.Current.Response.End();
+                HttpContext.Current.ApplicationInstance.CompleteRequest();
             }
             catch (Exception ex)
             {
@@ -3011,6 +3022,16 @@ namespace Gestion_Web.Formularios.Facturas
                     String fechaVto = String.Empty;
                     String cotizacionFecha = String.Empty;
 
+
+                    //obtengo la fecha de vencimiento
+                    string dMyFVenc = "";
+                    DataTable dtFFVenc = cCuentaCorriente.getFechaVencByIdFactura(f.id);
+                    if (dtFFVenc != null && dtFFVenc.Rows.Count > 0)
+                    {
+                        string[] fechaVenc = dtFFVenc.Rows[0]["fechaVenc"].ToString().Split(' ')[0].Split('/');
+                        dMyFVenc = fechaVenc[1] + "/" + fechaVenc[0] + "/" + fechaVenc[2];
+                    }
+
                     foreach (DataRow row in dtEmpresa.Rows)
                     {
                         //verifico cual es la empresa de la factura
@@ -3146,7 +3167,14 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         descuento = 0;
                     }
-
+                    //obtengo el saldo de la cuenta corriente del cliente                
+                    DataTable dt = this.contCobranza.obtenerTablaTopClientes(DateTime.Today.ToString("dd/MM/yyyy"), f.fecha.AddHours(23).ToString("dd/MM/yyyy"), f.cliente.id, 0, f.sucursal.id, 0, 0);
+                    decimal saldoCtaCte = 0;
+                    try
+                    {
+                        saldoCtaCte = Convert.ToDecimal(dt.Rows[0]["importe"].ToString());
+                    }
+                    catch { }
                     //letras
                     string totalS = Gestion_Api.Auxiliares.Numalet.ToCardinal(total.ToString().Replace(',', '.'));
                     //string totalS = Numalet.ToCardinal("18.25");
@@ -3198,7 +3226,26 @@ namespace Gestion_Web.Formularios.Facturas
                     {
                         textoDolares = "ESTA FACTURA EQUIVALE A USD $" + TotalDolares + " DOLARES ESTADOUNIDENSES PAGADERO  EN PESOS AL CIERRE DOLAR TIPO VENDEDOR DEL DÍA ANTERIOR A LA FECHA DE PAGO.";
                     }
-
+                    //Condición de Pago
+                    string condicionPago = String.Empty;
+                    if (f.formaPAgo.id == 7)
+                    {
+                        condicionPago = f.cliente.vencFC.ToString();
+                    }
+                    String nroPedido = String.Empty;
+                    String nroRemito = String.Empty;
+                    //Pedido Relacionado
+                    Pedido pedidoFc = this.contPedidos.obtenerPedidoByFacturaID(f.id);
+                    if (pedidoFc != null)
+                    {
+                        nroPedido = pedidoFc.numero;
+                    }
+                    //Remito Relacionado
+                    Remito remitoFc = this.controlador.obtenerRemitoByFactura(f.id);
+                    if (remitoFc != null)
+                    {
+                        nroRemito = remitoFc.numero;
+                    }
                     //Comentario factura
                     DataTable dtComentarios = this.controlador.obtenerComentarioPresupuesto(f.id);
 
@@ -3281,6 +3328,14 @@ namespace Gestion_Web.Formularios.Facturas
                     ReportParameter param23b = new ReportParameter("ParamCambioDolar", cotizacionFecha);
 
                     ReportParameter param32 = new ReportParameter("ParamImagen", @"file:///" + logo);
+
+                    ReportParameter param33 = new ReportParameter("ParamSaldoCtaCte", saldoCtaCte.ToString());
+              
+                    ReportParameter param40 = new ReportParameter("ParamNroPedido", nroPedido);
+                    ReportParameter param41 = new ReportParameter("ParamNroRemito", nroRemito);
+                    ReportParameter param42 = new ReportParameter("ParamCondicionPago", condicionPago);
+                    ReportParameter param43 = new ReportParameter("fechaVenc", dMyFVenc);
+
                     this.ReportViewer1.LocalReport.SetParameters(param32);
 
                     this.ReportViewer1.LocalReport.DataSources.Clear();
@@ -3321,7 +3376,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                     this.ReportViewer1.LocalReport.SetParameters(param23);
                     this.ReportViewer1.LocalReport.SetParameters(param23b);
-
+                    this.ReportViewer1.LocalReport.SetParameters(param32);
+                    this.ReportViewer1.LocalReport.SetParameters(param33);
+                    //nro pedido y nro remito relacionados
+                    this.ReportViewer1.LocalReport.SetParameters(param40);
+                    this.ReportViewer1.LocalReport.SetParameters(param41);
+                    this.ReportViewer1.LocalReport.SetParameters(param42);
+                    this.ReportViewer1.LocalReport.SetParameters(param43);
                     this.ReportViewer1.LocalReport.Refresh();
 
                     Warning[] warnings;

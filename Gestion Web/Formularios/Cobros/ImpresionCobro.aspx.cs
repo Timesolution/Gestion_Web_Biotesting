@@ -636,7 +636,7 @@ namespace Gestion_Web.Formularios.Cobros
             {
                 //DataTable dtCobrosRealizados2 = Session["datosRc"] as DataTable;
                 //Session["datosRc"] = null;
-                String lblSaldo = Session["saldoRc"] as String;
+                decimal lblSaldo = 0;// Session["saldoRc"] as String;
                 Session["saldoRc"] = null;
 
                 string[] fecha = fechaD.Split('/');
@@ -651,8 +651,13 @@ namespace Gestion_Web.Formularios.Cobros
                 this.ReportViewer1.ProcessingMode = ProcessingMode.Local;
                 this.ReportViewer1.LocalReport.ReportPath = Server.MapPath("CobrosRealizadosR.rdlc");
 
+                foreach (DataRow dr in dtCobrosRealizados.Rows)
+                {
+                    lblSaldo += Convert.ToDecimal(dr["haber"]);
+                }
+
                 ReportDataSource rds = new ReportDataSource("dsCobros", dtCobrosRealizados);
-                ReportParameter param = new ReportParameter("ParamSaldo", lblSaldo);
+                ReportParameter param = new ReportParameter("ParamSaldo", lblSaldo.ToString());
 
                 this.ReportViewer1.LocalReport.DataSources.Clear();
                 this.ReportViewer1.LocalReport.DataSources.Add(rds);
@@ -1101,7 +1106,7 @@ namespace Gestion_Web.Formularios.Cobros
                         {
                         int i = 0;
                     }
-                    DataTable datos = controladorCuentaCorriente.obtenerMovimientosByCuentaDT((Convert.ToInt32(row["id"].ToString())), this.idSucursal, -1, 2, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")));
+                    DataTable datos = controladorCuentaCorriente.obtenerMovimientosByCuentaDT((Convert.ToInt32(row["id"].ToString())), this.idSucursal, -1, 2, Convert.ToDateTime(this.fechaD, new CultureInfo("es-AR")), Convert.ToDateTime(this.fechaH, new CultureInfo("es-AR")), 0);
 
                     foreach (DataRow saldosFinales in datos.Rows)
                     {

@@ -39,7 +39,7 @@ namespace Gestion_Web.Formularios.Facturas
         string fechaDesde;
         string fechaHasta;
         string ordX;
-        string venc;
+        string venc = "0";
         Mensajes m = new Mensajes();
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -102,12 +102,15 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                 }
+
                 if (idCliente > 0)
                 {
                     //GridCtaCte.PageSize = Convert.ToInt32(configuracion.PageSizeGridView);
                     GridCtaCte.PageSize = Convert.ToInt32(11);
                     this.cargarMovimientos(idCliente, idSucursal, idTipo);
                 }
+
+
                 if (accion > 0)
                 {
                     //this.btnImpagas.Visible = true;
@@ -136,11 +139,11 @@ namespace Gestion_Web.Formularios.Facturas
                     ScriptManager.RegisterStartupScript(this, GetType(), "cambiarIcono", "cambiarIcono('fa fa-toggle-on','Ventas > Cuentas Corrientes');", true);
                 }
                 this.Form.DefaultButton = lbtnBuscar.UniqueID;
-                
+
 
             }
             catch (Exception ex)
-			{
+            {
 
             }
         }
@@ -421,7 +424,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta);
+                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta, Convert.ToInt32(venc));
 
                 if (String.IsNullOrEmpty(ordX) || ordX == "3" || ordX == "4")
                 {
@@ -458,7 +461,7 @@ namespace Gestion_Web.Formularios.Facturas
                 datos = tablaOrd.Copy();
 
                 string tipoOrden = "FechaVenc desc";
-                
+
                 switch (ordX)
                 {
                     case "1":
@@ -485,9 +488,12 @@ namespace Gestion_Web.Formularios.Facturas
                 datos = sortedTable.Copy();
                 if (venc == "1")
                 {
+                    /*
                     DataTable datosVenc = datos.Clone();
                     foreach (DataRow item in datos.Rows)
                     {
+
+
                         if (!String.IsNullOrEmpty(item.ItemArray[12].ToString()))
                         {
                             if (Convert.ToInt32(item.ItemArray[12]) > 0)
@@ -511,11 +517,12 @@ namespace Gestion_Web.Formularios.Facturas
                             }
                         }
                     }
+
                     datos.Clear();
                     foreach (DataRow dtRow in datosVenc.Rows)
                     {
                         datos.ImportRow(dtRow);
-                    }
+                    }*/
                     this.GridCtaCte.DataSource = datos;
                 }
                 else
@@ -523,10 +530,16 @@ namespace Gestion_Web.Formularios.Facturas
                     this.GridCtaCte.DataSource = datos;
                 }
 
-
-                
-
                 this.GridCtaCte.DataBind();
+
+
+
+                //Cargamos el label acá así no damos 50 vueltas al pedo
+                Cliente client = contrCliente.obtenerClienteID(idCliente);
+
+                int maxCantDias = obtenerMaxCantDias(datos);
+                string diasVenc = Convert.ToInt32(client.vencFC) < maxCantDias ? "danger" : "success";
+                lblDiasVenc.Text = "<span class=\"text-" + diasVenc + "\">" + client.vencFC + "</span>";
 
 
                 this.labelSaldo.Text = saldoAcumulado.ToString("C");
@@ -547,8 +560,8 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta); //Vencidas
-                DataTable dtImpagas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 2, fdesde, fhasta); //Impagas
+                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta, Convert.ToInt32(venc)); //Vencidas
+                DataTable dtImpagas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 2, fdesde, fhasta, Convert.ToInt32(venc)); //Impagas
 
                 decimal saldoAcumuladoVenc = 0;
                 decimal saldoAcumuladoImp = 0;
@@ -613,12 +626,12 @@ namespace Gestion_Web.Formularios.Facturas
                 this.labelSaldoVenc.Text = saldoAcumuladoVenc.ToString("C");
 
                 Cliente client = contrCliente.obtenerClienteID(idCliente);
-                //decimal saldoOperativo = ObtenerSaldoOperativo();
-                int maxCantDias = obtenerMaxCantDias(idCliente, idSucursal);
+                ///decimal saldoOperativo = ObtenerSaldoOperativo();
+                //int maxCantDias = obtenerMaxCantDias(idCliente, idSucursal);
                 string saldoMax = Convert.ToDecimal(client.saldoMax) < saldoAcumuladoImp ? "danger" : "success";
-                string diasVenc = Convert.ToInt32(client.vencFC) < maxCantDias ? "danger" : "success";
-                lblSaldoMax.Text = "<span class=\"text-"+ saldoMax + "\">$ " + client.saldoMax.ToString("N", new CultureInfo("is-IS")) + "</span>";
-                lblDiasVenc.Text = "<span class=\"text-" + diasVenc + "\">" + client.vencFC + "</span>";
+                //string diasVenc = Convert.ToInt32(client.vencFC) < maxCantDias ? "danger" : "success";
+                lblSaldoMax.Text = "<span class=\"text-" + saldoMax + "\">$ " + client.saldoMax.ToString("N", new CultureInfo("is-IS")) + "</span>";
+                //lblDiasVenc.Text = "<span class=\"text-" + diasVenc + "\">" + client.vencFC + "</span>";
 
                 Session.Add("saldoVenc", saldoAcumuladoVenc.ToString("C"));
                 Session.Add("saldoMax", client.saldoMax.ToString("N", new CultureInfo("is-IS")));
@@ -632,7 +645,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         private decimal ObtenerSaldoOperativo()
         {
-            DataTable datos = controlador.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today);
+            DataTable datos = controlador.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today, Convert.ToInt32(venc));
             decimal saldoOperativo;
             decimal saldoAcumulado = 0;
 
@@ -662,14 +675,14 @@ namespace Gestion_Web.Formularios.Facturas
             return saldoOperativo;
         }
 
-        private int obtenerMaxCantDias(int idCliente, int idSucursal)
+        private int obtenerMaxCantDias(DataTable datos)//int idCliente, int idSucursal)
         {
             try
             {
                 DateTime fdesde = Convert.ToDateTime("2000/01/01", new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta);
+                // DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta, Convert.ToInt32(venc));
                 int maxCantDias = 0;
                 bool primerValor = true;
                 foreach (DataRow item in datos.Rows)
@@ -919,7 +932,8 @@ namespace Gestion_Web.Formularios.Facturas
                     dtDatos.DefaultView.Sort = "fechaVenc, id";
                     DataTable tOrd = dtDatos.DefaultView.ToTable();
                     dtDatos = tOrd.Copy();
-                }else if (ordX == "1" || ordX == "2")
+                }
+                else if (ordX == "1" || ordX == "2")
                 {
                     dtDatos.DefaultView.Sort = "fecha, id";
                     DataTable tOrd = dtDatos.DefaultView.ToTable();
@@ -1022,9 +1036,9 @@ namespace Gestion_Web.Formularios.Facturas
                 Cliente clientImpReport = contrCliente.obtenerClienteID(idCliente);
                 Session.Add("datosMov", dtDatos);
                 Session.Add("saldoMov", labelSaldo.Text);
-                
+
                 //Response.Redirect("ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion);
-                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion+"','_blank')", true);
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel1, UpdatePanel1.GetType(), "alert", "window.open('ImpresionReportes.aspx?Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&a=" + this.accion + "','_blank')", true);
 
             }
             catch (Exception ex)
@@ -1375,17 +1389,17 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void tipoAmbos_Click(object sender, EventArgs e)
         {
-            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=-1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc="+venc);
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=-1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc=" + venc);
         }
 
         protected void tipoFC_Click(object sender, EventArgs e)
         {
-            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=0&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc="+venc);
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=0&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc=" + venc);
         }
 
         protected void tipoPRP_Click(object sender, EventArgs e)
         {
-            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc="+venc);
+            Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc=" + venc);
         }
     }
 }

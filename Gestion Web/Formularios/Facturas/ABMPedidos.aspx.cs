@@ -2579,7 +2579,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         private decimal ObtenerSaldoOperativo()
         {
-            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today);
+            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(this.cliente.id, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today,0);
             decimal saldoOperativo;
             decimal saldoAcumulado = 0;
 

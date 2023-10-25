@@ -145,7 +145,7 @@
                             </td>
                             <td>&nbsp
                             </td>
-                            <td>
+                           <%-- <td>
                                 <asp:Button ID="btnGenerarDto" runat="server" Text="Generar Dto" class="btn btn-info" data-toggle="modal" href="#modalDescuento" />
                             </td>
                             <td>&nbsp
@@ -157,9 +157,8 @@
                             </td>
                             <td>
                                 <asp:Button ID="btnImputar" runat="server" Text="Imputar doc. a favor" class="btn btn-info" OnClick="btnImputar_Click" />
-                            </td>
-                            <td>
-                            &nbsp
+                            </td>--%>
+<%--                            &nbsp--%>
                             <td>
                                 <asp:LinkButton ID="BtnImputarModal" runat="server" Text="Autoimputar Documento" class="btn btn-info"
                                     OnClientClick="AbrirModalImputar(); return false;"></asp:LinkButton>

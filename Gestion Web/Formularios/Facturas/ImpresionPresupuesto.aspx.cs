@@ -1248,8 +1248,8 @@ namespace Gestion_Web.Formularios.Facturas
                     condicionPago = fact.cliente.vencFC.ToString();
                 }
 
-                String nroPedido = String.Empty;
-                String nroRemito = String.Empty;
+                String nroPedido = " ";
+                String nroRemito = " ";
                 //Pedido Relacionado
                 Pedido pedidoFc = this.contPedidos.obtenerPedidoByFacturaID(idPresupuesto);
                 if (pedidoFc != null)

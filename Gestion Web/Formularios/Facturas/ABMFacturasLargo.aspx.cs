@@ -2445,7 +2445,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         private decimal ObtenerSaldoOperativo(int idCliente)
         {
-            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today.AddDays(1));
+            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today.AddDays(1),0);
             decimal saldoOperativo;
             decimal saldoAcumulado = 0;
 
@@ -2674,7 +2674,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime("2000/01/01", new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta);
+                DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta,0);
                 int maxCantDias = 0;
                 bool primerValor = true;
                 foreach (DataRow item in datos.Rows)
