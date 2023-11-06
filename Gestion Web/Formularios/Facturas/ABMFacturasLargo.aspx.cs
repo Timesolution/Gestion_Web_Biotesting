@@ -2445,7 +2445,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         private decimal ObtenerSaldoOperativo(int idCliente)
         {
-            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today.AddDays(1),0);
+            DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, 0, -1, 2, Convert.ToDateTime("01/01/2000"), DateTime.Today.AddDays(1), 0);
             decimal saldoOperativo;
             decimal saldoAcumulado = 0;
 
@@ -2674,7 +2674,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime("2000/01/01", new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta,0);
+                DataTable datos = controladorCC.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta, 0);
                 int maxCantDias = 0;
                 bool primerValor = true;
                 foreach (DataRow item in datos.Rows)
@@ -2714,7 +2714,7 @@ namespace Gestion_Web.Formularios.Facturas
                 controladorCliente controladorCliente = new controladorCliente();
                 this.cliente = controladorCliente.obtenerClienteID(Convert.ToInt32(DropListClientes.SelectedValue));
                 decimal saldoOperativo = ObtenerSaldoOperativo(cliente.id);
-
+                lblIvaClienteOculto.Text = cliente.iva.ToString();
                 int maxCantDias = obtenerMaxCantDias(cliente.id, idSucursal);
                 int maxCantDiasImp = 0;
 
@@ -2765,9 +2765,15 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
 
+                String Iva_Cliente_Hijo = cliente.iva.ToString();
+
                 if (accion != 6 && accion != 7 && accion != 13)
                 {
                     string[] cliente = this.labelCliente.Text.Split('-');
+
+                    //Le asignamos el iva del hijo para que no intente hacer facturas que no tiene permitidas.
+                    cliente[1] = Iva_Cliente_Hijo;
+
                     if ((cliente[1].Contains("Responsable Inscripto") || (cliente[1].Contains("Responsable Monotributo") || (cliente[1].Contains("Monotributista Social")))) && (c.monotributo != "1" && c.monotributo != "2"))
                     {
                         int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);
@@ -2926,6 +2932,11 @@ namespace Gestion_Web.Formularios.Facturas
             {
                 string[] cliente = this.labelCliente.Text.Split('-');
 
+                if (!String.IsNullOrEmpty(lblIvaClienteOculto.Text))
+                {
+                    cliente[1] = lblIvaClienteOculto.Text; //Hacemos que use el iva del hijo y no del padre
+                }
+
                 this.btnFacturaE.Visible = false;
                 this.btnAgregar.Visible = true;
                 this.btnAgregarRemitir.Visible = true;
@@ -3003,6 +3014,12 @@ namespace Gestion_Web.Formularios.Facturas
                 this.btnAgregarRemitir.Visible = true;
 
                 string[] cliente = this.labelCliente.Text.Split('-');
+
+                if (!String.IsNullOrEmpty(lblIvaClienteOculto.Text))
+                {
+                    cliente[1] = lblIvaClienteOculto.Text; //Hacemos que use el iva del hijo y no del padre
+                }
+
                 if (cliente[1].Contains("Responsable Inscripto"))
                 {
                     int ptoVenta = Convert.ToInt32(this.ListPuntoVenta.SelectedValue);

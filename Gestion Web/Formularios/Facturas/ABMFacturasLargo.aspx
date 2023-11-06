@@ -74,6 +74,7 @@
                                                             <div class="form-inline">
                                                                 <label class="col-md-12">
                                                                         <asp:Label ID="labelCliente" runat="server" Text="" Font-Bold="true"></asp:Label>
+                                                                    <asp:Label ID="lblIvaClienteOculto" runat="server" CssStyle="display:none" Visible="false"></asp:Label>
                                                                 </label>
                                                                 <label class="col-md-12">
                                                                     <asp:Label ID="lblSaldoMaxDiasVenc" runat="server" Text=""></asp:Label>

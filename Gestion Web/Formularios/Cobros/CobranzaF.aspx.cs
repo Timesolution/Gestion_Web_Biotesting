@@ -95,8 +95,22 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (this.idCliente > 0)
                 {
-                    this.cargarMovimientos();
-                    this.txtImputar.Enabled = true;
+                    int i = this.ValidarAsociacionCuentaCorriente(idCliente);
+
+                    if (i < 1)
+                    {
+                        this.cargarMovimientos();
+                        this.txtImputar.Enabled = true;
+                    }
+                    else
+                    {
+                        btnSiguiente.Attributes.Add("disabled", "disabled");
+                        btnPagoCuenta.Attributes.Add("disabled", "disabled");
+                        BtnImputarModal.Attributes.Add("disabled", "disabled");
+
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Este cliente esta asociado a otra CtaCte."));
+                    }
+
                 }
                 else
                 {
@@ -1150,7 +1164,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
                     sadoDeTodosLosDocEn0(movDocTildados);
                     // this variable contains the id of the documents, in the order they were clicked
-                    string movDocTildadosEnOrden = TxtIDDocumentos.Text;                                                         
+                    string movDocTildadosEnOrden = TxtIDDocumentos.Text;
                     //This function sorts the documents in the order they were clicked
                     var listaFinal = orderDocumentosByID(movDocTildadosEnOrden, movDocTildados);
                     actualizarSaldoImputadoModal(listaFinal);
@@ -1201,26 +1215,26 @@ namespace Gestion_Web.Formularios.Facturas
         //This function sorts the documents in the order they were clicked
         private List<MovimientoView> orderDocumentosByID(String movDocTildadosEnOrden, List<MovimientoView> movDocTildados)
         {
-           
-                string[] idsOrdenados = movDocTildadosEnOrden.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                Dictionary<int, int> indicePorId = new Dictionary<int, int>();
-                for (int i = 0; i < idsOrdenados.Length; i++)
-                {
-                    int id = int.Parse(idsOrdenados[i]);
-                    indicePorId[id] = i;
-                }
+            string[] idsOrdenados = movDocTildadosEnOrden.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                var movimientosPositivos = movDocTildados.Where(m => m.saldo >= 0).ToList();
-                var movimientosNegativos = movDocTildados.Where(m => m.saldo < 0).ToList();
+            Dictionary<int, int> indicePorId = new Dictionary<int, int>();
+            for (int i = 0; i < idsOrdenados.Length; i++)
+            {
+                int id = int.Parse(idsOrdenados[i]);
+                indicePorId[id] = i;
+            }
 
-                var movimientosPositivosOrdenados = movimientosPositivos
-                .OrderBy(m => indicePorId.ContainsKey(m.id) ? indicePorId[m.id] : int.MaxValue)
-                .ToList();
+            var movimientosPositivos = movDocTildados.Where(m => m.saldo >= 0).ToList();
+            var movimientosNegativos = movDocTildados.Where(m => m.saldo < 0).ToList();
+
+            var movimientosPositivosOrdenados = movimientosPositivos
+            .OrderBy(m => indicePorId.ContainsKey(m.id) ? indicePorId[m.id] : int.MaxValue)
+            .ToList();
 
 
-                var listaFinal = movimientosNegativos.Concat(movimientosPositivosOrdenados).ToList();
-                return listaFinal;                   
+            var listaFinal = movimientosNegativos.Concat(movimientosPositivosOrdenados).ToList();
+            return listaFinal;
         }
 
         protected void btnImputar_Click(object sender, EventArgs e)
@@ -1267,7 +1281,7 @@ namespace Gestion_Web.Formularios.Facturas
 
                     /*Si esta variable es mayor a 1, quiere decir se usaron movimientos con
                       saldos positivos de mas*/
-                    int movimientosPositivosDeMas = validarSaldo(movimientosNC, movimientosFC);             
+                    int movimientosPositivosDeMas = validarSaldo(movimientosNC, movimientosFC);
                     if (movimientosPositivosDeMas > 1)
                     {
                         ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo
@@ -1999,8 +2013,34 @@ namespace Gestion_Web.Formularios.Facturas
 
             return movimientosPositivosDeMas;
         }
+
+        public int ValidarAsociacionCuentaCorriente(int IdCliente)
+        {
+            try
+            {
+                DataTable dtTablaImputado = contrCliente.getCliente_ImputadoCtaCte(IdCliente);
+
+                int ImputadoEnCtaCte = 0;
+                foreach(DataRow dr in dtTablaImputado.Rows)
+                {
+                    ImputadoEnCtaCte = Convert.ToInt32(dr["idClienteImputado"]);
+
+                    if (ImputadoEnCtaCte == -1)
+                    {
+                        return ImputadoEnCtaCte;
+                    }
+                }
+
+                return dtTablaImputado.Rows.Count;
+
+            }catch(Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Error! Excepción: "+ ex.Message ));
+
+                return 0;
+            }
+        }
+
     }
-
-
 
 }

@@ -560,8 +560,8 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta, Convert.ToInt32(venc)); //Vencidas
-                DataTable dtImpagas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 2, fdesde, fhasta, Convert.ToInt32(venc)); //Impagas
+                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta, 0); //Vencidas
+                DataTable dtImpagas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 2, fdesde, fhasta, 0); //Impagas
 
                 decimal saldoAcumuladoVenc = 0;
                 decimal saldoAcumuladoImp = 0;
