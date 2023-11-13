@@ -424,7 +424,13 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta, Convert.ToInt32(venc));
+                int vencimiento = 0;
+                if (!String.IsNullOrEmpty(venc))
+                {
+                    vencimiento = Convert.ToInt32(venc);
+                }
+
+                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta, vencimiento);
 
                 if (String.IsNullOrEmpty(ordX) || ordX == "3" || ordX == "4")
                 {
