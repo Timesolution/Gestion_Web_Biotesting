@@ -99,8 +99,13 @@ namespace Gestion_Web.Formularios.Facturas
 
                     if (i < 1)
                     {
-                        this.cargarMovimientos();
-                        this.txtImputar.Enabled = true;
+                        //Para que no vuelva a buscar el contenido en caso de que le demos a imputar,
+                        //ya que es un proceso largo el obtener todos los datos de nuevo
+                      //  if (txtActivarProcesoImputacion.Text == "0") 
+                       // {
+                            this.cargarMovimientos();
+                            this.txtImputar.Enabled = true;
+                        //}
                     }
                     else
                     {
@@ -1154,11 +1159,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 if (!String.IsNullOrEmpty(idtildadoNC) && !String.IsNullOrEmpty(idtildadoFC))
                 {
-                    List<MovimientoView> movimientosNC = contrCC.obtenerListaMovimientos(idtildadoNC);
-                    List<MovimientoView> movimientosFC = contrCC.obtenerListaMovimientos(idtildadoFC);
-                    List<MovimientoView> movDocTildados = contrCC.obtenerListaMovimientos(idDocTildados);
-
-
+                    List<MovimientoView> movimientosNC = contrCC.obtenerListaMovimientosCobranza(idtildadoNC);
+                    List<MovimientoView> movimientosFC = contrCC.obtenerListaMovimientosCobranza(idtildadoFC);
+                    List<MovimientoView> movDocTildados = contrCC.obtenerListaMovimientosCobranza(idDocTildados);
 
                     hacerCobroAutoimputarModal();
                     this.contCobranza.imputarReciboCobroAFactura(movimientosNC, movimientosFC);
@@ -1169,6 +1172,9 @@ namespace Gestion_Web.Formularios.Facturas
                     var listaFinal = orderDocumentosByID(movDocTildadosEnOrden, movDocTildados);
                     actualizarSaldoImputadoModal(listaFinal);
                     RecargarLaPagina();
+
+                    //Obtener id del cobro
+                    // Response.Redirect("ImpresionCobro.aspx?valor=2&Cobro=179559");
                 }
 
                 else

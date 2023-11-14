@@ -9,6 +9,12 @@
         .widget.stacked::before {
             display: none;
         }
+
+        .ocultarTextbox{
+            display:none;
+            visibility:hidden;
+        }
+
     </style>
 
 
@@ -407,8 +413,9 @@
                                                                 </table>
                                                             </div>
                                                             <div style="text-align: right;">
+                                                                <asp:TextBox ID="txtActivarProcesoImputacion" runat="server" CssClass="ocultarTextbox" Text="0"></asp:TextBox>
                                                                 <asp:Button ID="Button1" runat="server" Text="Imputar doc. a favor"
-                                                                    class="btn btn-info" OnClick="btnImputarModal_Click"
+                                                                    class="btn btn-info" OnClick="btnImputarModal_Click" OnClientClick="ActivarProcesoImputacion()"
                                                                     Style="margin-top: 20px; float: right;" />
                                                             </div>
                                                         </fieldset>
@@ -638,7 +645,6 @@
         }
     </script>
     <script>
-
         function siguienteClick() {
             // Cambiamos la pestaña activa a la segunda pestaña (DocsSaldoPositivo)
             // Cambiar la clase "active" para resaltar la segunda pestaña
@@ -675,6 +681,11 @@
             $('#modalImputacion').modal('show');
             return false;
             // $('#modalComentarios').modal('show');
+        }
+
+        function ActivarProcesoImputacion() {
+            var ActivarImputarDocumento = document.getElementById("<%=txtActivarProcesoImputacion.ClientID%>");
+            ActivarImputarDocumento.value = "1";
         }
 
         function updateboxSaldoMenorACero(valor, id) {
