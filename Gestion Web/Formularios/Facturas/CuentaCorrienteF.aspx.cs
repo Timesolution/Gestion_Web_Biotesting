@@ -429,8 +429,11 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     vencimiento = Convert.ToInt32(venc);
                 }
+                //Metodo viejo para cargar los movimientos
+                //DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta, vencimiento);
 
-                DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta, vencimiento);
+                //Agrego este camino alternativo ya que no se que tanto puede llegar a romperse con las modificaciones de los dias vencidos
+                DataTable datos = controlador.obtenerMovimientosByCuentaDiasVencidosDT(idCliente, idSucursal, idTipo, this.accion, fdesde, fhasta, vencimiento);
 
                 if (String.IsNullOrEmpty(ordX) || ordX == "3" || ordX == "4")
                 {
@@ -439,29 +442,30 @@ namespace Gestion_Web.Formularios.Facturas
                     datos = tOrd.Copy();
                 }
 
-                decimal saldoAcumulado = 0;
+                decimal saldoAcumulado = 0; //Declaro e inicializo la variable que va a guardar el saldo acumulado
 
-                foreach (DataRow row in datos.Rows)
+                foreach (DataRow row in datos.Rows) //Recorremos las filas una a una
                 {
                     if (this.accion == 2)
                     {
-                        if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0)
+                        if (Math.Abs(Convert.ToDecimal(row["debe"])) > 0) //Si el debe es mayor a 0 se trata de una factura
                         {
-                            saldoAcumulado += Convert.ToDecimal(row["debe"]);
+                            saldoAcumulado += Convert.ToDecimal(row["debe"]); //Por lo que la deuda aumenta y por tanto el saldo acumulado
                         }
-                        if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0)
+                        if (Math.Abs(Convert.ToDecimal(row["haber"])) > 0) //Si el haber es mayor a 0 se trata de un cobro
                         {
-                            saldoAcumulado -= Convert.ToDecimal(row["haber"]);
+                            saldoAcumulado -= Convert.ToDecimal(row["haber"]); //Por lo que se salda parte de la deuda y por tanto el saldo disminuye
                         }
                     }
                     else
                     {
-                        saldoAcumulado += Convert.ToDecimal(row["saldo"]);
+                        saldoAcumulado += Convert.ToDecimal(row["saldo"]); 
                     }
 
-                    row["SaldoAcumulado"] = saldoAcumulado.ToString();
+                    row["SaldoAcumulado"] = saldoAcumulado.ToString(); //Llevamos el registro del calculo a medida que vamos cargando los documentos en la columna SaldoAcumulado
                 }
 
+                //Ordenamos la tabla
                 datos.DefaultView.Sort = "fechaVenc desc, id desc";
                 DataTable tablaOrd = datos.DefaultView.ToTable();
                 datos = tablaOrd.Copy();
@@ -489,46 +493,13 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
 
-
+                //Copiamos la tabla ordenada
                 DataTable sortedTable = datos.DefaultView.ToTable();
                 datos = sortedTable.Copy();
+
+                //Y la asignamos al datagridview para poder mostrar los datos en el front
                 if (venc == "1")
                 {
-                    /*
-                    DataTable datosVenc = datos.Clone();
-                    foreach (DataRow item in datos.Rows)
-                    {
-
-
-                        if (!String.IsNullOrEmpty(item.ItemArray[12].ToString()))
-                        {
-                            if (Convert.ToInt32(item.ItemArray[12]) > 0)
-                            {
-                                DataRow dr = datosVenc.NewRow();
-                                dr["Id"] = item.ItemArray[0];
-                                dr["fecha"] = item.ItemArray[1];
-                                dr["Numero"] = item.ItemArray[2];
-                                dr["id_doc"] = item.ItemArray[3];
-                                dr["tipo_doc"] = item.ItemArray[4];
-                                dr["debe"] = item.ItemArray[5];
-                                dr["haber"] = item.ItemArray[6];
-                                dr["saldo"] = item.ItemArray[7];
-                                dr["SaldoAcumulado"] = item.ItemArray[8];
-                                dr["sucursal"] = item.ItemArray[9];
-                                dr["GuiaDespacho"] = item.ItemArray[10];
-                                dr["fechaVenc"] = item.ItemArray[11];
-                                dr["diasVencidos"] = item.ItemArray[12];
-                                dr["TipoDoc"] = item.ItemArray[13];
-                                datosVenc.Rows.Add(dr);
-                            }
-                        }
-                    }
-
-                    datos.Clear();
-                    foreach (DataRow dtRow in datosVenc.Rows)
-                    {
-                        datos.ImportRow(dtRow);
-                    }*/
                     this.GridCtaCte.DataSource = datos;
                 }
                 else
@@ -542,15 +513,15 @@ namespace Gestion_Web.Formularios.Facturas
 
                 //Cargamos el label acá así no damos 50 vueltas al pedo
                 Cliente client = contrCliente.obtenerClienteID(idCliente);
-
-                int maxCantDias = obtenerMaxCantDias(datos);
-                string diasVenc = Convert.ToInt32(client.vencFC) < maxCantDias ? "danger" : "success";
-                lblDiasVenc.Text = "<span class=\"text-" + diasVenc + "\">" + client.vencFC + "</span>";
+                int maxCantDias = ObtenerMayorNumeroDiasFacturaVencida(datos);
+                //El número de "Días Vencidos" debe cambiar de color según si hay documentos vencidos o no.Verde si no hay nada vencido, Rojo si hay documentos(con saldo) vencidos.
+                this.CargarLabelDiasVencidos(maxCantDias,client);
 
 
                 this.labelSaldo.Text = saldoAcumulado.ToString("C");
                 this.cargarLabel(idCliente, idSucursal, idTipo);
-                cargarLabelSaldos();
+                //"Saldo Máximo".Debe cambiar de color según si el total de los documentos impagos suman o no más que lo que dice en "Saldo Máximo".Verde si no supera, Rojo si supera.
+               cargarLabelSaldos(client);
                 lblParametros.Text += " Ordenado por " + tipoOrden;
             }
             catch (Exception ex)
@@ -559,7 +530,18 @@ namespace Gestion_Web.Formularios.Facturas
             }
         }
 
-        private void cargarLabelSaldos()
+        private void CargarLabelDiasVencidos(int maxCantDias, Cliente client)
+        {
+            //En el label DiasVencidos, se asigna la cantidad de días vencidos que tiene un cliente segun su configuracion personal
+            //algunos tiene 0, otros tienen 7, 30, etc.
+            int dias = Convert.ToInt32(client.vencFC);
+            //Si maxCantDias es DIFERENTE de ese numero significa que hay facturas impagas vencidas
+            bool hayVencidas = maxCantDias != -2712 ? true : false; 
+            string color = hayVencidas ? "danger" : "success"; //Estilo de bootstrap para pintar de rojo o de verde
+            lblDiasVenc.Text = "<span class=\"text-" + color + "\">" + dias + "</span>";
+        }
+
+        private void cargarLabelSaldos(Cliente client)
         {
             try
             {
@@ -631,14 +613,10 @@ namespace Gestion_Web.Formularios.Facturas
                 this.labelSaldoImp.Text = saldoAcumuladoImp.ToString("C");
                 this.labelSaldoVenc.Text = saldoAcumuladoVenc.ToString("C");
 
-                Cliente client = contrCliente.obtenerClienteID(idCliente);
                 ///decimal saldoOperativo = ObtenerSaldoOperativo();
-                //int maxCantDias = obtenerMaxCantDias(idCliente, idSucursal);
-                string saldoMax = Convert.ToDecimal(client.saldoMax) < saldoAcumuladoImp ? "danger" : "success";
-                //string diasVenc = Convert.ToInt32(client.vencFC) < maxCantDias ? "danger" : "success";
-                lblSaldoMax.Text = "<span class=\"text-" + saldoMax + "\">$ " + client.saldoMax.ToString("N", new CultureInfo("is-IS")) + "</span>";
-                //lblDiasVenc.Text = "<span class=\"text-" + diasVenc + "\">" + client.vencFC + "</span>";
-
+                string color = Convert.ToDecimal(client.saldoMax) > saldoAcumuladoImp ? "success" : "danger";
+                lblSaldoMax.Text = "<span class=\"text-" + color + "\">$ " + client.saldoMax.ToString("N", new CultureInfo("is-IS")) + "</span>";
+                
                 Session.Add("saldoVenc", saldoAcumuladoVenc.ToString("C"));
                 Session.Add("saldoMax", client.saldoMax.ToString("N", new CultureInfo("is-IS")));
                 Session.Add("diasVenc", client.vencFC.ToString());
@@ -681,7 +659,8 @@ namespace Gestion_Web.Formularios.Facturas
             return saldoOperativo;
         }
 
-        private int obtenerMaxCantDias(DataTable datos)//int idCliente, int idSucursal)
+        //Vamos a recorrer la tabla de datos y vamos a devolver el mayor numero de dias vencidos que tiene una factura (vencida)
+        private int ObtenerMayorNumeroDiasFacturaVencida(DataTable datos)
         {
             try
             {
@@ -689,26 +668,50 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fhasta = Convert.ToDateTime(DateTime.Today, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
                 // DataTable datos = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta, Convert.ToInt32(venc));
-                int maxCantDias = 0;
+                
+                //Agrego el nuevo metodo que levanta el procedimiento nuevo que trae los dias corregidos 
+                //DataTable datosdias = controlador.obtenerMovimientosByCuentaDiasVencidosDT(idCliente, idSucursal, -1, this.accion, fdesde, fhasta, Convert.ToInt32(venc));
+
+                int maxCantDias = -2712;
                 bool primerValor = true;
-                foreach (DataRow item in datos.Rows)
+                string columna = "";
+                bool tieneDias = false;
+                bool esNumero = false;
+                int dias = 0;
+                //foreach (DataRow item in datosdias.Rows) //Recorremos las filas de la tabla
+                foreach (DataRow item in datos.Rows) //Recorremos las filas de la tabla
                 {
-                    if (Convert.ToInt32(item["saldo"]) > 0)
+                    double columnaSaldo = Convert.ToDouble(item["saldo"]);
+                    bool esImpaga = columnaSaldo > 0; //Preguntamos por el valor de la columna saldo
+
+                    if (esImpaga) //Contamos los dias vencidos de la factura
                     {
+                        columna = item["diasVencidos"].ToString(); //Guardamos el contenido de la columna en una variable
+                        tieneDias = !String.IsNullOrEmpty(columna); //Verificamos que no este vacia
+                        esNumero = columna != "-"; //A las notas y cobros les pone un - en la consulta de la DB
+                        if (esNumero)
+                        {
+                            dias = Convert.ToInt32(item["diasVencidos"]);
+                        }
                         //guardo el primer "diasVencidos" como el mas alto
                         if (primerValor)
                         {
-                            if (!String.IsNullOrEmpty(item["diasVencidos"].ToString()))
+                            if (tieneDias && esNumero)
                             {
-                                maxCantDias = Convert.ToInt32(item["diasVencidos"]);
+                                maxCantDias = dias;
                                 primerValor = false;
                             }
                         }
                         else
                         {
-                            if (!String.IsNullOrEmpty(item["diasVencidos"].ToString()) && Convert.ToInt32(item["diasVencidos"]) > maxCantDias)
+                            if (tieneDias && esNumero)
                             {
-                                maxCantDias = Convert.ToInt32(item["diasVencidos"]);
+                                if(dias > maxCantDias)
+                                {
+                                    maxCantDias = dias;
+                                    //primerValor = false;
+                                }
+                                
                             }
                         }
                     }
@@ -1406,6 +1409,54 @@ namespace Gestion_Web.Formularios.Facturas
         protected void tipoPRP_Click(object sender, EventArgs e)
         {
             Response.Redirect("CuentaCorrienteF.aspx?a=" + accion + "&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=1&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text + "&venc=" + venc);
+        }
+
+        protected void GridCtaCte_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            bool esNota = false;
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                // Acceder a los datos de la fila actual
+                DataRowView rowView = (DataRowView)e.Row.DataItem;
+                DataRow row = rowView.Row;
+
+                // Obtener los valores de las columnas necesarias
+                int diasVencidos = Convert.ToInt32(row["DiasVencidos"]); // Asegúrate de usar "DiasVencidos" con la letra "D" mayúscula
+                string descripcion = row["Numero"].ToString();
+                if (descripcion.Contains("Nota"))
+                {
+                    esNota = true;
+                }
+                // Acceder a la celda específica en la fila actual
+                TableCell diasVencidosCell = e.Row.Cells[getColumnIndexByName("Dias Vencidos")]; // Asegúrate de usar "Dias Vencidos" con la letra "D" mayúscula
+
+                // Verificar si el valor de "diasVencidos" es igual a -2712 o si se trata de una Nota ya sea de credito o debito
+                if (diasVencidos == -2712 || esNota)
+                {
+                    // Cambiar el texto en la celda
+                    diasVencidosCell.Text = "-";
+                }
+                else if (diasVencidos < 0)
+                {
+                    diasVencidosCell.ForeColor = System.Drawing.Color.Green;
+                }
+                else if (diasVencidos > 0)
+                {
+                    diasVencidosCell.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        }
+
+        private int getColumnIndexByName(string columnName)
+        {
+            foreach (DataControlField field in GridCtaCte.Columns)
+            {
+                if (field.HeaderText == columnName)
+                {
+                    return GridCtaCte.Columns.IndexOf(field);
+                }
+            }
+            return -1; // Retornar -1 si la columna no se encuentra
         }
     }
 }

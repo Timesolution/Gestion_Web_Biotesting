@@ -210,7 +210,7 @@
                             <ContentTemplate>
                                 <div class="table-responsive col-md-12 paddingTable">
                                     <asp:GridView ID="GridCtaCte" class="table table-striped table-bordered table-hover"
-                                        runat="server" AllowPaging="True" OnPageIndexChanging="GridInforme_PageIndexChanging" AllowSorting="true">
+                                        runat="server" AllowPaging="True" OnPageIndexChanging="GridInforme_PageIndexChanging" OnRowDataBound="GridCtaCte_RowDataBound" AllowSorting="true">
                                         <Columns>
                                             <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" ItemStyle-HorizontalAlign="Right">
                                                 <ItemStyle HorizontalAlign="Left"></ItemStyle>
