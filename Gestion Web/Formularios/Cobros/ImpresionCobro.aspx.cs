@@ -191,18 +191,18 @@ namespace Gestion_Web.Formularios.Cobros
                 DataTable dtDetalle = controlador.obtenerDetalleCobro(mov.id);
                 DataTable dtTotal = controlador.obtenerTotalCobro(mov.id);
                 DataTable dtDocumentos = controlador.obtenerDocumentosCancelados(mov.id);
-                //DataTable dtPagos = controlador.ObtenerPagos_DocumentoAutoImputado_byIdMovCuentaCliente(mov.id);
-                //try
-                //{
-                //    if(dtPagos != null)
-                //    {
-                //        dtDocumentos.Merge(dtPagos);
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
+                DataTable dtPagos = controlador.ObtenerPagos_DocumentoAutoImputado_byIdMovCuentaCliente(mov.id);
+                try
+                {
+                    if(dtPagos != null)
+                    {
+                        dtDocumentos.Merge(dtPagos);
+                    }
+                }
+                catch (Exception ex)
+                {
 
-                //}
+                }
                 DataTable dtCheques = controlador.obtenerDetalleCheques(mov.id);
                 DataTable dtTransferencia = controlador.obtenerDetalleTransferencia(mov.id);
                 DataTable dtDatosCliente = controlador.obtenerDatosCobrosClientes(mov.id);

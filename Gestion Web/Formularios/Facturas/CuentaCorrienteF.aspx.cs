@@ -548,7 +548,7 @@ namespace Gestion_Web.Formularios.Facturas
                 DateTime fdesde = Convert.ToDateTime(this.txtFechaDesde.Text, new CultureInfo("es-AR"));
                 DateTime fhasta = Convert.ToDateTime(this.txtFechaHasta.Text, new CultureInfo("es-AR")).AddHours(23).AddMinutes(59);
 
-                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta, 0); //Vencidas
+                DataTable dtVencidas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 1, fdesde, fhasta, 1); //Vencidas
                 DataTable dtImpagas = controlador.obtenerMovimientosByCuentaDT(idCliente, idSucursal, idTipo, 2, fdesde, fhasta, 0); //Impagas
 
                 decimal saldoAcumuladoVenc = 0;
@@ -623,7 +623,7 @@ namespace Gestion_Web.Formularios.Facturas
             }
             catch (Exception ex)
             {
-
+               
             }
         }
 
@@ -744,11 +744,20 @@ namespace Gestion_Web.Formularios.Facturas
                 }
                 if (idSucursal > 0)
                 {
-                    label += DropListSucursal.Items.FindByValue(idSucursal.ToString()).Text + ",";
+                    label += " "+ DropListSucursal.Items.FindByValue(idSucursal.ToString()).Text + ",";
                 }
                 if (idTipo > -1)
                 {
-                    label += DropListTipo.Items.FindByValue(idTipo.ToString()).Text;
+                    label += " "+ DropListTipo.Items.FindByValue(idTipo.ToString()).Text;
+                }
+                if(!String.IsNullOrEmpty(venc))
+                {
+                    if(Convert.ToInt32(venc) == 1)
+                    label += " Vencidas,";
+
+                }else if (accion == 1)
+                {
+                    label += " Impagas,";
                 }
 
                 this.lblParametros.Text = label;
@@ -914,14 +923,14 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (accion == 1)// 1 = impagas
+               /* if (accion == 1)// 1 = impagas
                 {
                     Response.Redirect("CuentaCorrienteF.aspx?a=2&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);
                 }
                 else
-                {
+                {*/
                     Response.Redirect("CuentaCorrienteF.aspx?a=1&Cliente=" + this.idCliente + "&Sucursal=" + this.idSucursal + "&Tipo=" + this.idTipo + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);
-                }
+                //}
 
             }
             catch

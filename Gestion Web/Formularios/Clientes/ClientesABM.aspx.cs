@@ -996,6 +996,7 @@ namespace Gestion_Web.Formularios.Clientes
         {
             try
             {
+                this.DropListClientes.Items.Clear();
 
                 DataTable dt = new DataTable();
                 string perfil = Session["Login_NombrePerfil"] as string;
