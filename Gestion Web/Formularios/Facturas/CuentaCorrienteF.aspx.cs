@@ -1422,7 +1422,7 @@ namespace Gestion_Web.Formularios.Facturas
 
         protected void GridCtaCte_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            bool esNota = false;
+            //bool esNota = false;
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 // Acceder a los datos de la fila actual
@@ -1431,16 +1431,18 @@ namespace Gestion_Web.Formularios.Facturas
 
                 // Obtener los valores de las columnas necesarias
                 int diasVencidos = Convert.ToInt32(row["DiasVencidos"]); // Asegúrate de usar "DiasVencidos" con la letra "D" mayúscula
-                string descripcion = row["Numero"].ToString();
-                if (descripcion.Contains("Nota"))
-                {
-                    esNota = true;
-                }
+                
+                //string descripcion = row["Numero"].ToString();
+                //if (descripcion.Contains("Nota"))
+                //{
+                //    esNota = true;
+                //}
+
                 // Acceder a la celda específica en la fila actual
                 TableCell diasVencidosCell = e.Row.Cells[getColumnIndexByName("Dias Vencidos")]; // Asegúrate de usar "Dias Vencidos" con la letra "D" mayúscula
 
                 // Verificar si el valor de "diasVencidos" es igual a -2712 o si se trata de una Nota ya sea de credito o debito
-                if (diasVencidos == -2712 || esNota)
+                if (diasVencidos == -2712)
                 {
                     // Cambiar el texto en la celda
                     diasVencidosCell.Text = "-";
