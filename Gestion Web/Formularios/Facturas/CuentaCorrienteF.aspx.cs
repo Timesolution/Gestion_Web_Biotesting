@@ -48,8 +48,8 @@ namespace Gestion_Web.Formularios.Facturas
                 this.idCliente = Convert.ToInt32(Request.QueryString["Cliente"]);
                 this.idSucursal = Convert.ToInt32(Request.QueryString["Sucursal"]);
                 this.idTipo = Convert.ToInt32(Request.QueryString["Tipo"]);
-                this.idVendedor = (int)Session["Login_Vendedor"];
                 this.VerificarLogin();
+                this.idVendedor = (int)Session["Login_Vendedor"];
                 this.fechaDesde = Request.QueryString["fd"];
                 this.fechaHasta = Request.QueryString["fh"];
                 this.accion = Convert.ToInt32(Request.QueryString["a"]);
@@ -848,7 +848,7 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                Response.Redirect("CuentaCorrienteF.aspx?a=2&Cliente=" + DropListClientes.SelectedValue + "&Sucursal=" + DropListSucursal.SelectedValue + "&Tipo=" + DropListTipo.SelectedValue + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);
+                    Response.Redirect("CuentaCorrienteF.aspx?a=2&Cliente=" + DropListClientes.SelectedValue + "&Sucursal=" + DropListSucursal.SelectedValue + "&Tipo=" + DropListTipo.SelectedValue + "&fd=" + this.txtFechaDesde.Text + "&fh=" + this.txtFechaHasta.Text);
             }
             catch (Exception ex)
             {
