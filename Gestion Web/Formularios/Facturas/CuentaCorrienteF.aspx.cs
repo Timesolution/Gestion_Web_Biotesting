@@ -463,6 +463,13 @@ namespace Gestion_Web.Formularios.Facturas
                     }
 
                     row["SaldoAcumulado"] = saldoAcumulado.ToString(); //Llevamos el registro del calculo a medida que vamos cargando los documentos en la columna SaldoAcumulado
+
+                    DateTime FechaCancelada = new DateTime(2001, 1, 1);
+                    if (((DateTime)row["fechaVenc"]).Date <= FechaCancelada.Date)
+                    {
+                        row["diasVencidos"] = 0;
+                    }
+
                 }
 
                 //Ordenamos la tabla
