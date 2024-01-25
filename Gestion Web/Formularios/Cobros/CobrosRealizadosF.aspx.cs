@@ -856,6 +856,7 @@ namespace Gestion_Web.Formularios.Cobros
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Recibo de Cobro. id mov: " + idMovimiento);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Cobro eliminado con exito", "CobrosRealizadosF.aspx"));
+                    Response.Redirect("CobrosRealizadosF.aspx");
                 }
                 else
                 {
