@@ -489,6 +489,7 @@ namespace Gestion_Web.Formularios.Facturas
                     this.lbtnAccion.Text = "PRP <span class='caret'></span>";
                     this.ActualizarTotales();
                 }
+
             }
             catch (Exception ex)
             {
@@ -1261,6 +1262,8 @@ namespace Gestion_Web.Formularios.Facturas
                 ScriptManager.RegisterClientScriptBlock(this.UpdatePanel4, UpdatePanel4.GetType(), "alert", "$.msgbox(\"Error verificando configuracion editar descripcion.  " + ex.Message + "\", {type: \"error\"});", true);
             }
         }
+
+
         public int verficarPermisoFactSucursal()
         {
             try
@@ -3447,85 +3450,128 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                if (IsValid)
+                
+                int idCliente = (Convert.ToInt32(this.DropListClientes.SelectedValue));
+                ControladorClienteEntity contEn = new ControladorClienteEntity();
+                int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
+               
+
+                if (estado== 1)
                 {
-                    Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
-                    if (!respuesta.Item2)
+                    if (IsValid)
                     {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
-                        return;
-                    }
-
-                    if (VerificarSiTotalSuperaLimiteYRequiereCUIT() == 0)
-                        return;
-
-                    //Verifico si tiene la alerta de precios de articulos sin actualizar
-                    //if (!VerificarArticulosSinActualizar())
-                    //{
-                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
-                    //    //return;
-                    //}
-
-                    //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
-                    if (!ValidarSaldoMutual())
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
-                        return;
-                    }
-
-                    //Verifico en caso de que sea Nota de Crédito de una Factura con Forma de Pago Mutual, que haya eliminado los cobros asociados
-                    if (!VerificarAnularFcMutual())
-                    {
-                        //Si existen cobros pendientes, retorno. El mensaje lo muestro en el método.
-                        return;
-                    }
-
-                    //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
-                    if (!VerificarNotaCreditoFactura())
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
-                        return;
-                    }
-
-                    if (!VerificarFacturaEnCero())
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
-                        return;
-                    }
-
-                    if (!VerificarDescripcionDeItems())
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
-                        return;
-                    }
-
-                    //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
-                    string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
-                    if (!string.IsNullOrEmpty(combustible) && combustible == "1")
-                    {
-                        int itemsCombustible = this.validarItemsCombustible();
-                        if (itemsCombustible < 0)
+                        Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                        if (!respuesta.Item2)
                         {
-                            if (itemsCombustible == -1)
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error validando items de la factura. \");", true);
-
-                            if (itemsCombustible == -2)
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Los items de la factura deben ser todos del grupo de combustibles. \");", true);
-
-                            if (itemsCombustible == -3)
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se calcularon los impuestos de combustibles. \");", true);
-
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
                             return;
                         }
-                    }
 
-                    if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
-                    {
+                        if (VerificarSiTotalSuperaLimiteYRequiereCUIT() == 0)
+                            return;
 
-                        int i = validarSaldoTarjeta();
-                        if (i == 1)
+                        //Verifico si tiene la alerta de precios de articulos sin actualizar
+                        //if (!VerificarArticulosSinActualizar())
+                        //{
+                        //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
+                        //    //return;
+                        //}
+
+                        //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
+                        if (!ValidarSaldoMutual())
                         {
-                            //int j = validarUltimaFactura();
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
+                            return;
+                        }
+
+                        //Verifico en caso de que sea Nota de Crédito de una Factura con Forma de Pago Mutual, que haya eliminado los cobros asociados
+                        if (!VerificarAnularFcMutual())
+                        {
+                            //Si existen cobros pendientes, retorno. El mensaje lo muestro en el método.
+                            return;
+                        }
+
+                        //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
+                        if (!VerificarNotaCreditoFactura())
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                            return;
+                        }
+
+                        if (!VerificarFacturaEnCero())
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                            return;
+                        }
+
+                        if (!VerificarDescripcionDeItems())
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
+                            return;
+                        }
+
+                        //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
+                        string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
+                        if (!string.IsNullOrEmpty(combustible) && combustible == "1")
+                        {
+                            int itemsCombustible = this.validarItemsCombustible();
+                            if (itemsCombustible < 0)
+                            {
+                                if (itemsCombustible == -1)
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error validando items de la factura. \");", true);
+
+                                if (itemsCombustible == -2)
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Los items de la factura deben ser todos del grupo de combustibles. \");", true);
+
+                                if (itemsCombustible == -3)
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se calcularon los impuestos de combustibles. \");", true);
+
+                                return;
+                            }
+                        }
+
+                        if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
+                        {
+
+                            int i = validarSaldoTarjeta();
+                            if (i == 1)
+                            {
+                                //int j = validarUltimaFactura();
+                                //if (j == 1)
+                                //{
+                                int t = this.validarTrazasCargadas();
+                                if (t == 1)
+                                {
+                                    int iec = this.validarItemsEnCero();
+                                    if (iec == 1)
+                                    {
+                                        this.generarFactura(0);
+                                    }
+                                    else
+                                    {
+                                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
+                                    }
+
+                                }
+                                else
+                                {
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.1 \", {type: \"error\"});", true);
+                                }
+                                //}
+                                //else
+                                //{
+                                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                                //}
+                            }
+                            else
+                            {
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto ingresado en la forma de pago no es igual al monto total de la factura. \", {type: \"error\"});", true);
+                                //m.mensajeBoxError("El monto ingresado en la forma de pago no es igual al monto total de la factura.");
+                            }
+                        }
+                        else
+                        {
+                            //int j = validarUltimaFactura();//solo para preimpresa
                             //if (j == 1)
                             //{
                             int t = this.validarTrazasCargadas();
@@ -3535,64 +3581,32 @@ namespace Gestion_Web.Formularios.Facturas
                                 if (iec == 1)
                                 {
                                     this.generarFactura(0);
+                                    CambiarEstadoAgendaFacturado();
                                 }
                                 else
                                 {
                                     ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
                                 }
-
                             }
                             else
                             {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.1 \", {type: \"error\"});", true);
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.2 \", {type: \"error\"});", true);
                             }
                             //}
                             //else
                             //{
                             //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                            //    this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
                             //}
                         }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto ingresado en la forma de pago no es igual al monto total de la factura. \", {type: \"error\"});", true);
-                            //m.mensajeBoxError("El monto ingresado en la forma de pago no es igual al monto total de la factura.");
-                        }
-                    }
-                    else
-                    {
-                        //int j = validarUltimaFactura();//solo para preimpresa
-                        //if (j == 1)
-                        //{
-                        int t = this.validarTrazasCargadas();
-                        if (t == 1)
-                        {
-                            int iec = this.validarItemsEnCero();
-                            if (iec == 1)
-                            {
-                                this.generarFactura(0);
-                                CambiarEstadoAgendaFacturado();
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                            }
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.2 \", {type: \"error\"});", true);
-                        }
-                        //}
-                        //else
-                        //{
-                        //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                        //    this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
-                        //}
                     }
                 }
                 else
                 {
                     this.btnAgregar.Attributes.Remove("Disabled");
                     this.btnAgregarRemitir.Attributes.Remove("Disabled");
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Cliente Inactivo. \");", true);
+
                 }
 
             }
@@ -4026,7 +4040,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //arego fila a tabla
 
                 TableCell celAccion = new TableCell();
-
+                
                 LinkButton btnEliminar = new LinkButton();
                 btnEliminar.CssClass = "btn btn-info";
                 btnEliminar.ID = "btnEliminar_" + item.articulo.codigo + "_" + pos;
@@ -4034,6 +4048,7 @@ namespace Gestion_Web.Formularios.Facturas
                 //btnEliminar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
                 btnEliminar.Click += new EventHandler(this.QuitarItem);
                 celAccion.Controls.Add(btnEliminar);
+
 
                 int trazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
                 if (trazable > 0)
@@ -4495,73 +4510,121 @@ namespace Gestion_Web.Formularios.Facturas
         }
         protected void btnAgregarRemitir_Click(object sender, EventArgs e)
         {
+            int idCliente = (Convert.ToInt32(this.DropListClientes.SelectedValue));
+            ControladorClienteEntity contEn = new ControladorClienteEntity();
+            int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
 
-            if (IsValid)
+
+            if (estado == 1)
             {
-                Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
-                if (!respuesta.Item2)
+                if (IsValid)
                 {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
-                    return;
-                }
-                //Verifico si tiene la alerta de precios de articulos sin actualizar
-                //if (!this.VerificarArticulosSinActualizar())
-                //{
-                //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
-                //    return;
-                //}
-
-                //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
-                if (!this.ValidarSaldoMutual())
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
-                    return;
-                }
-
-                //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
-                if (!VerificarNotaCreditoFactura())
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
-                    return;
-                }
-
-                if (!VerificarFacturaEnCero())
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
-                    return;
-                }
-
-                if (!VerificarDescripcionDeItems())
-                {
-                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
-                    return;
-                }
-
-                //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
-                string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
-                if (!string.IsNullOrEmpty(combustible) && combustible == "1")
-                {
-                    int itemsCombustible = this.validarItemsCombustible();
-                    if (itemsCombustible < 0)
+                    Tuple<string, bool> respuesta = ComprobarCamposSeleccionados();
+                    if (!respuesta.Item2)
                     {
-                        if (itemsCombustible == -1)
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error validando items de la factura. \");", true);
-
-                        if (itemsCombustible == -2)
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Los items de la factura deben ser todos del grupo de combustibles. \");", true);
-
-                        if (itemsCombustible == -3)
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se calcularon los impuestos de combustibles. \");", true);
-
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"" + respuesta.Item1 + "\");", true);
                         return;
                     }
-                }
+                    //Verifico si tiene la alerta de precios de articulos sin actualizar
+                    //if (!this.VerificarArticulosSinActualizar())
+                    //{
+                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Existen artículos cuyos precios no se actualizan hace mas de " + this.configuracion.AlertaArticulosSinActualizar + " dias. \");", true);
+                    //    return;
+                    //}
 
-                if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
-                {
+                    //Verifico si coinciden los saldos de la factura en caso de que la forma de pago sea mutual
+                    if (!this.ValidarSaldoMutual())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto final ingresado en la forma de pago es diferente al total de la factura. \");", true);
+                        return;
+                    }
 
-                    int i = validarSaldoTarjeta();
-                    if (i == 1)
+                    //Verifico en caso de que sea Nota de Crédito que ya no se hayan realizado Notas de Crédito sobre la factura seleccionada
+                    if (!VerificarNotaCreditoFactura())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Ya se han realizado Notas de Crédito sobre las Facturas seleccionadas. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarFacturaEnCero())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El total de la Factura debe ser mayor a 0. \");", true);
+                        return;
+                    }
+
+                    if (!VerificarDescripcionDeItems())
+                    {
+                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Hay items sin descripción. \");", true);
+                        return;
+                    }
+
+                    //Verifico, si tiene la opción de combustibles, valido que si está facturando combustibles, que todos los items de la factura sean combustibles
+                    string combustible = WebConfigurationManager.AppSettings.Get("Combustible");
+                    if (!string.IsNullOrEmpty(combustible) && combustible == "1")
+                    {
+                        int itemsCombustible = this.validarItemsCombustible();
+                        if (itemsCombustible < 0)
+                        {
+                            if (itemsCombustible == -1)
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Error validando items de la factura. \");", true);
+
+                            if (itemsCombustible == -2)
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Los items de la factura deben ser todos del grupo de combustibles. \");", true);
+
+                            if (itemsCombustible == -3)
+                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se calcularon los impuestos de combustibles. \");", true);
+
+                            return;
+                        }
+                    }
+
+                    if (this.DropListFormaPago.SelectedItem.Text == "Tarjeta")
+                    {
+
+                        int i = validarSaldoTarjeta();
+                        if (i == 1)
+                        {
+                            //int j = validarUltimaFactura();
+                            //if (j == 1)
+                            //{
+                            int t = this.validarTrazasCargadas();
+                            if (t == 1)
+                            {
+                                int iec = this.validarItemsEnCero();
+                                if (iec == 1)
+                                {
+                                    this.generarFactura(1);
+                                    CambiarEstadoAgendaFacturado();
+                                }
+                                else
+                                {
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
+                                }
+                            }
+                            else
+                            {
+                                if (t == -1)
+                                {
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.3 \", {type: \"error\"});", true);
+                                }
+                                else
+                                {
+                                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se tiene suficientes trazabilidades para la cantidad a vender. \");", true);
+                                }
+                            }
+                            //}
+                            //else
+                            //{
+                            //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                            //}
+                        }
+                        else
+                        {
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto ingresado en la forma de pago no es igual al monto total de la factura. \", {type: \"error\"});", true);
+                            //m.mensajeBoxError("El monto ingresado en la forma de pago no es igual al monto total de la factura.");
+                        }
+                    }
+                    else
                     {
                         //int j = validarUltimaFactura();
                         //if (j == 1)
@@ -4582,59 +4645,25 @@ namespace Gestion_Web.Formularios.Facturas
                         }
                         else
                         {
-                            if (t == -1)
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.3 \", {type: \"error\"});", true);
-                            }
-                            else
-                            {
-                                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se tiene suficientes trazabilidades para la cantidad a vender. \");", true);
-                            }
+                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.4 \", {type: \"error\"});", true);
                         }
                         //}
                         //else
                         //{
                         //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
+                        //    this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
                         //}
                     }
-                    else
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"El monto ingresado en la forma de pago no es igual al monto total de la factura. \", {type: \"error\"});", true);
-                        //m.mensajeBoxError("El monto ingresado en la forma de pago no es igual al monto total de la factura.");
-                    }
-                }
-                else
-                {
-                    //int j = validarUltimaFactura();
-                    //if (j == 1)
-                    //{
-                    int t = this.validarTrazasCargadas();
-                    if (t == 1)
-                    {
-                        int iec = this.validarItemsEnCero();
-                        if (iec == 1)
-                        {
-                            this.generarFactura(1);
-                            CambiarEstadoAgendaFacturado();
-                        }
-                        else
-                        {
-                            ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No es posible procesar articulos con importe 0. \", {type: \"error\"});", true);
-                        }
-                    }
-                    else
-                    {
-                        ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"No se seleccionaron las trazabilidades de los articulos a vender.4 \", {type: \"error\"});", true);
-                    }
-                    //}
-                    //else
-                    //{
-                    //    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Verifique la fecha de la factura ingresada \", {type: \"error\"});", true);
-                    //    this.txtFecha.Attributes.Remove("Disabled");//Si esta mal la fecha que ingreso antes lo vuelvo a habilitar para que corriga
-                    //}
                 }
             }
+            else
+            {
+                this.btnAgregar.Attributes.Remove("Disabled");
+                this.btnAgregarRemitir.Attributes.Remove("Disabled");
+                ScriptManager.RegisterClientScriptBlock(this.UpdatePanel5, UpdatePanel5.GetType(), "alert", "$.msgbox(\"Cliente Inactivo. \");", true);
 
+            }
+            
         }
         private void generarFactura(int generaRemito)
         {
@@ -5959,7 +5988,13 @@ namespace Gestion_Web.Formularios.Facturas
                         ct.items.Remove(item);
                         break;
                     }
+                    
                 }
+
+                //ct.items.Clear();
+                
+              
+
                 if (ct.items.Count == 0)
                 {
                     this.lbMovTrazaNueva.Text = "";

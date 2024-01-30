@@ -305,7 +305,7 @@
                                                     <th>Des. %</th>
                                                     <th>P. Unitario</th>
                                                     <th>Total</th>
-                                                    <th></th>
+<%--                                                    <th><input type="submit" name="btnEliminarArticulos" value="Eliminar Articulos" id="btnEliminarArticulos" class="btn btn-info"></th>--%>
                                                 </tr>
                                             </thead>
                                             <tbody>
