@@ -809,90 +809,107 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                int idCliente = (Convert.ToInt32(this.DropListClientes.SelectedValue));
+                ControladorClienteEntity contEn = new ControladorClienteEntity();
+                int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
 
-                string idtildado = "";
-                //verifico cierre caja
-                int cierreOK = this.verificarCierreCaja();
-                if (cierreOK < 0)
-                {
-                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
-                    return;
-                }
 
-                //Chequeo si se ingreso dinero a imputar
-                if (String.IsNullOrEmpty(this.txtImputar.Text) || this.txtImputar.Text == "0")
+                if (estado == 1)
                 {
-                    foreach (Control C in phCobranzas.Controls)
+
+                    string idtildado = "";
+                    //verifico cierre caja
+                    int cierreOK = this.verificarCierreCaja();
+                    if (cierreOK < 0)
                     {
-                        TableRow tr = C as TableRow;
-                        //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
-                        CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
-                        if (ch.Checked == true)
-                        {
-                            idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
-                        }
+                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
+                        return;
                     }
 
-                    //Verifico si se selecciono una factura que fue generado por liquidacion de cobros
-                    string pagares = this.verificarCobroLiquidacionPagares(idtildado);
-
-                    if (!String.IsNullOrEmpty(idtildado))
+                    //Chequeo si se ingreso dinero a imputar
+                    if (String.IsNullOrEmpty(this.txtImputar.Text) || this.txtImputar.Text == "0")
                     {
-                        Response.Redirect("ABMCobros.aspx?documentos=" + idtildado + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=0" + "&valor=1&tipo=" + this.DropListTipo.SelectedValue + "&pagares=" + pagares);
+                        foreach (Control C in phCobranzas.Controls)
+                        {
+                            TableRow tr = C as TableRow;
+                            //CheckBox ch = tr.Cells[5].Controls[0] as CheckBox;
+                            CheckBox ch = tr.Cells[6].Controls[0] as CheckBox;
+                            if (ch.Checked == true)
+                            {
+                                idtildado += ch.ID.Substring(12, ch.ID.Length - 12) + ";";
+                            }
+                        }
+
+                        //Verifico si se selecciono una factura que fue generado por liquidacion de cobros
+                        string pagares = this.verificarCobroLiquidacionPagares(idtildado);
+
+                        if (!String.IsNullOrEmpty(idtildado))
+                        {
+                            Response.Redirect("ABMCobros.aspx?documentos=" + idtildado + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=0" + "&valor=1&tipo=" + this.DropListTipo.SelectedValue + "&pagares=" + pagares);
+                        }
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento"));
+                        }
                     }
                     else
                     {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe seleccionar al menos un movimiento"));
-                    }
-                }
-                else
-                {
-                    //Consulto si hay documentos para Imputar
-                    string movimientos = this.contrCC.obtenerMovimientosImputar(Convert.ToDecimal(this.txtImputar.Text.Replace(',', '.'), CultureInfo.InvariantCulture), this.idCliente, this.idSucursal, this.idEmpresa, this.puntoVenta, this.idTipo);
+                        //Consulto si hay documentos para Imputar
+                        string movimientos = this.contrCC.obtenerMovimientosImputar(Convert.ToDecimal(this.txtImputar.Text.Replace(',', '.'), CultureInfo.InvariantCulture), this.idCliente, this.idSucursal, this.idEmpresa, this.puntoVenta, this.idTipo);
 
-                    if (!String.IsNullOrEmpty(movimientos))
-                    {
-                        //validamos que cada movimiento sea del tipo de doc que figura en la url (idTipo)
-
-                        string[] mov_temp = movimientos.Split(';');
-                        string mov_filtrados = "";
-                        foreach (var item in mov_temp)
+                        if (!String.IsNullOrEmpty(movimientos))
                         {
-                            if (item != "")
+                            //validamos que cada movimiento sea del tipo de doc que figura en la url (idTipo)
+
+                            string[] mov_temp = movimientos.Split(';');
+                            string mov_filtrados = "";
+                            foreach (var item in mov_temp)
                             {
-                                DataTable dtMov = contrCC.obtenerMovimientoByID(Convert.ToInt32(item));
-                                foreach (DataRow itemMov in dtMov.Rows)
+                                if (item != "")
                                 {
-                                    if (idTipo == 2)
+                                    DataTable dtMov = contrCC.obtenerMovimientoByID(Convert.ToInt32(item));
+                                    foreach (DataRow itemMov in dtMov.Rows)
                                     {
-                                        if (itemMov["tipo_doc"].ToString() != "15")
+                                        if (idTipo == 2)
+                                        {
+                                            if (itemMov["tipo_doc"].ToString() != "15")
+                                            {
+                                                mov_filtrados += item + ";";
+                                            }
+                                        }
+                                        else if (idTipo == 1)
+                                        {
+                                            if (itemMov["tipo_doc"].ToString() != "18")
+                                            {
+                                                mov_filtrados += item + ";";
+                                            }
+                                        }
+                                        else
                                         {
                                             mov_filtrados += item + ";";
                                         }
-                                    }
-                                    else if (idTipo == 1)
-                                    {
-                                        if (itemMov["tipo_doc"].ToString() != "18")
-                                        {
-                                            mov_filtrados += item + ";";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mov_filtrados += item + ";";
                                     }
                                 }
                             }
+                            Response.Redirect("ABMCobros.aspx?documentos=" + mov_filtrados + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
+                            //Response.Redirect("ABMCobros.aspx?documentos=" + movimientos + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
                         }
-                        Response.Redirect("ABMCobros.aspx?documentos=" + mov_filtrados + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
-                        //Response.Redirect("ABMCobros.aspx?documentos=" + movimientos + "&cliente=" + idCliente + "&empresa=" + idEmpresa + "&sucursal=" + idSucursal + "&puntoVenta=" + puntoVenta + "&monto=" + txtImputar.Text + "&valor=1&tipo=" + this.DropListTipo.SelectedValue);
-                    }
-                    else
-                    {
-                        ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El monto ingresado es menor al saldo de los documentos a imputar. "));
+                        else
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("El monto ingresado es menor al saldo de los documentos a imputar. "));
+                        }
                     }
                 }
 
+                else
+                {
+                    this.btnSiguiente.Attributes.Remove("Disabled");
+                    this.btnPagoCuenta.Attributes.Remove("Disabled");
+                    this.BtnImputarModal.Attributes.Remove("Disabled");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Cliente Inactivo"));
+
+
+                }
             }
             catch (Exception ex)
             {
@@ -987,8 +1004,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //verifico cierre caja
-                int cierreOK = this.verificarCierreCaja();
+                int idCliente = (Convert.ToInt32(this.DropListClientes.SelectedValue));
+                ControladorClienteEntity contEn = new ControladorClienteEntity();
+                int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
+
+
+                if (estado == 1)
+                {
+
+                    //verifico cierre caja
+                    int cierreOK = this.verificarCierreCaja();
                 if (cierreOK < 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
@@ -1004,7 +1029,18 @@ namespace Gestion_Web.Formularios.Facturas
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Debe ingresar un valor"));
 
                 }
+
             }
+                else
+                {
+                    this.btnSiguiente.Attributes.Remove("Disabled");
+                    this.btnPagoCuenta.Attributes.Remove("Disabled");
+                    this.BtnImputarModal.Attributes.Remove("Disabled");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Cliente Inactivo"));
+
+                }
+            }
+
             catch (Exception ex)
             {
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxError("Error generando Pago a Cuenta. " + ex.Message));
@@ -1103,8 +1139,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
-                //verifico cierre caja
-                int cierreOK = this.verificarCierreCaja();
+                int idCliente = (Convert.ToInt32(this.DropListClientes.SelectedValue));
+                ControladorClienteEntity contEn = new ControladorClienteEntity();
+                int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
+
+
+                if (estado == 1)
+                {
+
+                    //verifico cierre caja
+                    int cierreOK = this.verificarCierreCaja();
                 if (cierreOK < 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
@@ -1183,6 +1227,15 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
+                else
+                {
+                    this.btnSiguiente.Attributes.Remove("Disabled");
+                    this.btnPagoCuenta.Attributes.Remove("Disabled");
+                    this.BtnImputarModal.Attributes.Remove("Disabled");
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("Cliente Inactivo"));
+
+                }
+            }
             catch (Exception ex)
             {
 
@@ -1246,9 +1299,8 @@ namespace Gestion_Web.Formularios.Facturas
         protected void btnImputar_Click(object sender, EventArgs e)
         {
             try
-            {
-                //verifico cierre caja
-                int cierreOK = this.verificarCierreCaja();
+            { //verifico cierre caja
+                    int cierreOK = this.verificarCierreCaja();
                 if (cierreOK < 0)
                 {
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No se puede hacer un cobro mientras la caja este cerrada para este punto de venta."));
@@ -1310,6 +1362,7 @@ namespace Gestion_Web.Formularios.Facturas
                 }
 
             }
+                
             catch (Exception ex)
             {
 
