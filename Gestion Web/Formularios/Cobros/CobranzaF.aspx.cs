@@ -1417,7 +1417,7 @@ namespace Gestion_Web.Formularios.Facturas
                         cobro.imputado = Convert.ToDecimal(imputaciones[0].imputar);
                         //cobro.ingresado = Convert.ToDecimal(txtTotalIngresado.Replace(',', '.'), CultureInfo.InvariantCulture);
                         //cobro.ingresado = txtTotalIngresado;
-                        cobro.comentarios = "";
+                        cobro.comentarios = "documento autoimputado";
                         obtenerNroRecibo();
                         //if (this.config.numeracionCobros == "0")
                         //{
