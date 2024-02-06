@@ -293,7 +293,7 @@
                         <div class="widget-content">
                             <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Always" runat="server">
                                 <ContentTemplate>
-                                    <table class="table table-striped table-bordered" onload="AddRequestHandler()">
+                                    <table class="table table-striped table-bordered" onload="AddRequestHandler()" id="TableProductos">
                                         <asp:PlaceHolder ID="phAgregarItems" runat="server" Visible="true">
                                             <thead>
                                                 <tr>
@@ -305,10 +305,12 @@
                                                     <th>Des. %</th>
                                                     <th>P. Unitario</th>
                                                     <th>Total</th>
-<%--                                                    <th><input type="submit" name="btnEliminarArticulos" value="Eliminar Articulos" id="btnEliminarArticulos" class="btn btn-info"></th>--%>
+<%--                                                 <th><asp:Button id="btnEliminarProductos" runat="server"  Text="Eliminar Productos" class="btn btn-info" OnClick="btnEliminarProductos_Click"/></th>--%>
+<%--                                                <th><asp:LinkButton ID="btnEliminarProductos" runat="server" class="btn btn-info" Text="Eliminar Productos" OnClick="btnEliminarProductos_Click"></asp:LinkButton></th>--%>
                                                 </tr>
                                             </thead>
                                             <tbody>
+<%--                                                <asp:Button ID="btnEliminarProductos" runat="server" class="btn btn-info" Text="Eliminar Productos" OnClick="btnEliminar_Click"/>--%>
                                                 <tr>
                                                     <%-- <td style="width: 25%">--%>
                                                     <td style="width: 7%">
@@ -381,13 +383,16 @@
                                                 </tr>
                                             </tbody>
                                         </asp:PlaceHolder>
+
                                     </table>
 
                                     <br />
                                     <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog" href="#modalTrazabilidad"></a>
                                     <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog2" href="#modalDatosExtra"></a>
                                     <a class="btn btn-info" style="display: none" data-toggle="modal" id="abreDialog3" href="#modalEditarDesc"></a>
-                                    <table class="table table-striped table-bordered">
+
+                                   
+                                    <table class="table table-striped table-bordered" id="tablaProd">
                                         <thead>
                                             <tr>
                                                 <th>Codigo</th>
@@ -396,16 +401,19 @@
                                                 <th>P. Unitario</th>
                                                 <th>Des.</th>
                                                 <th>Total</th>
-                                                <th></th>
-                                            </tr>
+                                                <th><input type="submit" name="btnMarcarArticulos" value="Marcar Todo" onClick="marcarTodo()" id="btnMarcarArticulos" AutoPostBack="false" class="btn btn-info"></th>
+<%--                                                <th><asp:Button id="btnSeleccionarArticulos" runat="server"  Text="Seleccionar Productos" class="btn btn-info" OnClick="marcarTodo()"/></th>--%>
+                                                </tr>
                                         </thead>
+
                                         <tbody>
-
-
-                                            <asp:PlaceHolder ID="phArticulos" runat="server"></asp:PlaceHolder>
+                                              <div style="text-align:right">
+                                                 <asp:Button ID="btnEliminarProductos" runat="server" class="btn btn-danger" Text="Eliminar Productos" OnClick="btnEliminar_Click"/>
+                                              </div>
+                                                 <asp:PlaceHolder ID="phArticulos" runat="server"></asp:PlaceHolder>
                                         </tbody>
                                     </table>
-
+                                  
                                     <br />
                                     <div class="row">
 
@@ -2403,6 +2411,22 @@
         </script>
 
         <script>
+            function marcarTodo() {
+                for (var i = 1; i < document.getElementById('tablaProd').rows.length; i++) {
+                    let checkbox = document.getElementById('tablaProd').rows[i].cells[6].getElementsByTagName('input')[0];
+                
+                    if (checkbox != null)
+                    {
+                        checkbox.checked = true;
+                    }
+                }
+                $.msgbox("Todos los productos fueron seleccionados", { type: "alert" });
+            }
+
+        </script>
+
+
+        <script>
             function pageLoad() {
                 if (document.getElementById('<%= hiddenPtoVtaTipo.ClientID%>').value == 1) {
                 $("#<%= txtFecha.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy', minDate: '-6D', maxDate: '+0D' });
@@ -3067,4 +3091,5 @@
                 }
             }
         </script>
+    </div>
 </asp:Content>

@@ -3996,6 +3996,8 @@ namespace Gestion_Web.Formularios.Facturas
                 txtCant.AutoPostBack = true;
                 celCantidad.Controls.Add(txtCant);
                 celCantidad.Width = Unit.Percentage(10);
+
+
                 if (ListSucursalCliente.SelectedIndex > 0)
                 {
                     txtCant.Enabled = PuedeModificarCantidadDeItemSegunConfiguracion();
@@ -4049,7 +4051,25 @@ namespace Gestion_Web.Formularios.Facturas
                 btnEliminar.Click += new EventHandler(this.QuitarItem);
                 celAccion.Controls.Add(btnEliminar);
 
+                Literal l1 = new Literal();
+                l1.Text = "&nbsp&nbsp";
+                celAccion.Controls.Add(l1);
 
+                CheckBox cbSeleccion = new CheckBox();
+                cbSeleccion.CssClass = "btn btn-info";
+                //cbSeleccion.Text = "&nbsp;";
+                cbSeleccion.ID = "cbSeleccion_" + item.articulo.codigo + "_" + pos;
+                //cbSeleccion.Font.Size = 12;
+                celAccion.Controls.Add(cbSeleccion);
+
+                Button btnEliminarProductos = new Button();
+                btnEliminarProductos.CssClass = "btn btn-info";
+                btnEliminarProductos.ID = "btnEliminar_" + item.articulo.codigo + "_" + pos;
+                string id = btnEliminarProductos.ID;
+                //btnEliminar.Attributes.Add("onclick", " this.disabled = true; this.value='Aguarde…'; " + ClientScript.GetPostBackEventReference(btnEliminar, null) + ";");
+                btnEliminarProductos.Click += new EventHandler(this.btnEliminar_Click);
+                //celAccion.Controls.Add(btnEliminarProductos);
+              
                 int trazable = this.contArticulo.verificarGrupoTrazableByID(item.articulo.grupo.id);
                 if (trazable > 0)
                 {
@@ -8455,6 +8475,64 @@ namespace Gestion_Web.Formularios.Facturas
             catch
             {
 
+            }
+        }
+
+
+        private void btnEliminarProductos_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //string idCodigo = (sender as LinkButton).ID.ToString().Substring(11, (sender as LinkButton).ID.Length - 11);
+                string idCodigo = (sender as Button).ID.ToString();
+                string[] datos = idCodigo.Split('_');
+                idCodigo = datos[1];
+                string pos = datos[2];
+               
+                //obtengo el pedido del session
+                Factura ct = Session["Factura"] as Factura;
+                foreach (ItemFactura item in ct.items)
+                {
+                    CheckBox ch = null;
+                    if (ch.Checked == true)
+                    {
+                        if ((item.articulo.codigo == idCodigo) && Convert.ToInt32(pos) == ct.items.IndexOf(item))
+                        {
+                            //lo quito
+                            ct.items.Remove(item);
+                            break;
+                        }
+                    }
+                }
+
+                //ct.items.Clear();
+
+                if (ct.items.Count == 0)
+                {
+                    this.lbMovTrazaNueva.Text = "";
+                    this.lblMovTraza.Text = "";
+                }
+                //cargo el nuevo pedido a la sesion
+                Session["Factura"] = ct;
+
+                //vuelvo a cargar los items
+                this.cargarItems();
+                this.ActualizarTotales();
+
+                this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+
+                if (idCodigo.Equals("puntos", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                    CargarPuntosCliente(idCliente);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando item a la factura. " + ex.Message));
             }
         }
 
@@ -14183,6 +14261,70 @@ namespace Gestion_Web.Formularios.Facturas
         {
             Session["PermitirArtConCategAlert"] = "1";
             btnAgregar_Click(sender, e);
+        }
+
+
+        protected void btnEliminar_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                //string idCodigo = (sender as LinkButton).ID.ToString().Substring(11, (sender as LinkButton).ID.Length - 11);
+                //string idCodigo = (sender as Button).ID.ToString();
+                //string[] datos = idCodigo.Split('_');
+                //idCodigo = datos[1];
+                //string pos = datos[2];
+
+                //obtengo el pedido del session
+
+                Factura ct = Session["Factura"] as Factura;
+                int cont = 0;
+                foreach (Control C in phArticulos.Controls)
+                {
+                    TableRow tr = C as TableRow;
+                    CheckBox ch = tr.Cells[6].Controls[2] as CheckBox;
+                  
+                    if (ch.Checked == true)
+                    {
+                        
+                        ct.items.RemoveAt(cont);
+                        cont--;
+                       
+                    }
+                    cont++;
+                }
+
+              
+
+                if (ct.items.Count == 0)
+                {
+                    this.lbMovTrazaNueva.Text = "";
+                    this.lblMovTraza.Text = "";
+                }
+                //cargo el nuevo pedido a la sesion
+                Session["Factura"] = ct;
+
+                //vuelvo a cargar los items
+                this.cargarItems();
+                this.ActualizarTotales();
+
+                this.lblTotalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+                this.lblTotalOriginalMutuales.Text = decimal.Round(this.nuevaFactura.total, 2).ToString();
+
+                //if (idCodigo.Equals("puntos", StringComparison.InvariantCultureIgnoreCase))
+                //{
+                //    int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+                //    CargarPuntosCliente(idCliente);
+                //}
+
+
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxError("Error quitando item a la factura. " + ex.Message));
+            }
+
+
         }
     }
 }
