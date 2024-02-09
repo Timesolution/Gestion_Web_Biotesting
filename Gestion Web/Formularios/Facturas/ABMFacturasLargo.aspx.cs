@@ -390,6 +390,8 @@ namespace Gestion_Web.Formularios.Facturas
                     Session["FacturasABM_ArticuloModal"] = null;
 
                     int idCliente = Convert.ToInt32(DropListClientes.SelectedValue);
+
+
                     CargarPuntosCliente(idCliente);
                 }
 
@@ -523,12 +525,24 @@ namespace Gestion_Web.Formularios.Facturas
                         this.cargarClienteEnLista(Convert.ToInt32(idCliente));
                         this.cargarCliente(Convert.ToInt32(DropListClientes.SelectedValue));
 
+                        ControladorClienteEntity contEn = new ControladorClienteEntity();
+                        int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente((Convert.ToInt32(idCliente))).cliente.estado));
+
+                        if (estado != 1)
+                        {
+                            ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Cliente inactivo."));
+                        }
+
                         CargarDropList_DireccionesDeEntregaDelCliente(Convert.ToInt32(DropListClientes.SelectedValue));
 
                     }
 
                     DropListClientes.SelectedValue = dtClientes.Rows[0]["id"].ToString();
+                    
+
                     this.obtenerNroFactura();
+
+
                 }
                 else
                 {
@@ -1348,6 +1362,9 @@ namespace Gestion_Web.Formularios.Facturas
 
                 Cliente c = contCliente.obtenerClienteID(Convert.ToInt32(this.DropListClientes.SelectedValue));
                 c.alerta = contCliente.obtenerAlertaClienteByID(c.id);
+
+                
+
                 if (!String.IsNullOrEmpty(c.alerta.descripcion))
                 {
                     if (!String.IsNullOrEmpty(c.alerta.descripcion))
@@ -2079,6 +2096,16 @@ namespace Gestion_Web.Formularios.Facturas
         {
             try
             {
+                //int idCli = (Convert.ToInt32(this.DropListClientes.SelectedValue));
+
+                //ControladorClienteEntity contEn = new ControladorClienteEntity();
+                //int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
+
+                //if (estado != 1)
+                //{
+                //    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Cliente inactivo."));
+                //}
+
                 controladorCliente contCliente = new controladorCliente();
                 this.cliente = contCliente.obtenerClienteID(idCliente);
                 Configuracion c = new Configuracion();
@@ -2088,9 +2115,15 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     c.monotributo = controladorEmpresa.obtenerTipoFacturacionByEmpresa(this.idEmpresa);
                 }
+                
+                ControladorClienteEntity contEn = new ControladorClienteEntity();
+                int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
 
-
-                if (this.cliente != null)
+                if (estado != 1)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Cliente inactivo."));
+                }
+                    if (this.cliente != null)
                 {
                     //controladorCliente controladorCliente = new controladorCliente();
                     //this.cliente = controladorCliente.obtenerClienteID(this.cliente.id);
@@ -2563,6 +2596,7 @@ namespace Gestion_Web.Formularios.Facturas
                 {
                     this.DropListClientes.ClearSelection();
                     this.DropListClientes.SelectedValue = idCliente.ToString();
+
                     if (this.DropListClientes.SelectedValue == "-1")
                     {
                         this.cargarClienteEnLista(idCliente);
@@ -2586,6 +2620,14 @@ namespace Gestion_Web.Formularios.Facturas
 
         private void cargarClienteEnLista(int idCliente)
         {
+            ControladorClienteEntity contEn = new ControladorClienteEntity();
+            int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente(idCliente).cliente.estado));
+
+            if (estado != 1)
+            {
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Cliente inactivo."));
+            }
+
             if (this.DropListClientes.Items.FindByValue(idCliente.ToString()) == null)
             {
                 var c = contCliente.obtenerClienteID(idCliente);
@@ -2598,7 +2640,7 @@ namespace Gestion_Web.Formularios.Facturas
             else
             {
                 this.DropListClientes.SelectedValue = idCliente.ToString();
-            }
+            }   
         }
 
         /// <summary>
@@ -6722,10 +6764,24 @@ namespace Gestion_Web.Formularios.Facturas
                 //_idCliente = Convert.ToInt32(this.DropListClientes.SelectedValue);
                 var usuario_cliente = controladorFacturasEntity.ModificarUsuarioCliente(Convert.ToInt32(Session["Login_IdUser"]), Convert.ToInt32(DropListClientes.SelectedValue));
                 //this.cargarCliente(Convert.ToInt32(this.DropListClientes.SelectedValue));
-                this.cargarCliente((int)usuario_cliente.IdCliente);
+                ControladorClienteEntity contEn = new ControladorClienteEntity();
+                int estado = (Convert.ToInt32(contEn.obtenerClienteDatosByIdCliente((int)usuario_cliente.IdCliente).cliente.estado));
+
+
+
+                this.cargarClienteEnLista((int)usuario_cliente.IdCliente);
+                this.cargarCliente(Convert.ToInt32(DropListClientes.SelectedValue));
+                //this.cargarCliente((int)usuario_cliente.IdCliente);
                 this.obtenerNroFactura();
 
+                if (estado != 1)
+                {
+                    //ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", m.mensajeBoxAtencion("Cliente inactivo."));
+                    ScriptManager.RegisterClientScriptBlock(this.UpdatePanel2, UpdatePanel2.GetType(), "alert", "$.msgbox(\"Cliente inactivo. \");", true);
+
+                }
                 CargarDropList_DireccionesDeEntregaDelCliente((int)usuario_cliente.IdCliente);
+               
 
             }
             catch
