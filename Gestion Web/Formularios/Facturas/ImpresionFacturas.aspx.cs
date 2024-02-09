@@ -259,6 +259,17 @@ namespace Gestion_Web.Formularios.Facturas
                             row["netoNoGrabado"] = Convert.ToDecimal(0);
                         }
 
+                        //si es factura E, se pasa neto 0 a neto 21 para visualizar el informe
+                        if (row["tipo"].ToString().Contains("Factura E"))
+                        {
+                            decimal totalNeto0 = Convert.ToDecimal(row["TotalNeto0"]);
+                            decimal totalNeto21 = Convert.ToDecimal(row["TotalNeto21"]);
+
+                            row["TotalNeto21"] = totalNeto0 + totalNeto21;
+                            row["TotalNeto0"] = 0;
+
+                        }
+
                         total += Convert.ToDecimal(row["Total"].ToString());
                     }
                 }
