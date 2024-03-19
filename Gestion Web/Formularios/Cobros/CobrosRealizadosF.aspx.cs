@@ -852,11 +852,16 @@ namespace Gestion_Web.Formularios.Cobros
 
                 //int i = this.contCobranza.ProcesoEliminarCobro(idMovimiento);
                 int i = this.contCobranza.ProcesoEliminarCobroCompensacion(idMovimiento);
+
                 if (i > 0)
                 {
                     Log.EscribirSQL((int)Session["Login_IdUser"], "INFO", "Baja Recibo de Cobro. id mov: " + idMovimiento);
                     ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxInfo("Cobro eliminado con exito", "CobrosRealizadosF.aspx"));
-                    Response.Redirect("CobrosRealizadosF.aspx");
+                    //Response.Redirect("CobrosRealizadosF.aspx");
+              
+                }else if (i == -3)
+                {
+                    ClientScript.RegisterClientScriptBlock(this.GetType(), "alert", mje.mensajeBoxAtencion("No puede eliminar un pago a cuenta relacionado a un documento autoimputado. "));
                 }
                 else
                 {

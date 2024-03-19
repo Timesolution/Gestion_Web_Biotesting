@@ -467,12 +467,8 @@
     </div>
 
 
-    <script>
-        function abrirdialog(valor) {
-            document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
-        }
-    </script>
-    <link href="../../css/pages/reports.css" rel="stylesheet">
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
     <!-- Core Scripts - Include with every page -->
     <script src="../../Scripts/jquery-1.10.2.js"></script>
     <script src="../../Scripts/bootstrap.min.js"></script>
@@ -498,17 +494,22 @@
     <script src="../../Scripts/plugins/dataTables/custom.tables.js"></script>
     <link href="../../Scripts/plugins/dataTables/dataTables.css" rel="stylesheet" />
 
-    <%--<script src="//code.jquery.com/jquery-1.9.1.js"></script>--%>
-    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-
     <script>
-        window.onload = function () {
-            obtenerLosID_DeLosBotones();
-        };
+        function abrirdialog(valor) {
+            document.getElementById('<%= txtMovimiento.ClientID %>').value = valor;
+        }
     </script>
+
+<%--    <script>
+    Pongo su función en el pageLoad() debajo, ya que este provoca no poder mostrar los alert message
+        window.onload = function () {
+                obtenerLosID_DeLosBotones();
+        };
+    </script>--%>
 
     <script>
         function pageLoad() {
+
             $("#<%= txtFechaDesde.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
             $("#<%= txtFechaHasta.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -516,6 +517,9 @@
             $("#<%= txtFechaDesdeVendedores.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
 
             $("#<%= txtFechaHastaVendedores.ClientID %>").datepicker({ dateFormat: 'dd/mm/yy' });
+
+            obtenerLosID_DeLosBotones();
+
         }
     </script>
 
@@ -564,11 +568,10 @@
         };
     </script>
 
-    <script type="text/javascript">
-
-</script>
+<%--    <script type="text/javascript"> </script>--%>
 
 
+        <link href="../../css/pages/reports.css" rel="stylesheet">
 
 </asp:Content>
 
